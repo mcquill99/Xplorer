@@ -10,10 +10,21 @@ XPlorer.Preload.prototype = {
     preload: function() {
         //this.load.image('spriteName', 'filepath/image.png);
         //this.load.json('levelName', 'filepath/level.json');
+        this.load.image('black50', 'assets/test/black50.png');
+        this.load.image('blue50', 'assets/test/blue50.png');
+        this.load.image('darkGrey50', 'assets/test/darkGrey50.png');
+        this.load.image('green20', 'assets/test/green20.png');
+        this.load.image('green50', 'assets/test/green50.png');
+        this.load.image('lightGrey50', 'assets/test/lightGrey50.png');
+        this.load.image('red20', 'assets/test/red20.png');
+        this.load.image('red50', 'assets/test/red50.png');
+        this.load.image('white50', 'assets/test/white50.png');
+        this.load.image('yellow20', 'assets/test/yellow20.png');
+        this.load.image('yellow50', 'assets/test/yellow50.png');
     },
 
     update: function() {
-        this.state.start('INSERT NEXT PHASE HERE') //TODO
+        this.state.start('Game');
     }
 };
 
