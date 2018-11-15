@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>X-Plorer</title>
+    <!-- Add the states and libraries here -->
+    <script src="libs/phaser.js"></script>
+</head>
+
+<div id="GameContainer"></div>
+<script type="text/javascript">
+    var width = 960,
+        height = 600;
+
+    // Here is where we load the states. This overloads the "onLoad" function of
+    // window, which is called after every part of the website has been loaded
+    window.onLoad = function() {
+        var game = new Phaser.Game(width, height, Phaser.AUTO, "GameContainer");
+        //game.state.add('Preloader', XPlorer.Preloader);
+    }
+
+</script>
+
+</html>
