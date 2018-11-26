@@ -21,6 +21,9 @@ XPlorer.Preload.prototype = {
         this.load.image('white50', 'assets/test/white50.png');
         this.load.image('yellow20', 'assets/test/yellow20.png');
         this.load.image('yellow50', 'assets/test/yellow50.png');
+        this.load.image("menuBack", 'assets/menu/menuBack.png');
+        this.load.image('logo', 'assets/menu/logo.png');
+        this.load.image('startBtn', 'assets/menu/start.png');
     },
 
     update: function() {
