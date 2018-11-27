@@ -32,7 +32,7 @@ XPlorer.Preload.prototype = {
 
     },
 
-    update: function() {
+    create: function() {
         this.state.start('Menu');
     }
 };

@@ -12,6 +12,8 @@ XPlorer.Menu.prototype = {
 
     	this.logoText = game.add.sprite(game.world.centerX, 100, 'logo');
 
+    	var btn = game.add.button(game.world.centerX, 370, "startBtn", this.startGame, this);
+
     	
 
 
@@ -19,9 +21,9 @@ XPlorer.Menu.prototype = {
 
     },
 
+    startGame: function(){
+    	this.state.start("Game");
+    },
 
-    update: function() {
-
-    }
 
 };
