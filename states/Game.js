@@ -14,8 +14,9 @@ var tileWidth = 50,
     right,
     up,
     down,
-    space,
-    playerSpeed = 200;
+    spacebar,
+    playerSpeed = 200,
+    resource = 0;
 
 
 XPlorer.Game.prototype = {
@@ -44,6 +45,8 @@ XPlorer.Game.prototype = {
         right = this.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
         up = this.input.keyboard.addKey(Phaser.Keyboard.UP);
         down = this.input.keyboard.addKey(Phaser.Keyboard.DOWN);
+        spacebar = this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+        spacebar.onDown.add(this.interact, this);
 
         // Capture the keys from the window
         this.input.keyboard.removeKeyCapture(Phaser.Keyboard.LEFT);
@@ -68,6 +71,11 @@ XPlorer.Game.prototype = {
 
     update: function() {
         this.handleInput();
+    },
+
+
+    render: function() {
+        this.game.debug.text('resources: ' + resource, 50, 50);
     },
 
 
@@ -170,6 +178,24 @@ XPlorer.Game.prototype = {
             
         }
         
+
+
+    interact: function() {
+        // Creates a hitbox that checks for actors in the world
+        let hitbox = this.game.add.sprite(player.position.x, player.position.y, 'red50');
+        hitbox.scale.setTo(1.2, 1.2);
+        this.game.physics.enable(hitbox, Phaser.Physics.ARCADE);
+
+        // Tells the physics system how to act if this collides with an actor.
+        // NOTE: if it collides with multiple actors, it will run with hitActor for each actor hit
+        this.physics.arcade.collide(hitbox, actors, this.hitActor, null, this);
+        hitbox.destroy();
+    },
+
+
+    // TODO - make this function different depending on what actor is hit.
+    hitActor: function() {
+        resource++;
     }
 
     
