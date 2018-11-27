@@ -13,25 +13,27 @@ var tileWidth = 50,
     right,
     up,
     down,
+    space,
     playerSpeed = 200;
 
 
 XPlorer.Game.prototype = {
 
-    preload: function() {
-
-    },
-
-
     create: function() {
+        this.physics.startSystem(Phaser.Physics.ARCADE);
+
         // Create a tile group. This will hold all tiles and help with chunking later
         tiles = this.game.add.group();
+        tiles.enableBody = true;
+        tiles.physicsBodyType = Phaser.Physics.ARCADE;
         actors = this.game.add.group();
+        actors.enableBody = true;
+        actors.physicsBodyType = Phaser.Physics.ARCADE;
 
         this.game.physics.startSystem(Phaser.Physics.P2JS);
 
         player = this.game.add.sprite(0, 0, 'blue50');
-        this.game.physics.p2.enable(player);
+        this.game.physics.enable(player, Phaser.Physics.ARCADE);
 
         // Makes the camera follow the player
         this.game.camera.follow(player);
@@ -48,7 +50,7 @@ XPlorer.Game.prototype = {
         this.input.keyboard.removeKeyCapture(Phaser.Keyboard.UP);
         this.input.keyboard.removeKeyCapture(Phaser.Keyboard.DOWN);
 
-
+        this.buildWorld();
     },
 
 
@@ -58,25 +60,11 @@ XPlorer.Game.prototype = {
 
 
     handleInput: function() {
-        player.body.setZeroVelocity();
+        let horizontalDir = right.isDown - left.isDown;
+        let verticalDir = down.isDown - up.isDown;
 
-        if (up.isDown)
-        {
-            player.body.moveUp(playerSpeed)
-        }
-        else if (down.isDown)
-        {
-            player.body.moveDown(playerSpeed);
-        }
-
-        if (left.isDown)
-        {
-            player.body.moveLeft(playerSpeed);
-        }
-        else if (right.isDown)
-        {
-            player.body.moveRight(playerSpeed);
-        }
+        player.body.velocity.x = horizontalDir * playerSpeed;
+        player.body.velocity.y = verticalDir * playerSpeed;
     },
 
 
@@ -84,7 +72,7 @@ XPlorer.Game.prototype = {
         // Load the json file
         let level = this.game.cache.getJSON('testMap');
 
-        //game.world.setBounds(0, 0, 1920, 1920);
+        this.game.world.setBounds(0, 0, level.tiles[0].length * tileWidth, level.tiles.length * tileHeight);
 
         /*
         tile array is populated by integers so it's easier to load. These integers will be
@@ -101,11 +89,13 @@ XPlorer.Game.prototype = {
         // add the tiles into the world
         for(let i=0; i<level.tiles.length; i++) {
             for(let j=0; j<level.tiles[i].length; j++) {
-                let tileName = integerToTilename[level.tiles[i][j]];
+                let tileName = integerToTileName[level.tiles[i][j]];
                 let x = tileWidth * j,
                     y = tileWidth * i;
                 let curTile = this.game.add.sprite(x, y, tileName);
                 tiles.add(curTile);
+                this.game.physics.enable(curTile, Phaser.Physics.ARCADE);
+                //console.log(curTile);
                 curTile.body.immovable = true;
             }
         }
@@ -125,6 +115,7 @@ XPlorer.Game.prototype = {
                 y = level.actors[i].position[1];
             let curActor = this.game.add.sprite(x, y, actorName);
             actors.add(curActor);
+            this.game.physics.enable(curActor, Phaser.Physics.ARCADE);
             curActor.body.immovable = true;
         }
     }
