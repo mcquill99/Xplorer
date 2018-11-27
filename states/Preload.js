@@ -33,7 +33,7 @@ XPlorer.Preload.prototype = {
     },
 
     create: function() {
-        this.state.start('Menu');
+        this.state.start('Game');
     }
 };
 

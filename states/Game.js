@@ -13,7 +13,7 @@ var tileWidth = 50,
     right,
     up,
     down,
-    playerSpeed;
+    playerSpeed = 200;
 
 
 XPlorer.Game.prototype = {
@@ -28,7 +28,10 @@ XPlorer.Game.prototype = {
         tiles = this.game.add.group();
         actors = this.game.add.group();
 
-        player = this.game.add.sprite('blue50', 0, 0);
+        this.game.physics.startSystem(Phaser.Physics.P2JS);
+
+        player = this.game.add.sprite(0, 0, 'blue50');
+        this.game.physics.p2.enable(player);
 
         // Makes the camera follow the player
         this.game.camera.follow(player);
@@ -55,19 +58,33 @@ XPlorer.Game.prototype = {
 
 
     handleInput: function() {
-        // This takes the boolean isDown from each of these and casts it to an integer 0 or 1. This way if the
-        // player is going left, horizontalDirection will be set to -1 (0 - 1 = -1).
-        let horizontalDirection = right.isDown - left.isDown;
-        let verticalDirection = down.isDown - up.isDown;
+        player.body.setZeroVelocity();
 
-        player.position.x += playerSpeed * horizontalDirection;
-        player.position.y += playerSpeed * verticalDirection;
+        if (up.isDown)
+        {
+            player.body.moveUp(playerSpeed)
+        }
+        else if (down.isDown)
+        {
+            player.body.moveDown(playerSpeed);
+        }
+
+        if (left.isDown)
+        {
+            player.body.moveLeft(playerSpeed);
+        }
+        else if (right.isDown)
+        {
+            player.body.moveRight(playerSpeed);
+        }
     },
 
 
     buildWorld: function() {
         // Load the json file
         let level = this.game.cache.getJSON('testMap');
+
+        //game.world.setBounds(0, 0, 1920, 1920);
 
         /*
         tile array is populated by integers so it's easier to load. These integers will be
