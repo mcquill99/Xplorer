@@ -8,11 +8,11 @@ XPlorer.Menu.prototype = {
 
 
     create: function() {
-    	this.background = game.add.sprite(0,0,'menuBack');
+    	this.background = this.game.add.sprite(0,0,'menuBack');
 
-    	this.logoText = game.add.sprite(game.world.centerX, 100, 'logo');
+    	this.logoText = this.game.add.sprite(this.game.world.centerX-230, 20, 'logo');
 
-    	var btn = game.add.button(game.world.centerX, 370, "startBtn", this.startGame, this);
+    	var btn = this.game.add.button(this.game.world.centerX-280, 190, "startBtn", this.startGame, this);
 
     	
 
