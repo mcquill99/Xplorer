@@ -42,7 +42,7 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="html" value="742" />
-          <entry key="js" value="5227" />
+          <entry key="js" value="6148" />
           <entry key="json" value="226" />
         </counts>
       </usages-collector>
@@ -50,7 +50,7 @@
         <counts>
           <entry key="HTML" value="742" />
           <entry key="JSON" value="226" />
-          <entry key="JavaScript" value="5227" />
+          <entry key="JavaScript" value="6148" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.vcs.git.usages" />
@@ -89,8 +89,13 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/states/Game.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="479">
-              <caret line="44" column="64" lean-forward="true" selection-start-line="44" selection-start-column="64" selection-end-line="44" selection-end-column="64" />
+            <state relative-caret-position="660">
+              <caret line="140" column="25" selection-start-line="140" selection-start-column="25" selection-end-line="140" selection-end-column="25" />
+              <folding>
+                <element signature="e#513#521#0" />
+                <element signature="e#1509#1861#0" />
+                <element signature="e#551#2384#0" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -205,12 +210,12 @@
       <workItem from="1542302163819" duration="13000" />
       <workItem from="1543255434493" duration="3085000" />
       <workItem from="1543278744706" duration="112000" />
-      <workItem from="1543349001315" duration="4398000" />
+      <workItem from="1543349001315" duration="5482000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="9570000" />
+    <option name="totallyTimeSpent" value="10654000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1280" height="800" extended-state="0" />
@@ -279,8 +284,13 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/states/Game.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="479">
-          <caret line="44" column="64" lean-forward="true" selection-start-line="44" selection-start-column="64" selection-end-line="44" selection-end-column="64" />
+        <state relative-caret-position="660">
+          <caret line="140" column="25" selection-start-line="140" selection-start-column="25" selection-end-line="140" selection-end-column="25" />
+          <folding>
+            <element signature="e#513#521#0" />
+            <element signature="e#1509#1861#0" />
+            <element signature="e#551#2384#0" />
+          </folding>
         </state>
       </provider>
     </entry>
