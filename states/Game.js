@@ -7,7 +7,13 @@ XPlorer.Game = function() {
 var tileWidth = 50,
     tileHeight = 50,
     tiles,
-    actors;
+    actors,
+    player,
+    left,
+    right,
+    up,
+    down,
+    playerSpeed;
 
 
 XPlorer.Game.prototype = {
@@ -22,12 +28,42 @@ XPlorer.Game.prototype = {
         tiles = this.game.add.group();
         actors = this.game.add.group();
 
+        player = this.game.add.sprite('blue50', 0, 0);
+
+        // Makes the camera follow the player
+        this.game.camera.follow(player);
+
+        // Set up arrow key inputs
+        left = this.input.keyboard.addKey(Phaser.Keyboard.LEFT);
+        right = this.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
+        up = this.input.keyboard.addKey(Phaser.Keyboard.UP);
+        down = this.input.keyboard.addKey(Phaser.Keyboard.DOWN);
+
+        // Capture the keys from the window
+        this.input.keyboard.removeKeyCapture(Phaser.Keyboard.LEFT);
+        this.input.keyboard.removeKeyCapture(Phaser.Keyboard.RIGHT);
+        this.input.keyboard.removeKeyCapture(Phaser.Keyboard.UP);
+        this.input.keyboard.removeKeyCapture(Phaser.Keyboard.DOWN);
+
+
     },
 
 
     update: function() {
-
+        this.handleInput();
     },
+
+
+    handleInput: function() {
+        // This takes the boolean isDown from each of these and casts it to an integer 0 or 1. This way if the
+        // player is going left, horizontalDirection will be set to -1 (0 - 1 = -1).
+        let horizontalDirection = right.isDown - left.isDown;
+        let verticalDirection = down.isDown - up.isDown;
+
+        player.position.x += playerSpeed * horizontalDirection;
+        player.position.y += playerSpeed * verticalDirection;
+    },
+
 
     buildWorld: function() {
         // Load the json file

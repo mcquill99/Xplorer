@@ -18,7 +18,7 @@
 
     // Here is where we load the states. This overloads the "onLoad" function of
     // window, which is called after every part of the website has been loaded
-    window.onLoad = function() {
+    window.onload = function() {
         var game = new Phaser.Game(width, height, Phaser.AUTO, "GameContainer");
         game.state.add('Preload', XPlorer.Preload);
         game.state.add('Menu', XPlorer.Menu);
