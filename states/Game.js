@@ -15,7 +15,9 @@ var tileWidth = 50,
     down,
     spacebar,
     playerSpeed = 200,
-    resource = 0;
+    greenResource = 0,
+    redResource = 0,
+    yellowResource = 0;
 
 
 XPlorer.Game.prototype = {
@@ -63,7 +65,9 @@ XPlorer.Game.prototype = {
 
 
     render: function() {
-        this.game.debug.text('resources: ' + resource, 50, 50);
+        this.game.debug.text('Green Resources:\t' + greenResource, 50, 50);
+        this.game.debug.text('Red Resources: \t' + redResource, 50, 75);
+        this.game.debug.text('Yellow Resources: \t' + yellowResource, 50, 100);
     },
 
 
@@ -94,6 +98,7 @@ XPlorer.Game.prototype = {
         */
         // Make the conversion array
         let integerToTileName = ['black50', 'darkGrey50', 'lightGrey50', 'white50'];
+
         // add the tiles into the world
         for(let i=0; i<level.tiles.length; i++) {
             for(let j=0; j<level.tiles[i].length; j++) {
@@ -115,14 +120,26 @@ XPlorer.Game.prototype = {
             0 = green20
             1 = red20
             2 = yellow20
+
+
+        Phaser sprites have a "data" property which is unused in phaser, but allows us to associate some data with the
+        sprite. In this case, we can store an object which will hold any information we need. the object will look like:
+        {
+            "onInteract": this.onActorInteract
+        }
+
+        this.onHit will be the function to be run when the actor is interacted with. It
          */
         let integerToActorName = ['green20', 'red20', 'yellow20'];
+        let integerToActorResponse =[this.interactWithGreen, this.interactWithRed, this.interactWithYellow];
+
         for(let i=0; i<level.actors.length; i++) {
             let actorName = integerToActorName[level.actors[i].name];
             let x = level.actors[i].position[0],
                 y = level.actors[i].position[1];
             let curActor = this.game.add.sprite(x, y, actorName);
             actors.add(curActor);
+            curActor.data.onInteract = integerToActorResponse[level.actors[i].name];
             this.game.physics.enable(curActor, Phaser.Physics.ARCADE);
             curActor.body.immovable = true;
         }
@@ -137,14 +154,31 @@ XPlorer.Game.prototype = {
 
         // Tells the physics system how to act if this collides with an actor.
         // NOTE: if it collides with multiple actors, it will run with hitActor for each actor hit
-        this.physics.arcade.collide(hitbox, actors, this.hitActor, null, this);
+        this.physics.arcade.collide(hitbox, actors, this.interactWithActor, null, this);
         hitbox.destroy();
     },
 
 
-    // TODO - make this function different depending on what actor is hit.
-    hitActor: function() {
-        resource++;
+    interactWithActor: function(player, actor) {
+        actor.data.onInteract();
+    },
+
+
+    interactWithGreen: function() {
+        greenResource++;
+    },
+
+
+    interactWithRed: function() {
+        redResource++;
+    },
+
+
+    interactWithYellow: function() {
+        yellowResource++;
     }
+
+
+
     
 };
