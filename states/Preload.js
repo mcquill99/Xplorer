@@ -27,7 +27,8 @@ XPlorer.Preload.prototype = {
         this.load.image("menuBack", 'assets/menu/menuBack.png');
         this.load.image('logo', 'assets/menu/logo.png');
         this.load.image('startBtn', 'assets/menu/start.png');
-
+        this.load.image('textBox', 'assets/HUD/textBubble.png');
+        
         this.load.json('testMap', 'data/testMap.json');
 
     },

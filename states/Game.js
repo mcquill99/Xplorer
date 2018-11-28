@@ -6,6 +6,7 @@ XPlorer.Game = function() {
 // Initiate variables here
 var tileWidth = 50,
     tileHeight = 50,
+    canMove = 1,
     tiles,
     actors,
     player,
@@ -54,6 +55,17 @@ XPlorer.Game.prototype = {
         this.input.keyboard.removeKeyCapture(Phaser.Keyboard.RIGHT);
         this.input.keyboard.removeKeyCapture(Phaser.Keyboard.UP);
         this.input.keyboard.removeKeyCapture(Phaser.Keyboard.DOWN);
+
+        this.press = 0; //variable to represent if the character is interacting with something
+
+        this.bubble = this.game.add.sprite(1000,game.world.height-85,"textBox");
+        this.bubble.enableBody = true;
+
+        this.text1 = game.add.text(15, game.world.height - 80, '', { fontSize: '11px', fill: '#000000' });
+        this.text2 = game.add.text(15, game.world.height - 69, '', { fontSize: '11px', fill: '#000000' });
+        this.text3 = game.add.text(15, game.world.height - 58, '', { fontSize: '11px', fill: '#000000' });
+        this.text4 = game.add.text(15, game.world.height - 47, '', { fontSize: '11px', fill: '#000000' });
+        this.text5 = game.add.text(15, game.world.height - 36, '', { fontSize: '11px', fill: '#000000' });
 
         this.buildWorld();
     },
@@ -140,6 +152,46 @@ XPlorer.Game.prototype = {
         }
     },
 
+    textInteract: function(){
+
+        if(this.physics.arcade.distanceBetween(this.player, this.clerk) < 90 && this.spaceKey.isDown && Phaser.Math.isEven(this.press){
+            this.bubble.x = 10;
+            this.text1.text = "Welcome to the Beyond The Horizon Mini Mart!";
+            this.text2.text = "What can I do for you sonny?";
+            this.text3.text = 'Did the town mayor send another kid to pick up';
+            this.text4.text = "his groceries again? Oh silly him! here, it looks like";
+            this.text5.text = "you have just enough money for his usual, please bring this back!";
+
+            canMove = 0;
+
+            game.time.events.add(200, this.increment, this);
+
+            money = 0;
+            this.money.x = 1000;
+
+            quest = 1;
+
+
+        }
+        if(this.spaceKey.isDown && Phaser.Math.isOdd(this.press)){
+            this.bubble.x = -1000;
+            this.text1.text = "";
+            this.text2.text = "";
+            this.text3.text = "";
+            this.text4.text = "";
+            this.text5.text = "";
+
+            game.time.events.add(200, this.increment, this);
+            canMove = 1;
+            this.groceries.x = 490;
+
+            this.cashier = game.add.audio('register');
+            this.cashier.play();
+            
+        }
+    },
+        
+
 
     interact: function() {
         // Creates a hitbox that checks for actors in the world
@@ -172,8 +224,5 @@ XPlorer.Game.prototype = {
     interactWithYellow: function() {
         yellowResource++;
     }
-
-
-
     
 };
