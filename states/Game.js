@@ -123,12 +123,7 @@ XPlorer.Game.prototype = {
 
 
         Phaser sprites have a "data" property which is unused in phaser, but allows us to associate some data with the
-        sprite. In this case, we can store an object which will hold any information we need. the object will look like:
-        {
-            "onInteract": this.onActorInteract
-        }
-
-        this.onHit will be the function to be run when the actor is interacted with. It
+        sprite. In this case, we can store a function which will run when the actor is interacted with. 
          */
         let integerToActorName = ['green20', 'red20', 'yellow20'];
         let integerToActorResponse =[this.interactWithGreen, this.interactWithRed, this.interactWithYellow];
