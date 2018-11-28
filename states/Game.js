@@ -56,6 +56,7 @@ XPlorer.Game.prototype = {
         this.input.keyboard.removeKeyCapture(Phaser.Keyboard.UP);
         this.input.keyboard.removeKeyCapture(Phaser.Keyboard.DOWN);
 
+        /*
         this.press = 0; //variable to represent if the character is interacting with something
 
         this.bubble = this.game.add.sprite(1000,game.world.height-85,"textBox");
@@ -66,6 +67,7 @@ XPlorer.Game.prototype = {
         this.text3 = game.add.text(15, game.world.height - 58, '', { fontSize: '11px', fill: '#000000' });
         this.text4 = game.add.text(15, game.world.height - 47, '', { fontSize: '11px', fill: '#000000' });
         this.text5 = game.add.text(15, game.world.height - 36, '', { fontSize: '11px', fill: '#000000' });
+        */
 
         this.buildWorld();
     },
@@ -152,9 +154,10 @@ XPlorer.Game.prototype = {
         }
     },
 
+    /*
     textInteract: function(){
 
-        if(this.physics.arcade.distanceBetween(this.player, this.clerk) < 90 && this.spaceKey.isDown && Phaser.Math.isEven(this.press){
+        if(this.physics.arcade.distanceBetween(this.player, this.clerk) < 90 && this.spaceKey.isDown && Phaser.Math.isEven(this.press)){
             this.bubble.x = 10;
             this.text1.text = "Welcome to the Beyond The Horizon Mini Mart!";
             this.text2.text = "What can I do for you sonny?";
@@ -190,7 +193,7 @@ XPlorer.Game.prototype = {
             
         }
     },
-        
+       */
 
 
     interact: function() {
