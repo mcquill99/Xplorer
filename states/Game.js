@@ -58,14 +58,13 @@ XPlorer.Game.prototype = {
 
         this.press = 0; //variable to represent if the character is interacting with something
 
-        this.bubble = this.game.add.sprite(1000,game.world.height-85,"textBox");
+        this.bubble = this.game.add.sprite(this.game.world.x+1000,this.game.world.y+10000,"textBox");
         this.bubble.enableBody = true;
 
-        this.text1 = game.add.text(15, game.world.height - 80, '', { fontSize: '11px', fill: '#000000' });
-        this.text2 = game.add.text(15, game.world.height - 69, '', { fontSize: '11px', fill: '#000000' });
-        this.text3 = game.add.text(15, game.world.height - 58, '', { fontSize: '11px', fill: '#000000' });
-        this.text4 = game.add.text(15, game.world.height - 47, '', { fontSize: '11px', fill: '#000000' });
-        this.text5 = game.add.text(15, game.world.height - 36, '', { fontSize: '11px', fill: '#000000' });
+        this.text1 = this.game.add.text(this.game.camera.x+30, this.game.camera.y+450, '', { fontSize: '30px', fill: '#000000' });
+        this.text2 = this.game.add.text(this.game.camera.x+30, this.game.camera.y+480, '', { fontSize: '30px', fill: '#000000' });
+        this.text3 = this.game.add.text(this.game.camera.x+30, this.game.camera.y+510, '', { fontSize: '30px', fill: '#000000' });
+        this.text4 = this.game.add.text(this.game.camera.x+30, this.game.camera.y+540, '', { fontSize: '30px', fill: '#000000' });
 
         this.buildWorld();
     },
@@ -138,7 +137,7 @@ XPlorer.Game.prototype = {
         sprite. In this case, we can store a function which will run when the actor is interacted with. 
          */
         let integerToActorName = ['green20', 'red20', 'yellow20'];
-        let integerToActorResponse =[this.interactWithGreen, this.interactWithRed, this.interactWithYellow];
+        let integerToActorResponse =[this.interactWithGreen, this.interactWithRed, this.textInteract];
 
         for(let i=0; i<level.actors.length; i++) {
             let actorName = integerToActorName[level.actors[i].name];
@@ -152,41 +151,39 @@ XPlorer.Game.prototype = {
         }
     },
 
-    textInteract: function(){
+    increment: function(){
+        this.press = this.press + 1;
 
-        if(this.physics.arcade.distanceBetween(this.player, this.clerk) < 90 && this.spaceKey.isDown && Phaser.Math.isEven(this.press){
-            this.bubble.x = 10;
+    },
+
+    textInteract: function(){
+        console.log(this.press);
+        if(Phaser.Math.isEven(this.press)){
+            this.bubble.x = this.game.camera.x +10;
+            this.bubble.y = this.game.camera.y + 440;
             this.text1.text = "Welcome to the Beyond The Horizon Mini Mart!";
             this.text2.text = "What can I do for you sonny?";
             this.text3.text = 'Did the town mayor send another kid to pick up';
             this.text4.text = "his groceries again? Oh silly him! here, it looks like";
-            this.text5.text = "you have just enough money for his usual, please bring this back!";
 
             canMove = 0;
 
-            game.time.events.add(200, this.increment, this);
+            this.game.time.events.add(100, this.increment, this);
 
-            money = 0;
-            this.money.x = 1000;
 
-            quest = 1;
 
 
         }
-        if(this.spaceKey.isDown && Phaser.Math.isOdd(this.press)){
-            this.bubble.x = -1000;
+        if(Phaser.Math.isOdd(this.press)){
+            this.bubble.x = -10000;
+            this.bubble.y = -10000;
             this.text1.text = "";
             this.text2.text = "";
             this.text3.text = "";
             this.text4.text = "";
-            this.text5.text = "";
 
-            game.time.events.add(200, this.increment, this);
+            this.game.time.events.add(100, this.increment, this);
             canMove = 1;
-            this.groceries.x = 490;
-
-            this.cashier = game.add.audio('register');
-            this.cashier.play();
             
         }
     },
@@ -207,7 +204,7 @@ XPlorer.Game.prototype = {
 
 
     interactWithActor: function(player, actor) {
-        actor.data.onInteract();
+        actor.data.onInteract.call(this);
     },
 
 
