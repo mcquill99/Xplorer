@@ -43,6 +43,9 @@ XPlorer.Game.prototype = {
         player = this.game.add.sprite(0, 0, 'blue50');
         this.game.physics.enable(player, Phaser.Physics.ARCADE);
 
+        //changes anchor to the middle of the player
+        player.anchor.setTo(0.5,0.5);
+
         // Makes the camera follow the player
         this.game.camera.follow(player);
 
@@ -60,18 +63,18 @@ XPlorer.Game.prototype = {
         this.input.keyboard.removeKeyCapture(Phaser.Keyboard.UP);
         this.input.keyboard.removeKeyCapture(Phaser.Keyboard.DOWN);
 
-        /*
+        
         this.press = 0; //variable to represent if the character is interacting with something
 
-        this.bubble = this.game.add.sprite(1000,game.world.height-85,"textBox");
+        this.bubble = this.game.add.sprite(this.game.world.x+1000,this.game.world.y+10000,"textBox"); //adds text bubble off screen
         this.bubble.enableBody = true;
 
-        this.text1 = game.add.text(15, game.world.height - 80, '', { fontSize: '11px', fill: '#000000' });
-        this.text2 = game.add.text(15, game.world.height - 69, '', { fontSize: '11px', fill: '#000000' });
-        this.text3 = game.add.text(15, game.world.height - 58, '', { fontSize: '11px', fill: '#000000' });
-        this.text4 = game.add.text(15, game.world.height - 47, '', { fontSize: '11px', fill: '#000000' });
-        this.text5 = game.add.text(15, game.world.height - 36, '', { fontSize: '11px', fill: '#000000' });
-        */
+        //adds text lines but blank
+        this.text1 = this.game.add.text(this.game.camera.x+30, this.game.camera.y+450, '', { fontSize: '30px', fill: '#000000' });
+        this.text2 = this.game.add.text(this.game.camera.x+30, this.game.camera.y+480, '', { fontSize: '30px', fill: '#000000' });
+        this.text3 = this.game.add.text(this.game.camera.x+30, this.game.camera.y+510, '', { fontSize: '30px', fill: '#000000' });
+        this.text4 = this.game.add.text(this.game.camera.x+30, this.game.camera.y+540, '', { fontSize: '30px', fill: '#000000' });
+
 
         this.buildWorld();
     },
@@ -90,11 +93,18 @@ XPlorer.Game.prototype = {
 
 
     handleInput: function() {
-        let horizontalDir = right.isDown - left.isDown;
-        let verticalDir = down.isDown - up.isDown;
+        if(canMove == 1){
+            let horizontalDir = right.isDown - left.isDown;
+            let verticalDir = down.isDown - up.isDown;
 
-        player.body.velocity.x = horizontalDir * playerSpeed;
-        player.body.velocity.y = verticalDir * playerSpeed;
+            player.body.velocity.x = horizontalDir * playerSpeed;
+            player.body.velocity.y = verticalDir * playerSpeed;
+
+        }
+        else{
+            player.body.velocity.x = 0;
+            player.body.velocity.y = 0;
+        }
     },
 
 
@@ -144,7 +154,7 @@ XPlorer.Game.prototype = {
         sprite. In this case, we can store a function which will run when the actor is interacted with. 
          */
         let integerToActorName = ['green20', 'red20', 'yellow20'];
-        let integerToActorResponse =[this.interactWithGreen, this.interactWithRed, this.interactWithYellow];
+        let integerToActorResponse =[this.interactWithGreen, this.interactWithRed, this.textInteract];
 
         for(let i=0; i<level.actors.length; i++) {
             let actorName = integerToActorName[level.actors[i].name];
@@ -155,66 +165,76 @@ XPlorer.Game.prototype = {
             curActor.data.onInteract = integerToActorResponse[level.actors[i].name];
             this.game.physics.enable(curActor, Phaser.Physics.ARCADE);
             curActor.body.immovable = true;
+            //curActor.anchor.setTo(0.5,0.5);
         }
     },
 
-    /*
-    textInteract: function(){
+    increment: function(){
+        this.press = this.press + 1;
 
-        if(this.physics.arcade.distanceBetween(this.player, this.clerk) < 90 && this.spaceKey.isDown && Phaser.Math.isEven(this.press)){
-            this.bubble.x = 10;
+    },
+
+    textInteract: function(){
+        console.log(this.press);
+        if(Phaser.Math.isEven(this.press)){
+            this.bubble.x = this.game.camera.x +10;
+            this.bubble.y = this.game.camera.y + 440;
+
+            this.text1.x = this.game.camera.x+30;
+            this.text1.y = this.game.camera.y+450;
+            this.text2.x = this.game.camera.x+30;
+            this.text2.y = this.game.camera.y+480;
+            this.text3.x = this.game.camera.x+30;
+            this.text3.y =this.game.camera.y+510;
+            this.text4.x = this.game.camera.x+30;
+            this.text4.y =this.game.camera.y+540;
+
             this.text1.text = "Welcome to the Beyond The Horizon Mini Mart!";
             this.text2.text = "What can I do for you sonny?";
             this.text3.text = 'Did the town mayor send another kid to pick up';
             this.text4.text = "his groceries again? Oh silly him! here, it looks like";
-            this.text5.text = "you have just enough money for his usual, please bring this back!";
 
             canMove = 0;
 
-            game.time.events.add(200, this.increment, this);
+            this.game.time.events.add(100, this.increment, this);
 
-            money = 0;
-            this.money.x = 1000;
 
-            quest = 1;
 
 
         }
-        if(this.spaceKey.isDown && Phaser.Math.isOdd(this.press)){
-            this.bubble.x = -1000;
+        if(Phaser.Math.isOdd(this.press)){
+            this.bubble.x = -10000;
+            this.bubble.y = -10000;
             this.text1.text = "";
             this.text2.text = "";
             this.text3.text = "";
             this.text4.text = "";
-            this.text5.text = "";
 
-            game.time.events.add(200, this.increment, this);
+            this.game.time.events.add(100, this.increment, this);
             canMove = 1;
-            this.groceries.x = 490;
-
-            this.cashier = game.add.audio('register');
-            this.cashier.play();
             
         }
     },
-       */
+       
 
 
     interact: function() {
         // Creates a hitbox that checks for actors in the world
         let hitbox = this.game.add.sprite(player.position.x, player.position.y, 'red50');
+        hitbox.anchor.setTo(0.5,0.5);
         hitbox.scale.setTo(1.2, 1.2);
         this.game.physics.enable(hitbox, Phaser.Physics.ARCADE);
 
         // Tells the physics system how to act if this collides with an actor.
         // NOTE: if it collides with multiple actors, it will run with hitActor for each actor hit
         this.physics.arcade.collide(hitbox, actors, this.interactWithActor, null, this);
-        hitbox.destroy();
+        //hitbox.destroy();
     },
 
 
     interactWithActor: function(player, actor) {
         actor.data.onInteract.call(this, actor);
+
     },
 
 
