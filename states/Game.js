@@ -56,15 +56,18 @@ XPlorer.Game.prototype = {
         this.input.keyboard.removeKeyCapture(Phaser.Keyboard.UP);
         this.input.keyboard.removeKeyCapture(Phaser.Keyboard.DOWN);
 
+        
         this.press = 0; //variable to represent if the character is interacting with something
 
         this.bubble = this.game.add.sprite(this.game.world.x+1000,this.game.world.y+10000,"textBox");
         this.bubble.enableBody = true;
 
+
         this.text1 = this.game.add.text(this.game.camera.x+30, this.game.camera.y+450, '', { fontSize: '30px', fill: '#000000' });
         this.text2 = this.game.add.text(this.game.camera.x+30, this.game.camera.y+480, '', { fontSize: '30px', fill: '#000000' });
         this.text3 = this.game.add.text(this.game.camera.x+30, this.game.camera.y+510, '', { fontSize: '30px', fill: '#000000' });
         this.text4 = this.game.add.text(this.game.camera.x+30, this.game.camera.y+540, '', { fontSize: '30px', fill: '#000000' });
+
 
         this.buildWorld();
     },
@@ -187,7 +190,7 @@ XPlorer.Game.prototype = {
             
         }
     },
-        
+       */
 
 
     interact: function() {
