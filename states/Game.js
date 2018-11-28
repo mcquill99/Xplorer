@@ -39,6 +39,9 @@ XPlorer.Game.prototype = {
         player = this.game.add.sprite(0, 0, 'blue50');
         this.game.physics.enable(player, Phaser.Physics.ARCADE);
 
+        //changes anchor to the middle of the player
+        player.anchor.setTo(0.5,0.5);
+
         // Makes the camera follow the player
         this.game.camera.follow(player);
 
@@ -59,10 +62,10 @@ XPlorer.Game.prototype = {
         
         this.press = 0; //variable to represent if the character is interacting with something
 
-        this.bubble = this.game.add.sprite(this.game.world.x+1000,this.game.world.y+10000,"textBox");
+        this.bubble = this.game.add.sprite(this.game.world.x+1000,this.game.world.y+10000,"textBox"); //adds text bubble off screen
         this.bubble.enableBody = true;
 
-
+        //adds text lines but blank
         this.text1 = this.game.add.text(this.game.camera.x+30, this.game.camera.y+450, '', { fontSize: '30px', fill: '#000000' });
         this.text2 = this.game.add.text(this.game.camera.x+30, this.game.camera.y+480, '', { fontSize: '30px', fill: '#000000' });
         this.text3 = this.game.add.text(this.game.camera.x+30, this.game.camera.y+510, '', { fontSize: '30px', fill: '#000000' });
@@ -86,11 +89,18 @@ XPlorer.Game.prototype = {
 
 
     handleInput: function() {
-        let horizontalDir = right.isDown - left.isDown;
-        let verticalDir = down.isDown - up.isDown;
+        if(canMove == 1){
+            let horizontalDir = right.isDown - left.isDown;
+            let verticalDir = down.isDown - up.isDown;
 
-        player.body.velocity.x = horizontalDir * playerSpeed;
-        player.body.velocity.y = verticalDir * playerSpeed;
+            player.body.velocity.x = horizontalDir * playerSpeed;
+            player.body.velocity.y = verticalDir * playerSpeed;
+
+        }
+        else{
+            player.body.velocity.x = 0;
+            player.body.velocity.y = 0;
+        }
     },
 
 
@@ -151,6 +161,7 @@ XPlorer.Game.prototype = {
             curActor.data.onInteract = integerToActorResponse[level.actors[i].name];
             this.game.physics.enable(curActor, Phaser.Physics.ARCADE);
             curActor.body.immovable = true;
+            //curActor.anchor.setTo(0.5,0.5);
         }
     },
 
@@ -164,6 +175,16 @@ XPlorer.Game.prototype = {
         if(Phaser.Math.isEven(this.press)){
             this.bubble.x = this.game.camera.x +10;
             this.bubble.y = this.game.camera.y + 440;
+
+            this.text1.x = this.game.camera.x+30;
+            this.text1.y = this.game.camera.y+450;
+            this.text2.x = this.game.camera.x+30;
+            this.text2.y = this.game.camera.y+480;
+            this.text3.x = this.game.camera.x+30;
+            this.text3.y =this.game.camera.y+510;
+            this.text4.x = this.game.camera.x+30;
+            this.text4.y =this.game.camera.y+540;
+
             this.text1.text = "Welcome to the Beyond The Horizon Mini Mart!";
             this.text2.text = "What can I do for you sonny?";
             this.text3.text = 'Did the town mayor send another kid to pick up';
@@ -190,19 +211,20 @@ XPlorer.Game.prototype = {
             
         }
     },
-       */
+       
 
 
     interact: function() {
         // Creates a hitbox that checks for actors in the world
         let hitbox = this.game.add.sprite(player.position.x, player.position.y, 'red50');
+        hitbox.anchor.setTo(0.5,0.5);
         hitbox.scale.setTo(1.2, 1.2);
         this.game.physics.enable(hitbox, Phaser.Physics.ARCADE);
 
         // Tells the physics system how to act if this collides with an actor.
         // NOTE: if it collides with multiple actors, it will run with hitActor for each actor hit
         this.physics.arcade.collide(hitbox, actors, this.interactWithActor, null, this);
-        hitbox.destroy();
+        //hitbox.destroy();
     },
 
 
