@@ -33,6 +33,10 @@ XPlorer.Game.prototype = {
         actors = this.game.add.group();
         actors.enableBody = true;
         actors.physicsBodyType = Phaser.Physics.ARCADE;
+        //the little cirlces are 'drops'
+        drops = this.game.add.group();
+        drops.enableBody = true;
+        drops.physicsBodyType = Phaser.Physics.ARCADE;
 
         this.game.physics.startSystem(Phaser.Physics.P2JS);
 
@@ -210,22 +214,34 @@ XPlorer.Game.prototype = {
 
 
     interactWithActor: function(player, actor) {
-        actor.data.onInteract();
+        actor.data.onInteract.call(this, actor);
     },
 
 
-    interactWithGreen: function() {
+    interactWithGreen: function(actor) {
         greenResource++;
+        this.addDrop(actor.x,actor.y, "green");
+        actors.remove(actor);
     },
 
 
-    interactWithRed: function() {
+    interactWithRed: function(actor) {
         redResource++;
+        this.addDrop(actor.x,actor.y, "red");
+        actors.remove(actor);
     },
 
 
-    interactWithYellow: function() {
+    interactWithYellow: function(actor) {
         yellowResource++;
+        this.addDrop(actor.x,actor.y, "yellow");
+        actors.remove(actor);
+    },
+    
+    addDrop: function(x,y, resource){
+        let drop = this.game.add.sprite(x + 50, y, 'circle20');
+        drop.data.resource = resource;
+        drops.add(drop);
     }
     
 };
