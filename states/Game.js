@@ -33,6 +33,7 @@ XPlorer.Game.prototype = {
         actors = this.game.add.group();
         actors.enableBody = true;
         actors.physicsBodyType = Phaser.Physics.ARCADE;
+
         //the little cirlces are 'drops'
         drops = this.game.add.group();
         drops.enableBody = true;
