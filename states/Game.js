@@ -41,7 +41,7 @@ XPlorer.Game.prototype = {
 
         this.game.physics.startSystem(Phaser.Physics.P2JS);
 
-        player = this.game.add.sprite(0, 0, 'blue50');
+        player = this.game.add.sprite(970, 1100, 'blue50');
         this.game.physics.enable(player, Phaser.Physics.ARCADE);
 
         //changes anchor to the middle of the player
@@ -75,7 +75,11 @@ XPlorer.Game.prototype = {
         this.text2 = this.game.add.text(this.game.camera.x+30, this.game.camera.y+480, '', { fontSize: '30px', fill: '#000000' });
         this.text3 = this.game.add.text(this.game.camera.x+30, this.game.camera.y+510, '', { fontSize: '30px', fill: '#000000' });
         this.text4 = this.game.add.text(this.game.camera.x+30, this.game.camera.y+540, '', { fontSize: '30px', fill: '#000000' });
-
+        
+        // Setting up timer for oxygen
+        this.timeInSeconds = 25;
+        this.timeText = this.game.add.text(this.game.camera.x - 100, this.game.camera.y, "0:00", { fontSize: '30px', fill: '#ffffff' });
+        this.timer = this.game.time.events.loop(Phaser.Timer.SECOND, this.tick, this); // timer event calls tick function for seconds 
 
         this.buildWorld();
     },
@@ -90,6 +94,7 @@ XPlorer.Game.prototype = {
         this.game.debug.text('Green Resources:\t' + greenResource, 50, 50);
         this.game.debug.text('Red Resources: \t' + redResource, 50, 75);
         this.game.debug.text('Yellow Resources: \t' + yellowResource, 50, 100);
+        this.game.debug.text(this.timeText.text, 50, 125);
     },
 
 
@@ -98,8 +103,8 @@ XPlorer.Game.prototype = {
             let horizontalDir = right.isDown - left.isDown;
             let verticalDir = down.isDown - up.isDown;
 
-            player.body.velocity.x = horizontalDir * playerSpeed;
-            player.body.velocity.y = verticalDir * playerSpeed;
+            player.body.velocity.x = horizontalDir * playerSpeed/((greenResource + redResource)/8 + 1);
+            player.body.velocity.y = verticalDir * playerSpeed/((greenResource + redResource)/8 + 1);
 
         }
         else{
@@ -198,10 +203,9 @@ XPlorer.Game.prototype = {
             canMove = 0;
 
             this.game.time.events.add(100, this.increment, this);
-
-
-
-
+            // resets resources
+            this.resetResources(); 
+            
         }
         if(Phaser.Math.isOdd(this.press)){
             this.bubble.x = -10000;
@@ -213,15 +217,12 @@ XPlorer.Game.prototype = {
 
             this.game.time.events.add(100, this.increment, this);
             canMove = 1;
-            
         }
     },
        
-
-
     interact: function() {
         // Creates a hitbox that checks for actors in the world
-        let hitbox = this.game.add.sprite(player.position.x, player.position.y, 'red50');
+        let hitbox = this.game.add.sprite(player.position.x, player.position.y);//, 'red50');
         hitbox.anchor.setTo(0.5,0.5);
         hitbox.scale.setTo(1.2, 1.2);
         this.game.physics.enable(hitbox, Phaser.Physics.ARCADE);
@@ -241,21 +242,21 @@ XPlorer.Game.prototype = {
 
     interactWithGreen: function(actor) {
         greenResource++;
-        this.addDrop(actor.x,actor.y, "green");
+        //this.addDrop(actor.x,actor.y, "green");
         actors.remove(actor);
     },
 
 
     interactWithRed: function(actor) {
         redResource++;
-        this.addDrop(actor.x,actor.y, "red");
+        //this.addDrop(actor.x,actor.y, "red");
         actors.remove(actor);
     },
 
 
     interactWithYellow: function(actor) {
         yellowResource++;
-        this.addDrop(actor.x,actor.y, "yellow");
+        //this.addDrop(actor.x,actor.y, "yellow");
         actors.remove(actor);
     },
     
@@ -263,6 +264,36 @@ XPlorer.Game.prototype = {
         let drop = this.game.add.sprite(x + 50, y, 'circle20');
         drop.data.resource = resource;
         drops.add(drop);
+    },
+    
+    // Function to tick down time for the counter + formatting
+    tick: function(){
+        this.timeInSeconds--;
+        var minutes = Math.floor(this.timeInSeconds / 60);
+        var seconds = this.timeInSeconds - (minutes * 60);
+        var timeString = this.addZeros(minutes) + ":" + this.addZeros(seconds);
+        this.timeText.text = timeString;
+        if (this.timeInSeconds == 0) { // This condition calls functions when timer hits 0
+            this.game.time.events.remove(this.timer);
+            this.timeText.text="Game Over";
+            this.game.state.start('Game');
+        }
+    },
+    
+    // Function to add 0s to tome
+    addZeros: function(num) {
+        if (num < 10){
+            num = "0" + num;
+        }
+        return num;
+    },
+    
+    // Function to reset resources and timer
+    resetResources: function(){
+        this.timeInSeconds = this.timeInSeconds + 15;
+        greenResource = 0;
+        redResource = 0;
+        yellowResource = 0;
     }
     
 };
