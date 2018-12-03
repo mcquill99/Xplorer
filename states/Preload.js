@@ -37,7 +37,7 @@ XPlorer.Preload.prototype = {
     },
 
     create: function() {
-        this.state.start('LevelEditor');
+        this.state.start('Game');
     }
 };
 

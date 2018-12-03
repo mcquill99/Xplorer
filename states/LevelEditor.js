@@ -1,10 +1,12 @@
 XPlorer.LevelEditor = function() {};
 
-var tiles = [],
-    actors = [],
+var tiles,
+    actors,
     integerToTileName = ['black50', 'darkGrey50', 'lightGrey50', 'white50'],
     integerToActorName = ['green20', 'red20', 'yellow20'],
-    tileSprite;
+    tileSprite,
+    tileWidth = 50,
+    tileHeight = 50;
 
 XPlorer.LevelEditor.prototype = {
 
@@ -28,7 +30,10 @@ XPlorer.LevelEditor.prototype = {
         this.saveMap();
         */
 
-        tileSprite = this.game.add.tileSprite(0, 0, 960, 600, 'checkerboard50');
+        tiles = this.game.add.group();
+        actors = this.game.add.group();
+
+        //tileSprite = this.game.add.tileSprite(0, 0, 960, 600, 'checkerboard50');
 
     },
 
@@ -49,8 +54,6 @@ XPlorer.LevelEditor.prototype = {
             2 = lightGrey50
             3 = white50
         */
-        // Make the conversion array
-        let integerToTileName = ['black50', 'darkGrey50', 'lightGrey50', 'white50'];
 
         // add the tiles into the world
         for(let i=0; i<level.tiles.length; i++) {
@@ -60,9 +63,6 @@ XPlorer.LevelEditor.prototype = {
                     y = tileWidth * i;
                 let curTile = this.game.add.sprite(x, y, tileName);
                 tiles.add(curTile);
-                this.game.physics.enable(curTile, Phaser.Physics.ARCADE);
-                //console.log(curTile);
-                curTile.body.immovable = true;
             }
         }
 
@@ -78,8 +78,6 @@ XPlorer.LevelEditor.prototype = {
         Phaser sprites have a "data" property which is unused in phaser, but allows us to associate some data with the
         sprite. In this case, we can store a function which will run when the actor is interacted with.
          */
-        let integerToActorName = ['green20', 'red20', 'yellow20'];
-        //let integerToActorResponse =[this.interactWithGreen, this.interactWithRed, this.textInteract];
 
         for(let i=0; i<level.actors.length; i++) {
             let actorName = integerToActorName[level.actors[i].name];
@@ -87,10 +85,6 @@ XPlorer.LevelEditor.prototype = {
                 y = level.actors[i].position[1];
             let curActor = this.game.add.sprite(x, y, actorName);
             actors.add(curActor);
-            //curActor.data.onInteract = integerToActorResponse[level.actors[i].name];
-            this.game.physics.enable(curActor, Phaser.Physics.ARCADE);
-            curActor.body.immovable = true;
-            //curActor.anchor.setTo(0.5,0.5);
         }
     },
 
