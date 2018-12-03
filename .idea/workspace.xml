@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d7ec8386-0d52-4a22-a9f3-ca1341adac29" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/text.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/states/Game.js" beforeDir="false" afterPath="$PROJECT_DIR$/states/Game.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/states/LevelEditor.js" beforeDir="false" afterPath="$PROJECT_DIR$/states/LevelEditor.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/states/Preload.js" beforeDir="false" afterPath="$PROJECT_DIR$/states/Preload.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -71,12 +70,12 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="js" value="428" />
+          <entry key="js" value="430" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JavaScript" value="428" />
+          <entry key="JavaScript" value="430" />
         </counts>
       </usages-collector>
     </session>
@@ -96,7 +95,7 @@
         <entry file="file://$PROJECT_DIR$/states/Preload.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="585">
-              <caret line="39" column="30" selection-start-line="39" selection-start-column="30" selection-end-line="39" selection-end-column="30" />
+              <caret line="40" column="30" selection-start-line="40" selection-start-column="30" selection-end-line="40" selection-end-column="30" />
             </state>
           </provider>
         </entry>
@@ -113,8 +112,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/states/Game.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="502">
-              <caret line="273" column="33" selection-start-line="273" selection-start-column="33" selection-end-line="273" selection-end-column="33" />
+            <state relative-caret-position="-4432">
+              <caret line="29" column="14" lean-forward="true" selection-start-line="29" selection-start-column="14" selection-end-line="29" selection-end-column="14" />
             </state>
           </provider>
         </entry>
@@ -257,12 +256,12 @@
       <workItem from="1543500139307" duration="95000" />
       <workItem from="1543523546511" duration="11000" />
       <workItem from="1543601760672" duration="1981000" />
-      <workItem from="1543860964431" duration="1799000" />
+      <workItem from="1543860964431" duration="1930000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="23523000" />
+    <option name="totallyTimeSpent" value="23654000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1280" height="800" extended-state="6" />
@@ -332,7 +331,7 @@
     <entry file="file://$PROJECT_DIR$/states/Preload.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="585">
-          <caret line="39" column="30" selection-start-line="39" selection-start-column="30" selection-end-line="39" selection-end-column="30" />
+          <caret line="40" column="30" selection-start-line="40" selection-start-column="30" selection-end-line="40" selection-end-column="30" />
         </state>
       </provider>
     </entry>
@@ -345,8 +344,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/states/Game.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="502">
-          <caret line="273" column="33" selection-start-line="273" selection-start-column="33" selection-end-line="273" selection-end-column="33" />
+        <state relative-caret-position="-4432">
+          <caret line="29" column="14" lean-forward="true" selection-start-line="29" selection-start-column="14" selection-end-line="29" selection-end-column="14" />
         </state>
       </provider>
     </entry>

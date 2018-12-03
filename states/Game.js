@@ -21,7 +21,13 @@ var tileWidth = 50,
     minDrops = 2,
     maxDrops = 5,
     dropMinOffset = -50,
-    dropMaxOffset = 50;
+    dropMaxOffset = 50,
+    wordIndex = 0,
+    lineIndex = 0,
+    wordDelay = 120,
+    lineDelay = 400,
+    inc = 0,
+    line = [];
 
 
 XPlorer.Game.prototype = {
@@ -74,10 +80,11 @@ XPlorer.Game.prototype = {
         this.bubble.enableBody = true;
 
         //adds text lines but blank
-        this.text1 = this.game.add.text(this.game.camera.x+30, this.game.camera.y+450, '', { fontSize: '30px', fill: '#000000' });
-        this.text2 = this.game.add.text(this.game.camera.x+30, this.game.camera.y+480, '', { fontSize: '30px', fill: '#000000' });
-        this.text3 = this.game.add.text(this.game.camera.x+30, this.game.camera.y+510, '', { fontSize: '30px', fill: '#000000' });
-        this.text4 = this.game.add.text(this.game.camera.x+30, this.game.camera.y+540, '', { fontSize: '30px', fill: '#000000' });
+        this.text1 = this.game.add.text(this.game.camera.x+30, this.game.camera.y+450, '', { fontSize: '30px', fill: '#000000', wordWrap: true, wordWrapWidth: 910});
+        this.text1.lineSpacing = -10;
+
+        this.textCompare = this.game.add.text(this.game.width + 1000, this.game.height + 1000, '', { fontSize: '30px', fill: '#000000', wordWrap: true, wordWrapWidth: 910});
+        this.textCompare.lineSpacing = -10;
         
         // Setting up timer for oxygen
         this.timeInSeconds = 25;
@@ -188,29 +195,70 @@ XPlorer.Game.prototype = {
 
     },
 
+    nextWord: function(){
+        let dialogue = this.game.cache.getJSON('text')
+        this.textCompare.text = this.textCompare.text.concat(line[wordIndex] + " ");
+
+        if(wordIndex < line.length &&  this.textCompare.height < this.bubble.height){
+
+            this.text1.text = this.text1.text.concat(line[wordIndex] + " ");
+
+            wordIndex++;
+
+        }
+        if(lineIndex == dialogue.testText.length-1 && wordIndex == line.length && inc == 0){
+            this.game.time.events.add(100, this.increment, this);
+            inc = 1;
+        }
+    },
+
     textInteract: function(){
+
         console.log(this.press);
+
+        let dialogue = this.game.cache.getJSON('text')
+
         if(Phaser.Math.isEven(this.press)){
             this.bubble.x = this.game.camera.x +10;
             this.bubble.y = this.game.camera.y + 440;
-
             this.text1.x = this.game.camera.x+30;
             this.text1.y = this.game.camera.y+450;
-            this.text2.x = this.game.camera.x+30;
-            this.text2.y = this.game.camera.y+480;
-            this.text3.x = this.game.camera.x+30;
-            this.text3.y =this.game.camera.y+510;
-            this.text4.x = this.game.camera.x+30;
-            this.text4.y =this.game.camera.y+540;
 
-            this.text1.text = "Welcome to the Beyond The Horizon Mini Mart!";
-            this.text2.text = "What can I do for you sonny?";
-            this.text3.text = 'Did the town mayor send another kid to pick up';
-            this.text4.text = "his groceries again? Oh silly him! here, it looks like";
+            this.text1.text = "";
+            this.textCompare.text = "";
+
+            line = dialogue.testText[lineIndex].split(' ');
+
+
+            if(wordIndex < line.length){
+                this.game.time.events.add(100, this.increment, this);
+                console.log("wordIndex < line.length");
+
+            }
+
+
+            if(wordIndex == line.length && lineIndex <  dialogue.testText.length-1){
+                lineIndex++;
+                wordIndex = 0;
+
+                this.game.time.events.add(100,this.increment,this);
+                console.log("wordIndex == line.length");
+            }
+
+
+                line = dialogue.testText[lineIndex].split(' ');
+
+
+
+            this.game.time.events.repeat(wordDelay, line.length, this.nextWord, this);
+
 
             canMove = 0;
 
-            this.game.time.events.add(100, this.increment, this);
+            this.game.time.events.add(100, this.increment, this); //increments press counter
+
+
+
             // resets resources
             this.resetResources(); 
             
@@ -219,12 +267,13 @@ XPlorer.Game.prototype = {
             this.bubble.x = -10000;
             this.bubble.y = -10000;
             this.text1.text = "";
-            this.text2.text = "";
-            this.text3.text = "";
-            this.text4.text = "";
+
 
             this.game.time.events.add(100, this.increment, this);
             canMove = 1;
+            wordIndex = 0;
+            lineIndex = 0;
+            inc = 0;
         }
     },
        

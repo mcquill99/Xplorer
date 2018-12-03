@@ -33,6 +33,7 @@ XPlorer.Preload.prototype = {
         this.load.image('textBox', 'assets/HUD/textBubble.png');
         
         this.load.json('testMap', 'data/testMap.json');
+        this.load.json('text', 'data/text.json');
 
     },
 
