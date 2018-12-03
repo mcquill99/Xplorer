@@ -23,6 +23,7 @@ var tileWidth = 50,
     lineIndex = 0,
     wordDelay = 120,
     lineDelay = 400,
+    inc = 0;
     line = [];
 
 
@@ -197,8 +198,9 @@ XPlorer.Game.prototype = {
             wordIndex++;
 
         }
-        if(lineIndex == dialogue.testText.length-1 && wordIndex == line.length){
+        if(lineIndex == dialogue.testText.length-1 && wordIndex == line.length && inc == 0){
             this.game.time.events.add(100, this.increment, this);
+            inc = 1;
         }
     },
 
@@ -263,6 +265,7 @@ XPlorer.Game.prototype = {
             canMove = 1;
             wordIndex = 0;
             lineIndex = 0;
+            inc = 0;
         }
     },
        
