@@ -23,7 +23,7 @@ var tileWidth = 50,
     lineIndex = 0,
     wordDelay = 120,
     lineDelay = 400,
-    inc = 0;
+    inc = true;
     line = [];
 
 
@@ -94,6 +94,8 @@ XPlorer.Game.prototype = {
 
     update: function() {
         this.handleInput();
+        console.log('x: ' + this.player.body.x);
+        console.log('y: ' + this.player.body.y);
     },
 
 
@@ -166,8 +168,8 @@ XPlorer.Game.prototype = {
         Phaser sprites have a "data" property which is unused in phaser, but allows us to associate some data with the
         sprite. In this case, we can store a function which will run when the actor is interacted with. 
          */
-        let integerToActorName = ['green20', 'red20', 'yellow20'];
-        let integerToActorResponse =[this.interactWithGreen, this.interactWithRed, this.textInteract];
+        let integerToActorName = ['green20', 'red20', 'yellow20', 'ship'];
+        let integerToActorResponse =[this.interactWithGreen, this.interactWithRed, this.textInteract, this.interactWithShip];
 
         for(let i=0; i<level.actors.length; i++) {
             let actorName = integerToActorName[level.actors[i].name];
@@ -198,9 +200,9 @@ XPlorer.Game.prototype = {
             wordIndex++;
 
         }
-        if(lineIndex == dialogue.testText.length-1 && wordIndex == line.length && inc == 0){
+        if(lineIndex == dialogue.testText.length-1 && wordIndex == line.length && inc == true){
             this.game.time.events.add(100, this.increment, this);
-            inc = 1;
+            inc = false;
         }
     },
 
@@ -265,7 +267,7 @@ XPlorer.Game.prototype = {
             canMove = 1;
             wordIndex = 0;
             lineIndex = 0;
-            inc = 0;
+            inc = true;
         }
     },
        
