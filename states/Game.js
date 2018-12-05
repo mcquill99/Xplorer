@@ -4,8 +4,8 @@ XPlorer.Game = function() {
 };
 
 // Initiate variables here
-var tileWidth = 50,
-    tileHeight = 50,
+var tileWidth = 46,
+    tileHeight = 13,
     canMove = 1,
     tiles,
     actors,
@@ -50,6 +50,8 @@ XPlorer.Game.prototype = {
 
         this.game.physics.startSystem(Phaser.Physics.P2JS);
 
+        this.buildWorld();
+
         player = this.game.add.sprite(970, 1100, 'blue50');
         this.game.physics.enable(player, Phaser.Physics.ARCADE);
 
@@ -58,6 +60,7 @@ XPlorer.Game.prototype = {
 
         // Makes the camera follow the player
         this.game.camera.follow(player);
+        this.game.world.bringToTop(player);
 
         // Set up arrow key inputs
         left = this.input.keyboard.addKey(Phaser.Keyboard.LEFT);
@@ -91,7 +94,6 @@ XPlorer.Game.prototype = {
         this.timeText = this.game.add.text(this.game.camera.x - 100, this.game.camera.y, "0:00", { fontSize: '30px', fill: '#ffffff' });
         this.timer = this.game.time.events.loop(Phaser.Timer.SECOND, this.tick, this); // timer event calls tick function for seconds 
 
-        this.buildWorld();
     },
 
 
@@ -127,9 +129,18 @@ XPlorer.Game.prototype = {
     buildWorld: function() {
         // Load the json file
         let level = this.game.cache.getJSON('testMap');
+        console.log(level);
 
-        this.game.world.setBounds(0, 0, level.tiles[0].length * tileWidth, level.tiles.length * tileHeight);
+        this.game.world.setBounds(0, 0, level.tiles[0].length * tileWidth + tileWidth / 2, level.tiles.length * tileHeight);
 
+        //this.buildTiles(level);
+        this.buildIsometricTiles(level);
+        this.buildActors(level);
+
+    },
+
+
+    buildTiles: function(level) {
         /*
         tile array is populated by integers so it's easier to load. These integers will be
         converted to the image name of the tile so that we can use one function to create each one
@@ -156,7 +167,27 @@ XPlorer.Game.prototype = {
                 curTile.body.immovable = true;
             }
         }
+    },
 
+
+    buildIsometricTiles: function(level) {
+        let integerToTileName = ['grass1', 'grass2', 'grass3', 'grass3'];
+
+        for(let i=0; i<level.tiles.length; i++)
+            for(let j=0; j<level.tiles[i].length; j++) {
+                let tileName = integerToTileName[level.tiles[i][j]];
+                let x = tileWidth * j + (i%2) * tileWidth / 2;
+                let y = tileHeight * i / 4;
+                let curTile = this.game.add.sprite(x, y, tileName);
+                tiles.add(curTile);
+                this.game.physics.enable(curTile, Phaser.Physics.ARCADE);
+                curTile.body.immovable = true;
+            }
+
+    },
+
+
+    buildActors: function(level) {
         // Add the actors into the world
         /*
         We're doing the same thing we did for the tiles for the actors, converting integers to actor names.
@@ -167,14 +198,15 @@ XPlorer.Game.prototype = {
 
 
         Phaser sprites have a "data" property which is unused in phaser, but allows us to associate some data with the
-        sprite. In this case, we can store a function which will run when the actor is interacted with. 
+        sprite. In this case, we can store a function which will run when the actor is interacted with.
          */
-        let integerToActorName = ['green20', 'red20', 'yellow20'];
-        let integerToActorResponse =[this.interactWithResource, this.interactWithResource, this.textInteract];
+        let integerToActorName = ['green20', 'red20', 'yellow20', 'checkerboard50'];
+        let integerToActorResponse =[this.interactWithResource, this.interactWithResource, this.textInteract, function(){}];
         let integerToData = [
             function(curActor) {curActor.data.resource = 0},
             function(curActor) {curActor.data.resource = 1},
-            function(curActor) {curActor.data.text = "test text"}];
+            function(curActor) {curActor.data.text = "test text"},
+            function(curActor) {}];
 
         for(let i=0; i<level.actors.length; i++) {
             let actorName = integerToActorName[level.actors[i].name];
@@ -189,6 +221,7 @@ XPlorer.Game.prototype = {
             //curActor.anchor.setTo(0.5,0.5);
         }
     },
+
 
     increment: function(){
         this.press = this.press + 1;

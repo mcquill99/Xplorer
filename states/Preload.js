@@ -27,12 +27,22 @@ XPlorer.Preload.prototype = {
         this.load.image('yellow50', 'assets/test/yellow50.png');
         this.load.image('checkerboard50', 'assets/test/checkerboard50.png');
 
+        //this.load.image('grass1', 'assets/new/grass_tile_1.png');
+        this.load.image('grass1', 'assets/new/grass_tile_1_1.png');
+        this.load.image('grass2', 'assets/new/grass_tile_2.png');
+        this.load.image('grass3', 'assets/new/grass_tile_3.png');
+        this.load.image('resourceBlue', 'assets/new/resource_blue.png');
+        this.load.image('resourceOrange', 'assets/new/resource_orange.png');
+        this.load.image('resourceRed', 'assets/new/resource_red.png');
+        this.load.image('resourceYellow', 'assets/new/resource_yellow.png');
+
+
         this.load.image("menuBack", 'assets/menu/menuBack.png');
         this.load.image('logo', 'assets/menu/logo.png');
         this.load.image('startBtn', 'assets/menu/start.png');
         this.load.image('textBox', 'assets/HUD/textBubble.png');
         
-        this.load.json('testMap', 'data/testMap.json');
+        this.load.json('testMap', 'data/testWorld1.json');
         this.load.json('text', 'data/text.json');
 
     },
