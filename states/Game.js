@@ -9,6 +9,7 @@ var tileWidth = 50,
     canMove = 1,
     tiles,
     actors,
+    drops,
     player,
     left,
     right,
@@ -16,14 +17,17 @@ var tileWidth = 50,
     down,
     spacebar,
     playerSpeed = 200,
-    greenResource = 0,
-    redResource = 0,
-    yellowResource = 0,
+    resources = [0, 0],
+    minDrops = 2,
+    maxDrops = 5,
+    dropMinOffset = -50,
+    dropMaxOffset = 50,
     wordIndex = 0,
     lineIndex = 0,
     wordDelay = 120,
     lineDelay = 400,
     inc = true;
+
     line = [];
 
 
@@ -94,16 +98,18 @@ XPlorer.Game.prototype = {
 
     update: function() {
         this.handleInput();
+
         console.log('x: ' + this.player.body.x);
         console.log('y: ' + this.player.body.y);
+
+        this.physics.arcade.overlap(drops, player, this.pickUpDrop, null, this);
     },
 
 
     render: function() {
-        this.game.debug.text('Green Resources:\t' + greenResource, 50, 50);
-        this.game.debug.text('Red Resources: \t' + redResource, 50, 75);
-        this.game.debug.text('Yellow Resources: \t' + yellowResource, 50, 100);
-        this.game.debug.text(this.timeText.text, 50, 125);
+        this.game.debug.text('Green Resources:\t' + resources[0], 50, 50);
+        this.game.debug.text('Red Resources: \t' + resources[1], 50, 75);
+        this.game.debug.text(this.timeText.text, 50, 100);
     },
 
 
@@ -112,8 +118,8 @@ XPlorer.Game.prototype = {
             let horizontalDir = right.isDown - left.isDown;
             let verticalDir = down.isDown - up.isDown;
 
-            player.body.velocity.x = horizontalDir * playerSpeed/((greenResource + redResource)/8 + 1);
-            player.body.velocity.y = verticalDir * playerSpeed/((greenResource + redResource)/8 + 1);
+            player.body.velocity.x = horizontalDir * playerSpeed;
+            player.body.velocity.y = verticalDir * playerSpeed;
 
         }
         else{
@@ -168,8 +174,13 @@ XPlorer.Game.prototype = {
         Phaser sprites have a "data" property which is unused in phaser, but allows us to associate some data with the
         sprite. In this case, we can store a function which will run when the actor is interacted with. 
          */
-        let integerToActorName = ['green20', 'red20', 'yellow20', 'ship'];
-        let integerToActorResponse =[this.interactWithGreen, this.interactWithRed, this.textInteract, this.interactWithShip];
+
+        let integerToActorName = ['green20', 'red20', 'yellow20'];
+        let integerToActorResponse =[this.interactWithResource, this.interactWithResource, this.textInteract];
+        let integerToData = [
+            function(curActor) {curActor.data.resource = 0},
+            function(curActor) {curActor.data.resource = 1},
+            function(curActor) {curActor.data.text = "test text"}];
 
         for(let i=0; i<level.actors.length; i++) {
             let actorName = integerToActorName[level.actors[i].name];
@@ -178,6 +189,7 @@ XPlorer.Game.prototype = {
             let curActor = this.game.add.sprite(x, y, actorName);
             actors.add(curActor);
             curActor.data.onInteract = integerToActorResponse[level.actors[i].name];
+            integerToData[level.actors[i].name](curActor);
             this.game.physics.enable(curActor, Phaser.Physics.ARCADE);
             curActor.body.immovable = true;
             //curActor.anchor.setTo(0.5,0.5);
@@ -280,7 +292,7 @@ XPlorer.Game.prototype = {
 
         // Tells the physics system how to act if this collides with an actor.
         // NOTE: if it collides with multiple actors, it will run with hitActor for each actor hit
-        this.physics.arcade.collide(hitbox, actors, this.interactWithActor, null, this);
+        this.physics.arcade.overlap(hitbox, actors, this.interactWithActor, null, this);
         //hitbox.destroy();
     },
 
@@ -291,31 +303,35 @@ XPlorer.Game.prototype = {
     },
 
 
-    interactWithGreen: function(actor) {
-        greenResource++;
-        //this.addDrop(actor.x,actor.y, "green");
-        actors.remove(actor);
+    /*
+    This calls addDrops with the actors information.
+     */
+    interactWithResource: function(actor) {
+        this.addDrops(actor.position.x, actor.position.y, actor.data.resource, this.randIntBetween(minDrops, maxDrops));
+        actor.destroy();
     },
 
-
-    interactWithRed: function(actor) {
-        redResource++;
-        //this.addDrop(actor.x,actor.y, "red");
-        actors.remove(actor);
-    },
-
-
-    interactWithYellow: function(actor) {
-        yellowResource++;
-        //this.addDrop(actor.x,actor.y, "yellow");
-        actors.remove(actor);
-    },
     
-    addDrop: function(x,y, resource){
-        let drop = this.game.add.sprite(x + 50, y, 'circle20');
-        drop.data.resource = resource;
-        drops.add(drop);
+    addDrops: function(x,y, resource, numOfDrops){
+        for(numOfDrops; numOfDrops > 0; numOfDrops--) {
+            let xOffset = this.randIntBetween(dropMinOffset, dropMaxOffset),
+                yOffset = this.randIntBetween(dropMinOffset, dropMaxOffset);
+
+
+            let drop = this.game.add.sprite(x + xOffset, y + yOffset, 'circle20');
+            drop.data.resource = resource;
+            drops.add(drop);
+            this.game.physics.enable(drop, Phaser.Physics.ARCADE);
+        }
     },
+
+
+    pickUpDrop: function(player, drop) {
+        console.log('pickup drop...');
+        resources[drop.data.resource]++;
+        drop.destroy();
+    },
+
     
     // Function to tick down time for the counter + formatting
     tick: function(){
@@ -342,9 +358,14 @@ XPlorer.Game.prototype = {
     // Function to reset resources and timer
     resetResources: function(){
         this.timeInSeconds = this.timeInSeconds + 15;
-        greenResource = 0;
-        redResource = 0;
-        yellowResource = 0;
+        for(let i=0; i < resources.length; i++)
+            resources[i] = 0;
+
+    },
+
+
+    randIntBetween: function(min, max) {
+        return Math.floor(Math.random() * (max - min) + min);
     }
     
 };
