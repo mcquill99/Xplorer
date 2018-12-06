@@ -60,6 +60,7 @@ XPlorer.Game.prototype = {
         ship = this.game.add.sprite(775, 970, 'ship');
         this.game.physics.enable(player, Phaser.Physics.ARCADE);
 
+
         //changes anchor to the middle of the player
         player.anchor.setTo(0.5,0.5);
 
@@ -99,14 +100,16 @@ XPlorer.Game.prototype = {
         this.timeText = this.game.add.text(this.game.camera.x - 100, this.game.camera.y, "0:00", { fontSize: '30px', fill: '#ffffff' });
         this.timer = this.game.time.events.loop(Phaser.Timer.SECOND, this.tick, this); // timer event calls tick function for seconds 
 
+        this.game.world.bringToTop(actors);
+
     },
 
 
     update: function() {
         this.handleInput();
 
-        console.log('x: ' + player.body.x);
-        console.log('y: ' + player.body.y);
+        //console.log('x: ' + player.body.x);
+        //console.log('y: ' + player.body.y);
 
         this.physics.arcade.overlap(drops, player, this.pickUpDrop, null, this);
         this.physics.arcade.overlap(ship, player, this.stopTimer, null, this);
@@ -143,8 +146,8 @@ XPlorer.Game.prototype = {
 
         this.game.world.setBounds(0, 0, level.tiles[0].length * tileWidth + tileWidth / 2, level.tiles.length * tileHeight);
 
-        //this.buildTiles(level);
-        this.buildIsometricTiles(level);
+        this.buildTiles(level);
+        //this.buildIsometricTiles(level);
         this.buildActors(level);
 
     },
@@ -211,14 +214,15 @@ XPlorer.Game.prototype = {
         sprite. In this case, we can store a function which will run when the actor is interacted with.
          */
 
-        let integerToActorName = ['green20', 'red20', 'yellow20', 'checkerboard50'];
-        let integerToActorResponse =[this.interactWithResource, this.interactWithResource, this.textInteract, function(){}];
+        let integerToActorName = ['green20', 'red20', 'green20', 'checkerboard50', 'yellow20'];
+        let integerToActorResponse =[this.interactWithResource, this.interactWithResource, this.interactWithResource, function(){}, this.textInteract];
 
         let integerToData = [
             function(curActor) {curActor.data.resource = 0},
             function(curActor) {curActor.data.resource = 1},
             function(curActor) {curActor.data.text = "test text"},
-            function(curActor) {}];
+            function(curActor) {},
+            function(curActor) {curActor.data.text = "test text"}];
 
         for(let i=0; i<level.actors.length; i++) {
             let actorName = integerToActorName[level.actors[i].name];
@@ -407,7 +411,10 @@ XPlorer.Game.prototype = {
     
     // Function to reset resources and timer
     resetResources: function(){
-        this.timeInSeconds = this.timeInSeconds + 15;
+        if(this.timeInSeconds < 40){
+            this.toAdd = 40-this.timeInSeconds;
+            this.timeInSeconds = this.timeInSeconds + this.toAdd;
+        }
         for(let i=0; i < resources.length; i++)
             resources[i] = 0;
 
