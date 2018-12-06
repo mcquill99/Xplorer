@@ -11,6 +11,7 @@ var tileWidth = 46,
     actors,
     drops,
     player,
+    ship,
     left,
     right,
     up,
@@ -54,6 +55,9 @@ XPlorer.Game.prototype = {
         this.buildWorld();
 
         player = this.game.add.sprite(970, 1100, 'blue50');
+        this.game.physics.enable(player, Phaser.Physics.ARCADE);
+
+        ship = this.game.add.sprite(775, 970, 'ship');
         this.game.physics.enable(player, Phaser.Physics.ARCADE);
 
         //changes anchor to the middle of the player
@@ -101,10 +105,11 @@ XPlorer.Game.prototype = {
     update: function() {
         this.handleInput();
 
-        console.log('x: ' + this.player.body.x);
-        console.log('y: ' + this.player.body.y);
+        console.log('x: ' + player.body.x);
+        console.log('y: ' + player.body.y);
 
         this.physics.arcade.overlap(drops, player, this.pickUpDrop, null, this);
+        this.physics.arcade.overlap(ship, player, this.stopTimer, null, this);
     },
 
 
@@ -366,14 +371,25 @@ XPlorer.Game.prototype = {
         drop.destroy();
     },
 
+    checkForOverLap: function(spriteA, spriteB){
+        var boundsA = spriteA.getBounds();
+        var boundsB = spriteB.getBounds();
+
+        return Phaser.Rectangle.intersects(boundsA, boundsB);
+    },
+
     
     // Function to tick down time for the counter + formatting
     tick: function(){
-        this.timeInSeconds--;
+        if(!this.checkForOverLap(player, ship)){
+            this.timeInSeconds--;
+        }
+
         var minutes = Math.floor(this.timeInSeconds / 60);
         var seconds = this.timeInSeconds - (minutes * 60);
         var timeString = this.addZeros(minutes) + ":" + this.addZeros(seconds);
         this.timeText.text = timeString;
+
         if (this.timeInSeconds == 0) { // This condition calls functions when timer hits 0
             this.game.time.events.remove(this.timer);
             this.timeText.text="Game Over";
