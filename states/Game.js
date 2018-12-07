@@ -27,7 +27,10 @@ var tileWidth = 46,
     lineIndex = 0,
     wordDelay = 120,
     lineDelay = 400,
-    textIndex = 0,
+    textIndex = 1,
+    taskNum = 0,
+    greenNeeded = 10,
+    redNeeded = 5,
     inc = true;
 
     line = [];
@@ -278,7 +281,8 @@ XPlorer.Game.prototype = {
 
         console.log(this.press);
 
-        let dialogue = this.game.cache.getJSON('text')
+        let dialogue = this.game.cache.getJSON('text');
+
 
         if(Phaser.Math.isEven(this.press)){
             this.bubble.x = this.game.camera.x +10;
@@ -288,6 +292,8 @@ XPlorer.Game.prototype = {
 
             this.text1.text = "";
             this.textCompare.text = "";
+
+            //this.checkDialogue();
 
             line = dialogue.testText[textIndex][lineIndex].split(' ');
 
@@ -321,8 +327,7 @@ XPlorer.Game.prototype = {
 
 
 
-            // resets resources
-            this.resetResources(); 
+            // resets resources 
             
         }
         if(Phaser.Math.isOdd(this.press)){
@@ -338,6 +343,22 @@ XPlorer.Game.prototype = {
             inc = true;
         }
     },
+
+    checkDialogue: function(){
+        if(this.hasResources(greenNeeded, redNeeded)){
+            if(this.press != 0){
+                textIndex = textIndex + 1;
+                resetResources();
+            }
+
+        }
+        else{
+            if(this.press != 0){
+                textIndex = 0;
+            }
+        }
+    },
+
 
        
     interact: function() {
