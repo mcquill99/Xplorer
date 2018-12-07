@@ -27,6 +27,10 @@ var tileWidth = 46,
     lineIndex = 0,
     wordDelay = 120,
     lineDelay = 400,
+    textIndex = 1,
+    taskNum = 0,
+    greenNeeded = 10,
+    redNeeded = 5,
     inc = true;
 
     line = [];
@@ -101,6 +105,8 @@ XPlorer.Game.prototype = {
         this.timer = this.game.time.events.loop(Phaser.Timer.SECOND, this.tick, this); // timer event calls tick function for seconds 
 
         this.game.world.bringToTop(actors);
+        this.game.world.bringToTop(this.bubble);
+        this.game.world.bringToTop(this.text1);
 
     },
 
@@ -245,6 +251,16 @@ XPlorer.Game.prototype = {
         }
     },
 
+    hasResources: function(greenResources,redResources){
+        if(resources[0] >= greenResources && resources[1] >= redResources){
+            return true;
+        }
+        else{
+            return false;
+        }
+
+    },
+
 
     increment: function(){
         this.press = this.press + 1;
@@ -262,7 +278,7 @@ XPlorer.Game.prototype = {
             wordIndex++;
 
         }
-        if(lineIndex == dialogue.testText.length-1 && wordIndex == line.length && inc == true){
+        if(lineIndex == dialogue.testText[textIndex].length-1 && wordIndex == line.length && inc == true){
             this.game.time.events.add(100, this.increment, this);
             inc = false;
         }
@@ -272,7 +288,7 @@ XPlorer.Game.prototype = {
 
         console.log(this.press);
 
-        var dialogue = this.game.cache.getJSON('text')
+        var dialogue = this.game.cache.getJSON('text');
 
         if(Phaser.Math.isEven(this.press)){
             this.bubble.x = this.game.camera.x +10;
@@ -283,7 +299,9 @@ XPlorer.Game.prototype = {
             this.text1.text = "";
             this.textCompare.text = "";
 
-            line = dialogue.testText[lineIndex].split(' ');
+            //this.checkDialogue();
+
+            line = dialogue.testText[textIndex][lineIndex].split(' ');
 
 
             if(wordIndex < line.length){
@@ -293,7 +311,7 @@ XPlorer.Game.prototype = {
             }
 
 
-            if(wordIndex == line.length && lineIndex <  dialogue.testText.length-1){
+            if(wordIndex == line.length && lineIndex <  dialogue.testText[textIndex].length-1){
                 lineIndex++;
                 wordIndex = 0;
 
@@ -302,7 +320,7 @@ XPlorer.Game.prototype = {
             }
 
 
-                line = dialogue.testText[lineIndex].split(' ');
+                line = dialogue.testText[textIndex][lineIndex].split(' ');
 
 
 
@@ -315,8 +333,7 @@ XPlorer.Game.prototype = {
 
 
 
-            // resets resources
-            this.resetResources(); 
+            // resets resources 
             
         }
         if(Phaser.Math.isOdd(this.press)){
@@ -333,6 +350,21 @@ XPlorer.Game.prototype = {
         }
     },
 
+    checkDialogue: function(){
+        if(this.hasResources(greenNeeded, redNeeded)){
+            if(this.press != 0){
+                textIndex = textIndex + 1;
+                resetResources();
+            }
+
+        }
+        else{
+            if(this.press != 0){
+                textIndex = 0;
+            }
+        }
+    },
+    
        
     interact: function() {
         // Creates a hitbox that checks for actors in the world
