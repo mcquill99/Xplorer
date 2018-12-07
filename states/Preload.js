@@ -46,6 +46,10 @@ XPlorer.Preload.prototype = {
         this.load.json('testMap', 'data/testMap.json');
         this.load.json('text', 'data/text.json');
 
+        this.load.audio('chipResource', ['assets/sounds/Ice_impact_lite_02 (online-audio-converter.com).mp3',
+            'assets/sounds/Ice_impact_lite_02 (online-audio-converter.com).ogg']);
+        this.load.audio('breakResource', ['assets/sounds/RockCrumble.mp3', 'assets/sounds/RockCrumble.ogg']);
+
     },
 
     create: function() {

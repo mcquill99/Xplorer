@@ -18,7 +18,7 @@ var tileWidth = 46,
     down,
     spacebar,
     playerSpeed = 200,
-    resources = [0, 0],
+    resources = [0, 0], // [Green, Red]
     minDrops = 2,
     maxDrops = 5,
     dropMinOffset = -50,
@@ -54,10 +54,10 @@ XPlorer.Game.prototype = {
 
         this.buildWorld();
 
-        player = this.game.add.sprite(970, 1100, 'blue50');
+        player = this.game.add.sprite(this.game.world.width/2, this.game.world.height/2, 'blue50');
         this.game.physics.enable(player, Phaser.Physics.ARCADE);
 
-        ship = this.game.add.sprite(775, 970, 'ship');
+        ship = this.game.add.sprite(player.body.x - 200, player.body.y - 125, 'ship');
         this.game.physics.enable(player, Phaser.Physics.ARCADE);
 
 
@@ -125,8 +125,8 @@ XPlorer.Game.prototype = {
 
     handleInput: function() {
         if(canMove == 1){
-            let horizontalDir = right.isDown - left.isDown;
-            let verticalDir = down.isDown - up.isDown;
+            var horizontalDir = right.isDown - left.isDown;
+            var verticalDir = down.isDown - up.isDown;
 
             player.body.velocity.x = horizontalDir * playerSpeed;
             player.body.velocity.y = verticalDir * playerSpeed;
@@ -141,7 +141,7 @@ XPlorer.Game.prototype = {
 
     buildWorld: function() {
         // Load the json file
-        let level = this.game.cache.getJSON('testMap');
+        var level = this.game.cache.getJSON('testMap');
         console.log(level);
 
         this.game.world.setBounds(0, 0, level.tiles[0].length * tileWidth + tileWidth / 2, level.tiles.length * tileHeight);
@@ -165,15 +165,15 @@ XPlorer.Game.prototype = {
             3 = white50
         */
         // Make the conversion array
-        let integerToTileName = ['black50', 'darkGrey50', 'lightGrey50', 'white50'];
+        var integerToTileName = ['black50', 'darkGrey50', 'lightGrey50', 'white50'];
 
         // add the tiles into the world
-        for(let i=0; i<level.tiles.length; i++) {
-            for(let j=0; j<level.tiles[i].length; j++) {
-                let tileName = integerToTileName[level.tiles[i][j]];
-                let x = tileWidth * j,
+        for(var i=0; i<level.tiles.length; i++) {
+            for(var j=0; j<level.tiles[i].length; j++) {
+                var tileName = integerToTileName[level.tiles[i][j]];
+                var x = tileWidth * j,
                     y = tileWidth * i;
-                let curTile = this.game.add.sprite(x, y, tileName);
+                var curTile = this.game.add.sprite(x, y, tileName);
                 tiles.add(curTile);
                 this.game.physics.enable(curTile, Phaser.Physics.ARCADE);
                 //console.log(curTile);
@@ -184,14 +184,14 @@ XPlorer.Game.prototype = {
 
 
     buildIsometricTiles: function(level) {
-        let integerToTileName = ['grass1', 'grass2', 'grass3', 'grass3'];
+        var integerToTileName = ['grass1', 'grass2', 'grass3', 'grass3'];
 
-        for(let i=0; i<level.tiles.length; i++)
-            for(let j=0; j<level.tiles[i].length; j++) {
-                let tileName = integerToTileName[level.tiles[i][j]];
-                let x = tileWidth * j + (i%2) * tileWidth / 2;
-                let y = tileHeight * i / 4;
-                let curTile = this.game.add.sprite(x, y, tileName);
+        for(var i=0; i<level.tiles.length; i++)
+            for(var j=0; j<level.tiles[i].length; j++) {
+                var tileName = integerToTileName[level.tiles[i][j]];
+                var x = tileWidth * j + (i%2) * tileWidth / 2;
+                var y = tileHeight * i / 4;
+                var curTile = this.game.add.sprite(x, y, tileName);
                 tiles.add(curTile);
                 this.game.physics.enable(curTile, Phaser.Physics.ARCADE);
                 curTile.body.immovable = true;
@@ -214,21 +214,28 @@ XPlorer.Game.prototype = {
         sprite. In this case, we can store a function which will run when the actor is interacted with.
          */
 
-        let integerToActorName = ['green20', 'red20', 'green20', 'checkerboard50', 'yellow20'];
-        let integerToActorResponse =[this.interactWithResource, this.interactWithResource, this.interactWithResource, function(){}, this.textInteract];
+        var integerToActorName = ['green20', 'red20', 'green20', 'yellow20'];
+        var integerToActorResponse =[this.interactWithResource, this.interactWithResource, this.interactWithResource, function(){}, this.textInteract];
 
-        let integerToData = [
-            function(curActor) {curActor.data.resource = 0},
-            function(curActor) {curActor.data.resource = 1},
-            function(curActor) {curActor.data.text = "test text"},
-            function(curActor) {},
-            function(curActor) {curActor.data.text = "test text"}];
+        var integerToData = [
+                function(curActor) {
+                    curActor.data.resource = 0;
+                    curActor.data.health = 3
+                },
+                function(curActor) {
+                    curActor.data.resource = 1;
+                    curActor.data.health = 4
+                },
+                function(curActor) { curActor.data.text = "test text" },
+                function(curActor) {},
+                function(curActor) { curActor.data.text = "test text" }
+            ];
 
-        for(let i=0; i<level.actors.length; i++) {
-            let actorName = integerToActorName[level.actors[i].name];
-            let x = level.actors[i].position[0],
+        for(var i=0; i<level.actors.length; i++) {
+            var actorName = integerToActorName[level.actors[i].name];
+            var x = level.actors[i].position[0],
                 y = level.actors[i].position[1];
-            let curActor = this.game.add.sprite(x, y, actorName);
+            var curActor = this.game.add.sprite(x, y, actorName);
             actors.add(curActor);
             curActor.data.onInteract = integerToActorResponse[level.actors[i].name];
             integerToData[level.actors[i].name](curActor);
@@ -245,7 +252,7 @@ XPlorer.Game.prototype = {
     },
 
     nextWord: function(){
-        let dialogue = this.game.cache.getJSON('text')
+        var dialogue = this.game.cache.getJSON('text')
         this.textCompare.text = this.textCompare.text.concat(line[wordIndex] + " ");
 
         if(wordIndex < line.length &&  this.textCompare.height < this.bubble.height){
@@ -265,7 +272,7 @@ XPlorer.Game.prototype = {
 
         console.log(this.press);
 
-        let dialogue = this.game.cache.getJSON('text')
+        var dialogue = this.game.cache.getJSON('text')
 
         if(Phaser.Math.isEven(this.press)){
             this.bubble.x = this.game.camera.x +10;
@@ -325,10 +332,11 @@ XPlorer.Game.prototype = {
             inc = true;
         }
     },
+
        
     interact: function() {
         // Creates a hitbox that checks for actors in the world
-        let hitbox = this.game.add.sprite(player.position.x, player.position.y);//, 'red50');
+        var hitbox = this.game.add.sprite(player.position.x, player.position.y);//, 'red50');
         hitbox.anchor.setTo(0.5,0.5);
         hitbox.scale.setTo(1.2, 1.2);
         this.game.physics.enable(hitbox, Phaser.Physics.ARCADE);
@@ -350,18 +358,26 @@ XPlorer.Game.prototype = {
     This calls addDrops with the actors information.
      */
     interactWithResource: function(actor) {
-        this.addDrops(actor.position.x, actor.position.y, actor.data.resource, this.randIntBetween(minDrops, maxDrops));
-        actor.destroy();
+
+        if(actor.data.health > 0) {
+            actor.data.health--;
+            this.playSound('chipResource');
+        }
+        else {
+            this.addDrops(actor.position.x, actor.position.y, actor.data.resource, this.randIntBetween(minDrops, maxDrops));
+            actor.destroy();
+            this.playSound('breakResource');
+        }
     },
 
     
     addDrops: function(x,y, resource, numOfDrops){
         for(numOfDrops; numOfDrops > 0; numOfDrops--) {
-            let xOffset = this.randIntBetween(dropMinOffset, dropMaxOffset),
+            var xOffset = this.randIntBetween(dropMinOffset, dropMaxOffset),
                 yOffset = this.randIntBetween(dropMinOffset, dropMaxOffset);
 
 
-            let drop = this.game.add.sprite(x + xOffset, y + yOffset, 'circle20');
+            var drop = this.game.add.sprite(x + xOffset, y + yOffset, 'circle20');
             drop.data.resource = resource;
             drops.add(drop);
             this.game.physics.enable(drop, Phaser.Physics.ARCADE);
@@ -415,7 +431,7 @@ XPlorer.Game.prototype = {
             this.toAdd = 40-this.timeInSeconds;
             this.timeInSeconds = this.timeInSeconds + this.toAdd;
         }
-        for(let i=0; i < resources.length; i++)
+        for(var i=0; i < resources.length; i++)
             resources[i] = 0;
 
     },
@@ -423,6 +439,15 @@ XPlorer.Game.prototype = {
 
     randIntBetween: function(min, max) {
         return Math.floor(Math.random() * (max - min) + min);
+    },
+
+
+    /*
+    Plays a sound with a given name
+     */
+    playSound: function(soundName) {
+        var sound = this.add.audio(soundName);
+        sound.play();
     }
     
 };
