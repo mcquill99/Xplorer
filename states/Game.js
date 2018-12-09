@@ -31,6 +31,11 @@ var tileWidth = 46,
     taskNum = 0,
     greenNeeded = 10,
     redNeeded = 5,
+    resourceList = [];
+    greenNeeded = 0,
+    redNeeded = 0,
+    greenIndex = 0,
+    redIndex = 1,
     inc = true;
 
     line = [];
@@ -107,6 +112,10 @@ XPlorer.Game.prototype = {
         this.game.world.bringToTop(actors);
         this.game.world.bringToTop(this.bubble);
         this.game.world.bringToTop(this.text1);
+
+        resourceList = this.game.cache.getJSON('text').resourceCount[0];
+        greenNeeded = resourceList[greenIndex];
+        redNeeded = resourceList[redIndex];
 
     },
 
@@ -268,7 +277,7 @@ XPlorer.Game.prototype = {
     },
 
     nextWord: function(){
-        var dialogue = this.game.cache.getJSON('text')
+        let dialogue = this.game.cache.getJSON('text')
         this.textCompare.text = this.textCompare.text.concat(line[wordIndex] + " ");
 
         if(wordIndex < line.length &&  this.textCompare.height < this.bubble.height){
@@ -288,7 +297,8 @@ XPlorer.Game.prototype = {
 
         console.log(this.press);
 
-        var dialogue = this.game.cache.getJSON('text');
+        let dialogue = this.game.cache.getJSON('text');
+
 
         if(Phaser.Math.isEven(this.press)){
             this.bubble.x = this.game.camera.x +10;
@@ -299,7 +309,7 @@ XPlorer.Game.prototype = {
             this.text1.text = "";
             this.textCompare.text = "";
 
-            //this.checkDialogue();
+            this.checkDialogue();
 
             line = dialogue.testText[textIndex][lineIndex].split(' ');
 
@@ -354,12 +364,18 @@ XPlorer.Game.prototype = {
         if(this.hasResources(greenNeeded, redNeeded)){
             if(this.press != 0){
                 textIndex = textIndex + 1;
-                resetResources();
+                this.resetResources();
+                if(redIndex != resourceList.length){
+                    redIndex = redIndex + 2;
+                    greenIndex = greenIndex + 2;
+                    redNeeded = resourceList[redIndex]
+                    greenNeeded = resourceList[greenIndex];
+                }
             }
 
         }
         else{
-            if(this.press != 0){
+            if(this.press != 0 && wordIndex == 0 && lineIndex == 0){
                 textIndex = 0;
             }
         }
