@@ -193,12 +193,12 @@
 
     {
         "name": 3,
-        "position":[750, 1300]
+        "position":[800, 950]
     },
 
     {
-      "name": 4,
-      "position": [820, 1100]
+      "name": 1,
+      "position": [820, 1500]
     }
 
   ]

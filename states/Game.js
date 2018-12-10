@@ -32,10 +32,8 @@ var tileWidth = 46,
     greenNeeded = 10,
     redNeeded = 5,
     resourceList = [];
-    greenNeeded = 0,
-    redNeeded = 0,
-    greenIndex = 0,
-    redIndex = 1,
+    resourcesNeeded = [],
+    resourceIndex = 0;
     inc = true;
 
     line = [];
@@ -113,9 +111,8 @@ XPlorer.Game.prototype = {
         this.game.world.bringToTop(this.bubble);
         this.game.world.bringToTop(this.text1);
 
-        resourceList = this.game.cache.getJSON('text').resourceCount[0];
-        greenNeeded = resourceList[greenIndex];
-        redNeeded = resourceList[redIndex];
+        resourceList = this.game.cache.getJSON('text').resourceCount;
+        resourcesNeeded = resourceList[resourceIndex];
 
     },
 
@@ -230,7 +227,7 @@ XPlorer.Game.prototype = {
          */
 
         var integerToActorName = ['green20', 'red20', 'green20', 'yellow20'];
-        var integerToActorResponse =[this.interactWithResource, this.interactWithResource, this.interactWithResource, function(){}, this.textInteract];
+        var integerToActorResponse =[this.interactWithResource, this.interactWithResource, this.interactWithResource,this.textInteract];
 
         var integerToData = [
                 function(curActor) {
@@ -260,8 +257,8 @@ XPlorer.Game.prototype = {
         }
     },
 
-    hasResources: function(greenResources,redResources){
-        if(resources[0] >= greenResources && resources[1] >= redResources){
+    hasResources: function(resoursesNeeded){
+        if(resources[0] >= resourcesNeeded[0] && resources[1] >= resourcesNeeded[1]){
             return true;
         }
         else{
@@ -365,11 +362,9 @@ XPlorer.Game.prototype = {
             if(this.press != 0){
                 textIndex = textIndex + 1;
                 this.resetResources();
-                if(redIndex != resourceList.length){
-                    redIndex = redIndex + 2;
-                    greenIndex = greenIndex + 2;
-                    redNeeded = resourceList[redIndex]
-                    greenNeeded = resourceList[greenIndex];
+                if(resourceIndex != resourceList.length){
+                    resourceIndex++;
+                    resourcesNeeded = resourceList[resourceIndex];
                 }
             }
 
