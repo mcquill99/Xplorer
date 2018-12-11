@@ -31,7 +31,8 @@ var tileWidth = 46,
     taskNum = 0,
     greenNeeded = 10,
     redNeeded = 5,
-    resourceList = [];
+    timeArray = [],
+    resourceList = [],
     resourcesNeeded = [],
     resourceIndex = 0;
     inc = true;
@@ -103,7 +104,8 @@ XPlorer.Game.prototype = {
         this.textCompare.lineSpacing = -10;
         
         // Setting up timer for oxygen
-        this.timeInSeconds = 25;
+        timeArray = this.game.cache.getJSON('text').oxygenTime[0];
+        this.timeInSeconds = timeArray[resourceIndex];
         this.timeText = this.game.add.text(this.game.camera.x - 100, this.game.camera.y, "0:00", { fontSize: '30px', fill: '#ffffff' });
         this.timer = this.game.time.events.loop(Phaser.Timer.SECOND, this.tick, this); // timer event calls tick function for seconds 
 
@@ -365,6 +367,7 @@ XPlorer.Game.prototype = {
                 if(resourceIndex != resourceList.length){
                     resourceIndex++;
                     resourcesNeeded = resourceList[resourceIndex];
+                    this.timeInSeconds = timeArray[resourceIndex];
                 }
             }
 
@@ -470,8 +473,8 @@ XPlorer.Game.prototype = {
     
     // Function to reset resources and timer
     resetResources: function(){
-        if(this.timeInSeconds < 40){
-            this.toAdd = 40-this.timeInSeconds;
+        if(this.timeInSeconds < timeArray[resourceIndex]){
+            this.toAdd = timeArray[resourceIndex]-this.timeInSeconds;
             this.timeInSeconds = this.timeInSeconds + this.toAdd;
         }
         for(var i=0; i < resources.length; i++)
