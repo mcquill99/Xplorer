@@ -37,6 +37,11 @@ var tileWidth = 46,
     inc = true,
     tilesRendered,
     tilesArray,
+    timeArray = [],
+    resourceList = [],
+    resourcesNeeded = [],
+    resourceIndex = 0;
+    inc = true;
     line = [];
 
 
@@ -106,7 +111,8 @@ XPlorer.Game.prototype = {
         this.textCompare.lineSpacing = -10;
         
         // Setting up timer for oxygen
-        this.timeInSeconds = 25;
+        timeArray = this.game.cache.getJSON('text').oxygenTime[0];
+        this.timeInSeconds = timeArray[resourceIndex];
         this.timeText = this.game.add.text(this.game.camera.x - 100, this.game.camera.y, "0:00", { fontSize: '30px', fill: '#ffffff' });
         this.timer = this.game.time.events.loop(Phaser.Timer.SECOND, this.tick, this); // timer event calls tick function for seconds 
 
@@ -115,6 +121,8 @@ XPlorer.Game.prototype = {
         this.game.world.bringToTop(this.text1);
 
         this.buildEmitters();
+        resourceList = this.game.cache.getJSON('text').resourceCount;
+        resourcesNeeded = resourceList[resourceIndex];
 
     },
 
@@ -236,7 +244,7 @@ XPlorer.Game.prototype = {
          */
 
         var integerToActorName = ['green20', 'red20', 'green20', 'yellow20'];
-        var integerToActorResponse =[this.interactWithResource, this.interactWithResource, this.interactWithResource, function(){}, this.textInteract];
+        var integerToActorResponse =[this.interactWithResource, this.interactWithResource, this.interactWithResource,this.textInteract];
 
         var integerToData = [
                 function(curActor) {
@@ -276,9 +284,9 @@ XPlorer.Game.prototype = {
         }
     },
 
-
-    hasResources: function(greenResources,redResources){
-        if(resources[0] >= greenResources && resources[1] >= redResources){
+    
+    hasResources: function(resoursesNeeded){
+        if(resources[0] >= resourcesNeeded[0] && resources[1] >= resourcesNeeded[1]){
             return true;
         }
         else{
@@ -294,7 +302,7 @@ XPlorer.Game.prototype = {
     },
 
     nextWord: function(){
-        var dialogue = this.game.cache.getJSON('text')
+        let dialogue = this.game.cache.getJSON('text')
         this.textCompare.text = this.textCompare.text.concat(line[wordIndex] + " ");
 
         if(wordIndex < line.length &&  this.textCompare.height < this.bubble.height){
@@ -314,7 +322,8 @@ XPlorer.Game.prototype = {
 
         console.log(this.press);
 
-        var dialogue = this.game.cache.getJSON('text');
+        let dialogue = this.game.cache.getJSON('text');
+
 
         if(Phaser.Math.isEven(this.press)){
             this.bubble.x = this.game.camera.x +10;
@@ -325,7 +334,7 @@ XPlorer.Game.prototype = {
             this.text1.text = "";
             this.textCompare.text = "";
 
-            //this.checkDialogue();
+            this.checkDialogue();
 
             line = dialogue.testText[textIndex][lineIndex].split(' ');
 
@@ -380,12 +389,17 @@ XPlorer.Game.prototype = {
         if(this.hasResources(greenNeeded, redNeeded)){
             if(this.press != 0){
                 textIndex = textIndex + 1;
-                resetResources();
+                this.resetResources();
+                if(resourceIndex != resourceList.length){
+                    resourceIndex++;
+                    resourcesNeeded = resourceList[resourceIndex];
+                    this.timeInSeconds = timeArray[resourceIndex];
+                }
             }
 
         }
         else{
-            if(this.press != 0){
+            if(this.press != 0 && wordIndex == 0 && lineIndex == 0){
                 textIndex = 0;
             }
         }
@@ -490,8 +504,8 @@ XPlorer.Game.prototype = {
     
     // Function to reset resources and timer
     resetResources: function(){
-        if(this.timeInSeconds < 40){
-            this.toAdd = 40-this.timeInSeconds;
+        if(this.timeInSeconds < timeArray[resourceIndex]){
+            this.toAdd = timeArray[resourceIndex]-this.timeInSeconds;
             this.timeInSeconds = this.timeInSeconds + this.toAdd;
         }
         for(var i=0; i < resources.length; i++)
