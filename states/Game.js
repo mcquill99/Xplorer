@@ -35,6 +35,7 @@ var tileWidth = 46,
     greenNeeded = 10,
     redNeeded = 5,
     inc = true,
+    collision,
     tilesRendered,
     tilesArray,
     timeArray = [],
@@ -43,6 +44,7 @@ var tileWidth = 46,
     resourceIndex = 0;
     inc = true;
     line = [];
+
 
 
 XPlorer.Game.prototype = {
@@ -65,6 +67,10 @@ XPlorer.Game.prototype = {
 
         emitters = this.game.add.group();
 
+        collision = this.game.add.group()
+        collision.enableBody = true;
+        collision.physicsBodyType = Phaser.Physics.ARCADE;
+
         this.game.physics.startSystem(Phaser.Physics.P2JS);
 
         this.buildWorld();
@@ -73,8 +79,10 @@ XPlorer.Game.prototype = {
         this.game.physics.enable(player, Phaser.Physics.ARCADE);
 
         ship = this.game.add.sprite(player.body.x - 200, player.body.y - 125, 'ship');
-        this.game.physics.enable(player, Phaser.Physics.ARCADE);
+        ship.enableBody = true;
+        this.game.physics.enable(ship, Phaser.Physics.ARCADE);
 
+        //this.createCollision();
 
         //changes anchor to the middle of the player
         player.anchor.setTo(0.5,0.5);
@@ -135,6 +143,7 @@ XPlorer.Game.prototype = {
 
         this.physics.arcade.overlap(drops, player, this.pickUpDrop, null, this);
         this.physics.arcade.overlap(ship, player, this.stopTimer, null, this);
+        this.physics.arcade.collide(player, collision, this.stopPlayer, this);
     },
 
 
@@ -202,6 +211,7 @@ XPlorer.Game.prototype = {
                 curTile.body.immovable = true;
             }
         }
+
     },
 
 
@@ -281,6 +291,23 @@ XPlorer.Game.prototype = {
             resourceEmitters[i].makeParticles(resourceParticles[i]);
             resourceEmitters[i].gravity = 200;
             emitters.add(resourceEmitters[i]);
+        }
+    },
+
+    createCollision: function(){
+        for(var i = 0; i < 8; i++){
+            var x = ship.body.x + (50 * i);
+
+            for(var j = 0; j < 5; j++){
+                var y = ship.body.y + (50 * j);
+
+                if(j == 0 || j == 4 || i == 0 ||i == 7){
+                    var curCollision = this.game.add.sprite(x,y, 'red50');
+                    collision.add(curCollision);
+                    this.game.physics.enable(curCollision, Phaser.Physics.ARCADE);
+                    curCollision.body.immovable = true;
+                }
+            }
         }
     },
 
@@ -532,6 +559,12 @@ XPlorer.Game.prototype = {
         var topleft = [player.body.x - width/2 - tileWidth*2, player.body.y - height/2 - tileHeight*2],
             bottomright = [player.body.x + width/2 - tileWidth*2, player.body.y-width/2 - tileHeight*2];
 
+    },
+
+
+    stopPlayer: function(){
+        player.body.x = player.body.x;
+        player.body.y = player.body.y;
     }
     
 };
