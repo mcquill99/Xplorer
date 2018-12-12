@@ -19,6 +19,9 @@ var tileWidth = 46,
     spacebar,
     playerSpeed = 200,
     resources = [0, 0], // [Green, Red]
+    resourceEmitters = [null, null],
+    emitters,
+    resourceParticles = [['greenParticle1', 'greenParticle2', 'greenParticle3'], ['redParticle1', 'redParticle2', 'redParticle3']],
     minDrops = 2,
     maxDrops = 5,
     dropMinOffset = -50,
@@ -31,8 +34,9 @@ var tileWidth = 46,
     taskNum = 0,
     greenNeeded = 10,
     redNeeded = 5,
-    inc = true;
-
+    inc = true,
+    tilesRendered,
+    tilesArray,
     line = [];
 
 
@@ -53,6 +57,8 @@ XPlorer.Game.prototype = {
         drops = this.game.add.group();
         drops.enableBody = true;
         drops.physicsBodyType = Phaser.Physics.ARCADE;
+
+        emitters = this.game.add.group();
 
         this.game.physics.startSystem(Phaser.Physics.P2JS);
 
@@ -107,6 +113,8 @@ XPlorer.Game.prototype = {
         this.game.world.bringToTop(actors);
         this.game.world.bringToTop(this.bubble);
         this.game.world.bringToTop(this.text1);
+
+        this.buildEmitters();
 
     },
 
@@ -191,6 +199,12 @@ XPlorer.Game.prototype = {
 
     buildIsometricTiles: function(level) {
         var integerToTileName = ['grass1', 'grass2', 'grass3', 'grass3'];
+        tilesRendered = level.tiles;
+        for(var i=0; i<tilesRendered.length; i++)
+            for(var j=0; j<tilesRendered[i].length; j++)
+                tilesRendered[i][j] = 1;
+
+        tilesArray = tilesRendered;
 
         for(var i=0; i<level.tiles.length; i++)
             for(var j=0; j<level.tiles[i].length; j++) {
@@ -200,6 +214,7 @@ XPlorer.Game.prototype = {
                 var curTile = this.game.add.sprite(x, y, tileName);
                 tiles.add(curTile);
                 this.game.physics.enable(curTile, Phaser.Physics.ARCADE);
+                tilesArray[i][j] = curTile;
                 curTile.body.immovable = true;
             }
 
@@ -226,11 +241,11 @@ XPlorer.Game.prototype = {
         var integerToData = [
                 function(curActor) {
                     curActor.data.resource = 0;
-                    curActor.data.health = 3
+                    curActor.data.health = 3;
                 },
                 function(curActor) {
                     curActor.data.resource = 1;
-                    curActor.data.health = 4
+                    curActor.data.health = 4;
                 },
                 function(curActor) { curActor.data.text = "test text" },
                 function(curActor) {},
@@ -250,6 +265,17 @@ XPlorer.Game.prototype = {
             //curActor.anchor.setTo(0.5,0.5);
         }
     },
+
+
+    buildEmitters: function() {
+        for(var i=0; i<resourceEmitters.length; i++) {
+            resourceEmitters[i] = this.game.add.emitter(0, 0, 20);
+            resourceEmitters[i].makeParticles(resourceParticles[i]);
+            resourceEmitters[i].gravity = 200;
+            emitters.add(resourceEmitters[i]);
+        }
+    },
+
 
     hasResources: function(greenResources,redResources){
         if(resources[0] >= greenResources && resources[1] >= redResources){
@@ -364,7 +390,7 @@ XPlorer.Game.prototype = {
             }
         }
     },
-    
+
        
     interact: function() {
         // Creates a hitbox that checks for actors in the world
@@ -390,6 +416,11 @@ XPlorer.Game.prototype = {
     This calls addDrops with the actors information.
      */
     interactWithResource: function(actor) {
+
+        resourceEmitters[actor.data.resource].x = actor.x;
+        resourceEmitters[actor.data.resource].y = actor.y;
+        emitters.bringToTop(resourceEmitters[actor.data.resource]);
+        resourceEmitters[actor.data.resource].start(true, 500, 0, 15, false);
 
         if(actor.data.health > 0) {
             actor.data.health--;
@@ -480,6 +511,13 @@ XPlorer.Game.prototype = {
     playSound: function(soundName) {
         var sound = this.add.audio(soundName);
         sound.play();
+    },
+
+
+    renderTiles: function() {
+        var topleft = [player.body.x - width/2 - tileWidth*2, player.body.y - height/2 - tileHeight*2],
+            bottomright = [player.body.x + width/2 - tileWidth*2, player.body.y-width/2 - tileHeight*2];
+
     }
     
 };
