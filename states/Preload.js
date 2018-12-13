@@ -27,22 +27,19 @@ XPlorer.Preload.prototype = {
         this.load.image('yellow50', 'assets/test/yellow50.png');
         this.load.image('checkerboard50', 'assets/test/checkerboard50.png');
         this.load.image('ship', 'assets/test/ship.png');
+        this.load.image('transparent', 'assets/new/transparent.png');
         this.load.image('redParticle1', 'assets/test/redParticle1.png');
         this.load.image('redParticle2', 'assets/test/redParticle2.png');
         this.load.image('redParticle3', 'assets/test/redParticle3.png');
         this.load.image('greenParticle1', 'assets/test/greenParticle1.png');
         this.load.image('greenParticle2', 'assets/test/greenParticle2.png');
         this.load.image('greenParticle3', 'assets/test/greenParticle3.png');
-
-        // this.load.image('grass1', 'assets/new/grass_tile_1.png');
-        this.load.image('grass1', 'assets/new/grass_tile_1_scaled.png');
-        this.load.image('grass2', 'assets/new/grass_tile_2_scaled.png');
-        this.load.image('grass3', 'assets/new/grass_tile_3_scaled.png');
-        this.load.image('grass4', 'assets/new/grass_tile_4_scaled.png');
-        this.load.image('grass5', 'assets/new/grass_tile_5_scaled.png');
-        // this.load.image('grass1', 'assets/new/grass_tile_1.png');
-        // this.load.image('grass2', 'assets/new/grass_tile_2.png');
-        // this.load.image('grass3', 'assets/new/grass_tile_3.png');
+        this.load.spritesheet('moSteele','assets/new/moSteele.png');
+        this.load.spritesheet('shipInside', 'assets/new/shipInside.png');
+        //this.load.image('grass1', 'assets/new/grass_tile_1.png');
+        this.load.image('grass1', 'assets/new/grass_tile_1_1.png');
+        this.load.image('grass2', 'assets/new/grass_tile_2.png');
+        this.load.image('grass3', 'assets/new/grass_tile_3.png');
         this.load.image('resourceBlue', 'assets/new/resource_blue.png');
         this.load.image('resourceOrange', 'assets/new/resource_orange.png');
         this.load.image('resourceRed', 'assets/new/resource_red.png');
@@ -52,21 +49,13 @@ XPlorer.Preload.prototype = {
         this.load.image('logo', 'assets/menu/logo.png');
         this.load.image('startBtn', 'assets/menu/start.png');
         this.load.image('textBox', 'assets/HUD/textBubble.png');
-
-        this.load.image('transparent', 'assets/new/transparent.png');
-        this.load.image('transparent1x250', 'assets/new/transparent1x250.png');
-        this.load.image('transparent400x1', 'assets/new/transparent400x1.png');
         
-        this.load.json('testMap1', 'data/testMap.json');
-        this.load.json('testMap2', 'data/testWorld30+40x40.json');
-        this.load.json('testMap3', 'data/testWorld30+15x60.json');
+        this.load.json('testMap', 'data/testMap.json');
         this.load.json('text', 'data/text.json');
 
         this.load.audio('chipResource', ['assets/sounds/Ice_impact_lite_02 (online-audio-converter.com).mp3',
             'assets/sounds/Ice_impact_lite_02 (online-audio-converter.com).ogg']);
         this.load.audio('breakResource', ['assets/sounds/RockCrumble.mp3', 'assets/sounds/RockCrumble.ogg']);
-
-        this.load.spritesheet('mo','assets/new/moSteele.png',64,64)
 
     },
 
