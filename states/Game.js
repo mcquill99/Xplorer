@@ -75,14 +75,16 @@ XPlorer.Game.prototype = {
 
         this.buildWorld();
 
-        player = this.game.add.sprite(this.game.world.width/2, this.game.world.height/2, 'blue50');
+        player = this.game.add.sprite(this.game.world.width/2, this.game.world.height/2, 'mo');
         this.game.physics.enable(player, Phaser.Physics.ARCADE);
 
         ship = this.game.add.sprite(player.body.x - 200, player.body.y - 125, 'ship');
         ship.enableBody = true;
         this.game.physics.enable(ship, Phaser.Physics.ARCADE);
 
-        //this.createCollision();
+        this.createCollision();
+        this.addAnimations();
+
 
         //changes anchor to the middle of the player
         player.anchor.setTo(0.5,0.5);
@@ -142,8 +144,7 @@ XPlorer.Game.prototype = {
         //console.log('y: ' + player.body.y);
 
         this.physics.arcade.overlap(drops, player, this.pickUpDrop, null, this);
-        this.physics.arcade.overlap(ship, player, this.stopTimer, null, this);
-        this.physics.arcade.collide(player, collision, this.stopPlayer, this);
+        this.physics.arcade.collide(player, collision, this.stopPlayer,null, this);
     },
 
 
@@ -162,11 +163,51 @@ XPlorer.Game.prototype = {
             player.body.velocity.x = horizontalDir * playerSpeed;
             player.body.velocity.y = verticalDir * playerSpeed;
 
+            if(horizontalDir == -1){
+
+                if(verticalDir != 1 && verticalDir != -1){
+                    player.animations.play('left');
+                    this.stopFrame = 1;
+                }
+            }
+
+            if(horizontalDir == 1){
+
+                if(verticalDir != 1 && verticalDir != -1){
+                    player.animations.play('right');
+                    this.stopFrame = 6;
+                }
+            }
+
+            if(verticalDir == -1){
+                player.animations.play('up');
+                this.stopFrame = 13;
+            }
+
+            if(verticalDir == 1){
+                player.animations.play('down');
+                this.stopFrame = 0;
+            }
+
+            if(horizontalDir == 0 && verticalDir == 0){
+                player.animations.stop();
+                player.frame = this.stopFrame;
+            }
+
         }
         else{
             player.body.velocity.x = 0;
             player.body.velocity.y = 0;
+            player.animations.stop();
+            player.frame = 1;
         }
+    },
+
+    addAnimations: function(){
+        player.animations.add('left', [1,2,3,4],10, true);
+        player.animations.add('right', [6,7,8,9], 10, true);
+        player.animations.add('down', [0,11,12], 10, true);
+        player.animations.add('up', [13,14,15], 10, true);
     },
 
 
@@ -295,20 +336,21 @@ XPlorer.Game.prototype = {
     },
 
     createCollision: function(){
-        for(var i = 0; i < 8; i++){
-            var x = ship.body.x + (50 * i);
+        var leftShipCollision = this.game.add.sprite(ship.body.x,ship.body.y, 'transparent1x250');
+        collision.add(leftShipCollision);
+        this.game.physics.enable(leftShipCollision, Phaser.Physics.ARCADE);
+        leftShipCollision.body.immovable = true;
 
-            for(var j = 0; j < 5; j++){
-                var y = ship.body.y + (50 * j);
+        var topShipCollision = this.game.add.sprite(ship.body.x,ship.body.y, 'transparent400x1');
+        collision.add(topShipCollision);
+        this.game.physics.enable(topShipCollision, Phaser.Physics.ARCADE);
+        topShipCollision.body.immovable = true;
 
-                if(j == 0 || j == 4 || i == 0 ||i == 7){
-                    var curCollision = this.game.add.sprite(x,y, 'red50');
-                    collision.add(curCollision);
-                    this.game.physics.enable(curCollision, Phaser.Physics.ARCADE);
-                    curCollision.body.immovable = true;
-                }
-            }
-        }
+        var bottomShipCollision = this.game.add.sprite(ship.body.x, ship.body.y+250, 'transparent400x1');
+        collision.add(bottomShipCollision);
+        this.game.physics.enable(bottomShipCollision, Phaser.Physics.ARCADE);
+        bottomShipCollision.body.immovable = true;
+
     },
 
     
@@ -563,8 +605,8 @@ XPlorer.Game.prototype = {
 
 
     stopPlayer: function(){
-        player.body.x = player.body.x;
-        player.body.y = player.body.y;
+        //player.body.x = player.body.x;
+        //player.body.y = player.body.y;
     }
     
 };
