@@ -27,7 +27,6 @@ XPlorer.Preload.prototype = {
         this.load.image('yellow50', 'assets/test/yellow50.png');
         this.load.image('checkerboard50', 'assets/test/checkerboard50.png');
         this.load.image('ship', 'assets/test/ship.png');
-        this.load.image('transparent', 'assets/new/transparent.png');
         this.load.image('redParticle1', 'assets/test/redParticle1.png');
         this.load.image('redParticle2', 'assets/test/redParticle2.png');
         this.load.image('redParticle3', 'assets/test/redParticle3.png');
@@ -53,6 +52,10 @@ XPlorer.Preload.prototype = {
         this.load.image('logo', 'assets/menu/logo.png');
         this.load.image('startBtn', 'assets/menu/start.png');
         this.load.image('textBox', 'assets/HUD/textBubble.png');
+
+        this.load.image('transparent', 'assets/new/transparent.png');
+        this.load.image('transparent1x250', 'assets/new/transparent1x250.png');
+        this.load.image('transparent400x1', 'assets/new/transparent400x1.png');
         
         this.load.json('testMap1', 'data/testMap.json');
         this.load.json('testMap2', 'data/testWorld30+40x40.json');
@@ -62,6 +65,8 @@ XPlorer.Preload.prototype = {
         this.load.audio('chipResource', ['assets/sounds/Ice_impact_lite_02 (online-audio-converter.com).mp3',
             'assets/sounds/Ice_impact_lite_02 (online-audio-converter.com).ogg']);
         this.load.audio('breakResource', ['assets/sounds/RockCrumble.mp3', 'assets/sounds/RockCrumble.ogg']);
+
+        this.load.spritesheet('mo','assets/new/moSteele.png',64,64)
 
     },
 
