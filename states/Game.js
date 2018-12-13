@@ -18,6 +18,7 @@ var tileWidth = 46,
     down,
     spacebar,
     playerSpeed = 200,
+    enemySpeed = 200,
     resources = [0, 0], // [Green, Red]
     resourceEmitters = [null, null],
     emitters,
@@ -154,7 +155,7 @@ XPlorer.Game.prototype = {
         this.game.debug.text(this.timeText.text, 50, 100);
     },
 
-
+    //handles player input and decides which way the player will go
     handleInput: function() {
         if(canMove == 1){
             var horizontalDir = right.isDown - left.isDown;
@@ -203,6 +204,7 @@ XPlorer.Game.prototype = {
         }
     },
 
+    //adds player animations
     addAnimations: function(){
         player.animations.add('left', [1,2,3,4],10, true);
         player.animations.add('right', [6,7,8,9], 10, true);
@@ -255,7 +257,7 @@ XPlorer.Game.prototype = {
 
     },
 
-
+    //builds isometric tiles
     buildIsometricTiles: function(level) {
         var integerToTileName = ['grass1', 'grass2', 'grass3', 'grass3'];
         tilesRendered = level.tiles;
@@ -325,7 +327,7 @@ XPlorer.Game.prototype = {
         }
     },
 
-
+    //builds the emitters for the resources
     buildEmitters: function() {
         for(var i=0; i<resourceEmitters.length; i++) {
             resourceEmitters[i] = this.game.add.emitter(0, 0, 20);
@@ -335,6 +337,7 @@ XPlorer.Game.prototype = {
         }
     },
 
+    //create collision around ship and adds it to collision group
     createCollision: function(){
         var leftShipCollision = this.game.add.sprite(ship.body.x,ship.body.y, 'transparent1x250');
         collision.add(leftShipCollision);
@@ -353,7 +356,7 @@ XPlorer.Game.prototype = {
 
     },
 
-    
+    //returns if the player has the resources needed
     hasResources: function(resoursesNeeded){
         if(resources[0] >= resourcesNeeded[0] && resources[1] >= resourcesNeeded[1]){
             return true;
@@ -364,12 +367,13 @@ XPlorer.Game.prototype = {
 
     },
 
-
+    //increments press counter
     increment: function(){
         this.press = this.press + 1;
 
     },
 
+    //Prints out text word by word. Creates two strings and compares to see if the text can fit in the bubble
     nextWord: function(){
         let dialogue = this.game.cache.getJSON('text')
         this.textCompare.text = this.textCompare.text.concat(line[wordIndex] + " ");
@@ -387,23 +391,24 @@ XPlorer.Game.prototype = {
         }
     },
 
+    //this function exists to handle text interactions with the player and eve
     textInteract: function(){
 
         console.log(this.press);
 
-        let dialogue = this.game.cache.getJSON('text');
+        let dialogue = this.game.cache.getJSON('text'); //reading json
 
 
-        if(Phaser.Math.isEven(this.press)){
+        if(Phaser.Math.isEven(this.press)){ //continues text interaction if odd
             this.bubble.x = this.game.camera.x +10;
             this.bubble.y = this.game.camera.y + 440;
             this.text1.x = this.game.camera.x+30;
             this.text1.y = this.game.camera.y+450;
 
             this.text1.text = "";
-            this.textCompare.text = "";
+            this.textCompare.text = ""; 
 
-            this.checkDialogue();
+            this.checkDialogue(); //checks which dialogue to print out
 
             line = dialogue.testText[textIndex][lineIndex].split(' ');
 
@@ -412,7 +417,7 @@ XPlorer.Game.prototype = {
                 this.game.time.events.add(100, this.increment, this);
                 console.log("wordIndex < line.length");
 
-            }
+            } //increments if we need more room for text
 
 
             if(wordIndex == line.length && lineIndex <  dialogue.testText[textIndex].length-1){
@@ -421,14 +426,14 @@ XPlorer.Game.prototype = {
 
                 this.game.time.events.add(100,this.increment,this);
                 console.log("wordIndex == line.length");
-            }
+            } //increments if we need more text
 
 
                 line = dialogue.testText[textIndex][lineIndex].split(' ');
 
 
 
-            this.game.time.events.repeat(wordDelay, line.length, this.nextWord, this);
+            this.game.time.events.repeat(wordDelay, line.length, this.nextWord, this); //calls nextWord function to print out text by word
 
 
             canMove = 0;
@@ -436,11 +441,10 @@ XPlorer.Game.prototype = {
             this.game.time.events.add(100, this.increment, this); //increments press counter
 
 
-
-            // resets resources 
+ 
             
         }
-        if(Phaser.Math.isOdd(this.press)){
+        if(Phaser.Math.isOdd(this.press)){ //resets text if odd
             this.bubble.x = -10000;
             this.bubble.y = -10000;
             this.text1.text = "";
@@ -454,11 +458,14 @@ XPlorer.Game.prototype = {
         }
     },
 
+    //Checks to see if the player has the resources needed to progress the dialogue
     checkDialogue: function(){
-        if(this.hasResources(greenNeeded, redNeeded)){
+
+        if(this.hasResources(greenNeeded, redNeeded)){ //resets resources and increments story in text.json if they have resources
             if(this.press != 0){
                 textIndex = textIndex + 1;
                 this.resetResources();
+
                 if(resourceIndex != resourceList.length){
                     resourceIndex++;
                     resourcesNeeded = resourceList[resourceIndex];
@@ -466,7 +473,7 @@ XPlorer.Game.prototype = {
                 }
             }
 
-        }
+        } //otherwise they get told they do not have enough
         else{
             if(this.press != 0 && wordIndex == 0 && lineIndex == 0){
                 textIndex = 0;
@@ -488,7 +495,7 @@ XPlorer.Game.prototype = {
         //hitbox.destroy();
     },
 
-
+    //calls the corresponding functin for the player to interact with the actor
     interactWithActor: function(player, actor) {
         actor.data.onInteract.call(this, actor);
 
@@ -516,7 +523,7 @@ XPlorer.Game.prototype = {
         }
     },
 
-    
+    //adds drops across the map to the drop group
     addDrops: function(x,y, resource, numOfDrops){
         for(numOfDrops; numOfDrops > 0; numOfDrops--) {
             var xOffset = this.randIntBetween(dropMinOffset, dropMaxOffset),
@@ -530,13 +537,14 @@ XPlorer.Game.prototype = {
         }
     },
 
-
+    //has the player pick up a drop
     pickUpDrop: function(player, drop) {
         console.log('pickup drop...');
         resources[drop.data.resource]++;
         drop.destroy();
     },
 
+    //Checks for overlap between two sprites
     checkForOverLap: function(spriteA, spriteB){
         var boundsA = spriteA.getBounds();
         var boundsB = spriteB.getBounds();
@@ -547,7 +555,7 @@ XPlorer.Game.prototype = {
     
     // Function to tick down time for the counter + formatting
     tick: function(){
-        if(!this.checkForOverLap(player, ship)){
+        if(!this.checkForOverLap(player, ship)){ // does not decrement if the player is located inside the ship
             this.timeInSeconds--;
         }
 
@@ -582,7 +590,7 @@ XPlorer.Game.prototype = {
 
     },
 
-
+    //Returns a random integer 
     randIntBetween: function(min, max) {
         return Math.floor(Math.random() * (max - min) + min);
     },
@@ -605,8 +613,7 @@ XPlorer.Game.prototype = {
 
 
     stopPlayer: function(){
-        //player.body.x = player.body.x;
-        //player.body.y = player.body.y;
+        //This function just exists as a call for collision between collidable walls and the player
     }
     
 };
