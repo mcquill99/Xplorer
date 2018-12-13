@@ -284,7 +284,7 @@ XPlorer.Game.prototype = {
         }
     },
 
-    
+
     hasResources: function(resoursesNeeded){
         if(resources[0] >= resourcesNeeded[0] && resources[1] >= resourcesNeeded[1]){
             return true;
