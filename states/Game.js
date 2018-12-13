@@ -19,6 +19,8 @@ var tileWidth = 46,
     spacebar,
     playerSpeed = 200,
     enemySpeed = 200,
+    enemyRange = 200,
+    enemyDirection = 1,
     resources = [0, 0], // [Green, Red]
     resourceEmitters = [null, null],
     emitters,
@@ -37,6 +39,7 @@ var tileWidth = 46,
     redNeeded = 5,
     inc = true,
     collision,
+    enemies,
     tilesRendered,
     tilesArray,
     timeArray = [],
@@ -84,8 +87,10 @@ XPlorer.Game.prototype = {
         this.game.physics.enable(ship, Phaser.Physics.ARCADE);
 
         this.createCollision();
+
         this.addAnimations();
 
+        this.addEnemies();
 
         //changes anchor to the middle of the player
         player.anchor.setTo(0.5,0.5);
@@ -210,6 +215,13 @@ XPlorer.Game.prototype = {
         player.animations.add('right', [6,7,8,9], 10, true);
         player.animations.add('down', [0,11,12], 10, true);
         player.animations.add('up', [13,14,15], 10, true);
+    },
+
+    //adds enemies to the level
+    addEnemies: function(){
+        this.enemy = this.game.add.sprite(ship.body.x - 500, ship.body.y, 'green50');
+        enemies.add(this.enemy);
+        this.game.physics.enable(enemies);
     },
 
 

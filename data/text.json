@@ -3,6 +3,7 @@
 		["Mo that's not as many materials as we need! Go out and grab some more, take this more seriously!"],
 		["Mo, if we want to repair the ship you need to bring me 10 green resources and 5 red ones!", "All right, I'm on it!"],
 		["Oh thank goodness! I didn't actually think you'd make it back in one piece, this is uncharted territory", "Anyway, go find me 10 red resources and 5 green resources this time. We need it to fix the mainframe."],
+		["Thanks Mo! You're really turning into a valuable asset. Now please go out and grab me 10 green resources and 10 red resources", "Ok! I'm not an asset, I'm your friend, but I'll let that slide"],
 		["Excellent Mo! No, owae ma wo shinderu", "NANI?"]
 	],
 	"resourceCount": [
