@@ -34,10 +34,15 @@ XPlorer.Preload.prototype = {
         this.load.image('greenParticle2', 'assets/test/greenParticle2.png');
         this.load.image('greenParticle3', 'assets/test/greenParticle3.png');
 
-        //this.load.image('grass1', 'assets/new/grass_tile_1.png');
-        this.load.image('grass1', 'assets/new/grass_tile_1_1.png');
-        this.load.image('grass2', 'assets/new/grass_tile_2.png');
-        this.load.image('grass3', 'assets/new/grass_tile_3.png');
+        // this.load.image('grass1', 'assets/new/grass_tile_1.png');
+        this.load.image('grass1', 'assets/new/grass_tile_1_scaled.png');
+        this.load.image('grass2', 'assets/new/grass_tile_2_scaled.png');
+        this.load.image('grass3', 'assets/new/grass_tile_3_scaled.png');
+        this.load.image('grass4', 'assets/new/grass_tile_4_scaled.png');
+        this.load.image('grass5', 'assets/new/grass_tile_5_scaled.png');
+        // this.load.image('grass1', 'assets/new/grass_tile_1.png');
+        // this.load.image('grass2', 'assets/new/grass_tile_2.png');
+        // this.load.image('grass3', 'assets/new/grass_tile_3.png');
         this.load.image('resourceBlue', 'assets/new/resource_blue.png');
         this.load.image('resourceOrange', 'assets/new/resource_orange.png');
         this.load.image('resourceRed', 'assets/new/resource_red.png');
@@ -52,7 +57,9 @@ XPlorer.Preload.prototype = {
         this.load.image('transparent1x250', 'assets/new/transparent1x250.png');
         this.load.image('transparent400x1', 'assets/new/transparent400x1.png');
         
-        this.load.json('testMap', 'data/testMap.json');
+        this.load.json('testMap1', 'data/testMap.json');
+        this.load.json('testMap2', 'data/testWorld30+40x40.json');
+        this.load.json('testMap3', 'data/testWorld30+15x60.json');
         this.load.json('text', 'data/text.json');
 
         this.load.audio('chipResource', ['assets/sounds/Ice_impact_lite_02 (online-audio-converter.com).mp3',

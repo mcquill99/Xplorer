@@ -9,16 +9,16 @@ import java.util.Random;
 
 public class RandomMapCreator {
 
-    static int mapWidth = 25;
-    static int mapHeight = 25;
-    static int tileWidth = 48;
-    static int tileHeight = 26;
+    static int mapWidth = 15;
+    static int mapHeight = 60;
+    static int tileWidth = 96;
+    static int tileHeight = 52;
     static int worldWidthPx = mapWidth * tileWidth;
     static int worldHeightPx = mapHeight * tileHeight / 2;
-    static int numOfActors = 20;
-    static int actorsLength = 4; // The number of different actors
-    static int tilesLength = 4; // The number of different tiles
-    static private String path = "testWorld20+25*25.json";
+    static int numOfActors = 30;
+    static int actorsLength = 2; // The number of different actors
+    static int tilesLength = 5; // The number of different tiles
+    static private String path = "testWorld30+15*60.json";
 
 
     public static void main(String[] args) {
