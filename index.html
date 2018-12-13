@@ -9,7 +9,6 @@
     <script src="states/Menu.js"></script>
     <script src="states/Game.js"></script>
     <script src="states/GameOver.js"></script>
-    <script src="states/LevelEditor.js"></script>
 </head>
 
 <div id="GameContainer"></div>
@@ -25,8 +24,6 @@
         game.state.add('Menu', XPlorer.Menu);
         game.state.add('Game', XPlorer.Game);
         game.state.add('GameOver', XPlorer.GameOver);
-        game.state.add('LevelEditor', XPlorer.LevelEditor);
-
         game.state.start('Preload');
     }
 

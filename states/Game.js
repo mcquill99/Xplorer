@@ -4,8 +4,8 @@ XPlorer.Game = function() {
 };
 
 // Initiate variables here
-var tileWidth = 46,
-    tileHeight = 13,
+var tileWidth = 96,
+    tileHeight = 52,
     canMove = 1,
     tiles,
     actors,
@@ -21,6 +21,7 @@ var tileWidth = 46,
     resources = [0, 0], // [Green, Red]
     resourceEmitters = [null, null],
     emitters,
+    critters,
     resourceParticles = [['greenParticle1', 'greenParticle2', 'greenParticle3'], ['redParticle1', 'redParticle2', 'redParticle3']],
     minDrops = 2,
     maxDrops = 5,
@@ -41,8 +42,8 @@ var tileWidth = 46,
     timeArray = [],
     resourceList = [],
     resourcesNeeded = [],
-    resourceIndex = 0;
-    inc = true;
+    resourceIndex = 0,
+    inc = true,
     line = [];
 
 
@@ -67,7 +68,7 @@ XPlorer.Game.prototype = {
 
         emitters = this.game.add.group();
 
-        collision = this.game.add.group()
+        collision = this.game.add.group();
         collision.enableBody = true;
         collision.physicsBodyType = Phaser.Physics.ARCADE;
 
@@ -172,13 +173,13 @@ XPlorer.Game.prototype = {
 
     buildWorld: function() {
         // Load the json file
-        var level = this.game.cache.getJSON('testMap');
+        var level = this.game.cache.getJSON('testMap3');
         console.log(level);
 
-        this.game.world.setBounds(0, 0, level.tiles[0].length * tileWidth + tileWidth / 2, level.tiles.length * tileHeight);
+        this.game.world.setBounds(0, 0, level.tiles[0].length * tileWidth + tileWidth / 2, level.tiles.length * tileHeight / 2);
 
-        this.buildTiles(level);
-        //this.buildIsometricTiles(level);
+        //this.buildTiles(level);
+        this.buildIsometricTiles(level);
         this.buildActors(level);
 
     },
@@ -216,23 +217,17 @@ XPlorer.Game.prototype = {
 
 
     buildIsometricTiles: function(level) {
-        var integerToTileName = ['grass1', 'grass2', 'grass3', 'grass3'];
-        tilesRendered = level.tiles;
-        for(var i=0; i<tilesRendered.length; i++)
-            for(var j=0; j<tilesRendered[i].length; j++)
-                tilesRendered[i][j] = 1;
-
-        tilesArray = tilesRendered;
+        var integerToTileName = ['grass1', 'grass2', 'grass3', 'grass4', 'grass5'];
 
         for(var i=0; i<level.tiles.length; i++)
             for(var j=0; j<level.tiles[i].length; j++) {
                 var tileName = integerToTileName[level.tiles[i][j]];
-                var x = tileWidth * j + (i%2) * tileWidth / 2;
-                var y = tileHeight * i / 4;
+                console.log("making a tile: " + tileName + " from index " + level.tiles[i][j] + " i=" + i + " j=" + j);
+                var x = tileWidth * j + ((i%2) * tileWidth / 2);
+                var y = tileHeight * i / 2;
                 var curTile = this.game.add.sprite(x, y, tileName);
                 tiles.add(curTile);
                 this.game.physics.enable(curTile, Phaser.Physics.ARCADE);
-                tilesArray[i][j] = curTile;
                 curTile.body.immovable = true;
             }
 
@@ -253,7 +248,7 @@ XPlorer.Game.prototype = {
         sprite. In this case, we can store a function which will run when the actor is interacted with.
          */
 
-        var integerToActorName = ['green20', 'red20', 'green20', 'yellow20'];
+        var integerToActorName = ['resourceRed', 'resourceBlue', 'yellow20'];
         var integerToActorResponse =[this.interactWithResource, this.interactWithResource, this.interactWithResource,this.textInteract];
 
         var integerToData = [
@@ -265,8 +260,10 @@ XPlorer.Game.prototype = {
                     curActor.data.resource = 1;
                     curActor.data.health = 4;
                 },
-                function(curActor) { curActor.data.text = "test text" },
-                function(curActor) {},
+                function(curActor) {
+                    curActor.data.resource = 2;
+                    curActor.data.health = 3;
+                },
                 function(curActor) { curActor.data.text = "test text" }
             ];
 
@@ -294,7 +291,7 @@ XPlorer.Game.prototype = {
         }
     },
 
-    
+
     createCollision: function(){
         for(var i = 0; i < 8; i++){
             var x = ship.body.x + (50 * i);
@@ -302,7 +299,7 @@ XPlorer.Game.prototype = {
             for(var j = 0; j < 5; j++){
                 var y = ship.body.y + (50 * j);
 
-                if(j == 0 || j == 4 || i == 0 ||i == 7){
+                if(j == 0 || j == 4 || i == 0 ||i == 7) {
                     var curCollision = this.game.add.sprite(x,y, 'red50');
                     collision.add(curCollision);
                     this.game.physics.enable(curCollision, Phaser.Physics.ARCADE);
@@ -324,12 +321,12 @@ XPlorer.Game.prototype = {
     },
 
 
-    increment: function(){
+    increment: function() {
         this.press = this.press + 1;
 
     },
 
-    nextWord: function(){
+    nextWord: function() {
         let dialogue = this.game.cache.getJSON('text')
         this.textCompare.text = this.textCompare.text.concat(line[wordIndex] + " ");
 
@@ -346,7 +343,7 @@ XPlorer.Game.prototype = {
         }
     },
 
-    textInteract: function(){
+    textInteract: function() {
 
         console.log(this.press);
 
