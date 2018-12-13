@@ -59,7 +59,7 @@ XPlorer.Preload.prototype = {
         
         this.load.json('testMap1', 'data/testMap.json');
         this.load.json('testMap2', 'data/testWorld30+40x40.json');
-        this.load.json('testMap3', 'data/testWorld30+15*60.json');
+        this.load.json('testMap3', 'data/testWorld30+15x60.json');
         this.load.json('text', 'data/text.json');
 
         this.load.audio('chipResource', ['assets/sounds/Ice_impact_lite_02 (online-audio-converter.com).mp3',
