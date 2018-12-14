@@ -18,8 +18,8 @@ var tileWidth = 96,
     down,
     spacebar,
     playerSpeed = 200,
-    enemySpeed = 150,
-    enemyRange = 170,
+    enemySpeed = 130,
+    enemyRange = 135,
     resources = [0, 0], // [Green, Red]
     resourceEmitters = [null, null],
     emitters,
@@ -90,7 +90,7 @@ XPlorer.Game.prototype = {
         player = this.game.add.sprite(this.game.world.width/2, this.game.world.height/2, 'mo');
         this.game.physics.enable(player, Phaser.Physics.ARCADE);
 
-        ship = this.game.add.sprite(player.body.x - 200, player.body.y - 125, 'ship');
+        ship = this.game.add.sprite(player.body.x - 210, player.body.y - 125, 'ship');
         ship.enableBody = true;
         this.game.physics.enable(ship, Phaser.Physics.ARCADE);
 
@@ -98,7 +98,7 @@ XPlorer.Game.prototype = {
         enemies.enableBody = true;
 
         //adds collision for spaceShip
-        this.createCollision();
+        //this.createCollision();
 
         //adds player animations
         this.addAnimations();
@@ -153,7 +153,7 @@ XPlorer.Game.prototype = {
         this.timeText = this.game.add.text(this.game.camera.x - 100, this.game.camera.y, "0:00", { fontSize: '30px', fill: '#ffffff' });
         this.timer = this.game.time.events.loop(Phaser.Timer.SECOND, this.tick, this); // timer event calls tick function for seconds 
 
-        this.game.world.bringToTop(actors);
+        //this.game.world.bringToTop(actors);
         this.game.world.bringToTop(this.bubble);
         this.game.world.bringToTop(this.text1);
 
@@ -169,15 +169,15 @@ XPlorer.Game.prototype = {
     update: function() {
         this.handleInput();
 
-        console.log('game world length:  ' + this.game.world.width);
-        console.log('game world height: ' +this.game.world.height);
+        //console.log("x: " + player.body.x);
+        //console.log("y: " + player.body.y);
 
         this.physics.arcade.overlap(drops, player, this.pickUpDrop, null, this);
         this.physics.arcade.collide(player, collision, this.stopPlayer,null, this);
 
         enemies.forEach(function(enemy){
             var distance = this.physics.arcade.distanceBetween(enemy, player);
-            if(enemy.data.hasCollided == 0){
+            if(enemy.data.hasCollided == false){
                 if(distance <= enemyRange){
                     this.attackState(enemy);
                 }
@@ -185,8 +185,8 @@ XPlorer.Game.prototype = {
                     this.paceState(enemy);
                 }
             }
-            else{
-                //this.takeResourcesState(enemy);
+            else if(enemy.data.hasCollided == true){
+                this.takeResourcesState(enemy);
             }
             
         },this);
@@ -196,8 +196,8 @@ XPlorer.Game.prototype = {
 
 
     render: function() {
-        this.game.debug.text('Green Resources:\t' + resources[0], 50, 50);
-        this.game.debug.text('Red Resources: \t' + resources[1], 50, 75);
+        this.game.debug.text('Blue Resources:\t' + resources[1], 50, 50);
+        this.game.debug.text('Red Resources: \t' + resources[0], 50, 75);
         this.game.debug.text(this.timeText.text, 50, 100);
     },
 
@@ -258,45 +258,78 @@ XPlorer.Game.prototype = {
         player.animations.add('right', [6,7,8,9], 10, true);
         player.animations.add('down', [0,11,12], 10, true);
         player.animations.add('up', [13,14,15], 10, true);
+
+        ship.animations.add('play', [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35], 10,true);
+        ship.animations.play('play');
     },
 
     //adds enemies to the level
     addEnemies: function(){
         this.enemy1 = this.game.add.sprite(ship.body.x - 350, ship.body.y, 'enemy');
         enemies.add(this.enemy1);
-        this.enemy1.data.direction = -1;
-        this.enemy1.data.whichWay = this.game.rnd.integerInRange(0, 1);
-        this.enemy1.data.hasCollided = false;
+        this.enemy1.data.direction = -1;    //which direction the enemy is moving
+        this.enemy1.data.whichWay = this.game.rnd.integerInRange(0, 1); //determine if it moves side to side or up and down
+        this.enemy1.data.hasCollided = false;   //tells if it has collided with player
+        this.enemy1.data.decrement = true;  //tells if it should decrement resources from player
+        this.enemy1.data.return = false; //tells if it should return to its original position
+
+        this.enemy1.data.defaultX = ship.body.x - 350;
+        this.enemy1.data.defaultY = ship.body.y;
 
         this.enemy2 = this.game.add.sprite(ship.body.x + 200, ship.body.y + 600, 'enemy');
         enemies.add(this.enemy2);
         this.enemy2.data.direction = -1;
         this.enemy2.data.whichWay = this.game.rnd.integerInRange(0, 1);
         this.enemy2.data.hasCollided = false;
+        this.enemy2.data.decrement = true;
+        this.enemy2.data.return = false;
+
+        this.enemy2.data.defaultX = ship.body.x + 200;
+        this.enemy2.data.defaultY = ship.body.y + 600;
 
         this.enemy3 = this.game.add.sprite(ship.body.x, ship.body.y-300, 'enemy');
         enemies.add(this.enemy3);
         this.enemy3.data.direction = -1;
         this.enemy3.data.whichWay = this.game.rnd.integerInRange(0, 1);
         this.enemy3.data.hasCollided = false;
+        this.enemy3.data.decrement = true;
+        this.enemy3.data.return = false;
+
+        this.enemy3.data.defaultX = ship.body.x;
+        this.enemy3.data.defaultY = ship.body.y - 300;
 
         this.enemy4 = this.game.add.sprite(ship.body.x + 700, ship.body.y + 250, 'enemy');
         enemies.add(this.enemy4);
         this.enemy4.data.direction = -1;
         this.enemy4.data.whichWay = this.game.rnd.integerInRange(0, 1);
         this.enemy4.data.hasCollided = false;
+        this.enemy4.data.decrement = true;
+        this.enemy4.data.return = false;
+
+        this.enemy4.data.defaultX = ship.body.x + 700;
+        this.enemy4.data.defaultY = ship.body.y + 250;
 
         this.enemy5 = this.game.add.sprite(ship.body.x - 300 , ship.body.y + 800 , 'enemy');
         enemies.add(this.enemy5);
         this.enemy5.data.direction = -1;
         this.enemy5.data.whichWay = 0;
         this.enemy5.data.hasCollided = false;
+        this.enemy5.data.decrement = true;
+        this.enemy5.data.return = false;
+
+        this.enemy5.data.defaultX = ship.body.x - 300;
+        this.enemy5.data.defaultY = ship.body.y + 800;
 
         this.enemy6 = this.game.add.sprite(ship.body.x + 720 , ship.body.y - 525 , 'enemy');
         enemies.add(this.enemy6);
         this.enemy6.data.direction = -1;
         this.enemy6.data.whichWay = 0;
         this.enemy6.data.hasCollided = false;
+        this.enemy6.data.decrement = true;
+        this.enemy6.data.return = false;
+
+        this.enemy6.data.defaultX = ship.body.x + 720;
+        this.enemy6.data.defaultY = ship.body.y -525;
         
     },
 
@@ -310,6 +343,8 @@ XPlorer.Game.prototype = {
             enemy.body.velocity.x = enemySpeed * enemy.data.direction;
             enemy.body.velocity.y = 0;
         }
+        enemy.data.decrement = true;
+        enemy.data.return = false;
 
 
     },
@@ -327,10 +362,47 @@ XPlorer.Game.prototype = {
             enemy.data.hasCollided = true;
         }
     },
+    //decrements resources by 2 and has alien run away
+    takeResourcesState: function(enemy){
+        if(resources[0] > 1 && resources[1] > 1 &&  enemy.data.decrement == true){
+            resources[0] = resources[0] - 2;
+            resources[1] = resources[1] - 2;
+            enemy.data.decrement = false;
+        }
+        else if (resources[0] <= 1 && resources[1] <= 1 && enemy.data.decrement == true){
+            resources[0] = 0;
+            resources[1] = 0;
+            enemy.data.decrement = false;
+        }
+        else if(resources[0] <= 1 && resources[1] > 1 && enemy.data.decrement == true){
+            resources[0] = 0;
+            resources[1] = resources[1] - 2;
+            enemy.data.decrement = false;
+        }
+        else if(resources[0] > 1 && resources[1] <= 1 && enemy.data.decrement == true){
+            resources[0] = resources[0] - 2;
+            resources[1] = 0;
+            enemy.data.decrement = false;
+        }
 
-    //takeResourcesState: function(enemy){
-    //    if(physics.arcade.distanceBetween(enemy, this.game.world.height))
-    //},
+        if(enemy.body.x > 1550){
+            enemy.data.return = true;
+        }
+
+        enemy.body.velocity.x = 200;
+        if(enemy.data.return == true){
+
+            this.originalPos = this.game.add.sprite(enemy.data.defaultX,enemy.data.defaultY, 'transparent');
+
+            this.physics.arcade.moveToObject(enemy , this.originalPos, enemySpeed);
+
+            if(this.physics.arcade.distanceBetween(enemy, this.originalPos) < 5){
+                enemy.data.hasCollided = false;
+                this.paceState(enemy);
+            }
+
+        }
+    },
 
 
 
@@ -413,7 +485,7 @@ XPlorer.Game.prototype = {
          */
 
         var integerToActorName = ['resourceRed', 'resourceBlue', 'yellow20'];
-        var integerToActorResponse =[this.interactWithResource, this.interactWithResource, this.interactWithResource,this.textInteract];
+        var integerToActorResponse =[this.interactWithResource, this.interactWithResource, this.textInteract];
 
         var integerToData = [
                 function(curActor) {
@@ -629,7 +701,7 @@ XPlorer.Game.prototype = {
     //Checks to see if the player has the resources needed to progress the dialogue
     checkDialogue: function(){
 
-        if(this.hasResources(greenNeeded, redNeeded)){ //resets resources and increments story in text.json if they have resources
+        if(this.hasResources(resources)){ //resets resources and increments story in text.json if they have resources
             if(this.press != 0){
                 textIndex = textIndex + 1;
                 this.resetResources();
@@ -754,7 +826,7 @@ XPlorer.Game.prototype = {
             this.timeInSeconds = this.timeInSeconds + this.toAdd;
         }
         for(var i=0; i < resources.length; i++)
-            resources[i] = 0;
+            resources[i] = resources[i] - resourcesNeeded[i];
 
     },
 

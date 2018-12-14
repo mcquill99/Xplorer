@@ -26,7 +26,7 @@ XPlorer.Preload.prototype = {
         this.load.image('yellow20', 'assets/test/yellow20.png');
         this.load.image('yellow50', 'assets/test/yellow50.png');
         this.load.image('checkerboard50', 'assets/test/checkerboard50.png');
-        this.load.image('ship', 'assets/test/ship.png');
+        this.load.spritesheet('ship', 'assets/new/shipInside.png', 400, 250);
         this.load.image('transparent', 'assets/new/transparent.png');
         this.load.image('redParticle1', 'assets/test/redParticle1.png');
         this.load.image('redParticle2', 'assets/test/redParticle2.png');
@@ -34,6 +34,7 @@ XPlorer.Preload.prototype = {
         this.load.image('greenParticle1', 'assets/test/greenParticle1.png');
         this.load.image('greenParticle2', 'assets/test/greenParticle2.png');
         this.load.image('greenParticle3', 'assets/test/greenParticle3.png');
+        this.load.image('transparent', 'assets/new/transparent.png');
         this.load.image('transparent1x250', 'assets/new/transparent1x250.png');
         this.load.image('transparent400x1', 'assets/new/transparent400x1.png');
         this.load.spritesheet('mo','assets/new/moSteele.png',64,64);
