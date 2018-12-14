@@ -48,7 +48,8 @@ var tileWidth = 96,
     resourcesNeeded = [],
     resourceIndex = 0,
     inc = true,
-    line = [];
+    line = [],
+    numberOfRocks = 10;
 
 
 
@@ -70,6 +71,10 @@ XPlorer.Game.prototype = {
         drops.enableBody = true;
         drops.physicsBodyType = Phaser.Physics.ARCADE;
 
+        rocks = this.game.add.group();
+        rocks.enableBody = true;
+        rocks.physicsBodyType = Phaser.Physics.ARCADE;
+
         emitters = this.game.add.group();
 
         collision = this.game.add.group();
@@ -86,6 +91,8 @@ XPlorer.Game.prototype = {
         ship = this.game.add.sprite(player.body.x - 200, player.body.y - 125, 'ship');
         ship.enableBody = true;
         this.game.physics.enable(ship, Phaser.Physics.ARCADE);
+
+        enemies = this.game.add.group();
 
         this.createCollision();
 
@@ -280,7 +287,7 @@ XPlorer.Game.prototype = {
         for(var i=0; i<level.tiles.length; i++)
             for(var j=0; j<level.tiles[i].length; j++) {
                 var tileName = integerToTileName[level.tiles[i][j]];
-                console.log("making a tile: " + tileName + " from index " + level.tiles[i][j] + " i=" + i + " j=" + j);
+                //console.log("making a tile: " + tileName + " from index " + level.tiles[i][j] + " i=" + i + " j=" + j);
                 var x = tileWidth * j + ((i%2) * tileWidth / 2);
                 var y = tileHeight * i / 2;
                 var curTile = this.game.add.sprite(x, y, tileName);
@@ -348,6 +355,49 @@ XPlorer.Game.prototype = {
             resourceEmitters[i].gravity = 200;
             emitters.add(resourceEmitters[i]);
         }
+    },
+
+
+    // Make the rocks that surround the edge of the map
+    buildRocks: function() {
+        var rockNames = ['rock1', 'rock2', 'rock3', 'rock4', 'rock5'];
+        for(var i=0; i<numberOfRocks; i++) {
+            var rand = Math.floor(Math.random() * 5);
+            var newRockleft = this.game.add.sprite(
+                0,
+                this.game.world.height/numberOfRocks * i,
+                rockNames[rand]);
+            var newRockRight = this.game.add.sprite(
+                this.game.world.width-70,
+                this.game.world.height/numberOfRocks * i,
+                rockNames[rand]);
+            collision.add(newRockleft);
+            collision.add(newRockRight);
+            newRockleft.body.immovable = true;
+            newRockRight.body.immovable = true;
+            this.game.physics.enable(newRockleft, Phaser.Physics.ARCADE);
+            this.game.physics.enable(newRockRight, Phaser.Physics.ARCADE);
+        }
+        for(i=0; i<numberOfRocks; i++) {
+            rand = Math.floor(Math.random() * 5);
+            newRockleft = this.game.add.sprite(
+                this.game.world.width/numberOfRocks * i,
+                0,
+                rockNames[rand]);
+            newRockRight = this.game.add.sprite(
+                this.game.world.width/numberOfRocks * i,
+                this.game.world.height - 70,
+                rockNames[rand]);
+            collision.add(newRockleft);
+            collision.add(newRockRight);
+            newRockleft.body.immovable = true;
+            newRockRight.body.immovable = true;
+            this.game.physics.enable(newRockleft, Phaser.Physics.ARCADE);
+            this.game.physics.enable(newRockRight, Phaser.Physics.ARCADE);
+
+        }
+
+
     },
 
 

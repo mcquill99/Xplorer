@@ -34,16 +34,26 @@ XPlorer.Preload.prototype = {
         this.load.image('greenParticle1', 'assets/test/greenParticle1.png');
         this.load.image('greenParticle2', 'assets/test/greenParticle2.png');
         this.load.image('greenParticle3', 'assets/test/greenParticle3.png');
-        this.load.spritesheet('moSteele','assets/new/moSteele.png');
+        this.load.image('transparent1x250', 'assets/new/transparent1x250.png');
+        this.load.image('transparent400x1', 'assets/new/transparent400x1.png');
+        this.load.spritesheet('mo','assets/new/moSteele.png');
         this.load.spritesheet('shipInside', 'assets/new/shipInside.png');
+
         //this.load.image('grass1', 'assets/new/grass_tile_1.png');
-        this.load.image('grass1', 'assets/new/grass_tile_1_1.png');
-        this.load.image('grass2', 'assets/new/grass_tile_2.png');
-        this.load.image('grass3', 'assets/new/grass_tile_3.png');
+        this.load.image('grass1', 'assets/new/grass_tile_1_scaled.png');
+        this.load.image('grass2', 'assets/new/grass_tile_2_scaled.png');
+        this.load.image('grass3', 'assets/new/grass_tile_3_scaled.png');
+        this.load.image('grass4', 'assets/new/grass_tile_4_scaled.png');
+        this.load.image('grass5', 'assets/new/grass_tile_5_scaled.png');
         this.load.image('resourceBlue', 'assets/new/resource_blue.png');
         this.load.image('resourceOrange', 'assets/new/resource_orange.png');
         this.load.image('resourceRed', 'assets/new/resource_red.png');
         this.load.image('resourceYellow', 'assets/new/resource_yellow.png');
+        this.load.image('rock1', 'assets/new/rock_big_1.png');
+        this.load.image('rock2', 'assets/new/rock_big_2.png');
+        this.load.image('rock3', 'assets/new/rock_big_3.png');
+        this.load.image('rock4', 'assets/new/rock_big_4.png');
+        this.load.image('rock5', 'assets/new/rock_big_5.png');
 
         this.load.image("menuBack", 'assets/menu/menuBack.png');
         this.load.image('logo', 'assets/menu/logo.png');
@@ -51,6 +61,7 @@ XPlorer.Preload.prototype = {
         this.load.image('textBox', 'assets/HUD/textBubble.png');
         
         this.load.json('testMap', 'data/testMap.json');
+        this.load.json('testMap3', 'data/testWorld30+15x60.json');
         this.load.json('text', 'data/text.json');
 
         this.load.audio('chipResource', ['assets/sounds/Ice_impact_lite_02 (online-audio-converter.com).mp3',
