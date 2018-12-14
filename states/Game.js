@@ -18,13 +18,12 @@ var tileWidth = 96,
     down,
     spacebar,
     playerSpeed = 200,
-    enemySpeed = 200,
+    enemySpeed = 175,
     enemyRange = 200,
-    enemyDirection = 1,
     resources = [0, 0], // [Green, Red]
     resourceEmitters = [null, null],
     emitters,
-    critters,
+    enemies,
     resourceParticles = [['greenParticle1', 'greenParticle2', 'greenParticle3'], ['redParticle1', 'redParticle2', 'redParticle3']],
     minDrops = 2,
     maxDrops = 5,
@@ -40,7 +39,6 @@ var tileWidth = 96,
     redNeeded = 5,
     inc = true,
     collision,
-    enemies,
     tilesRendered,
     tilesArray,
     timeArray = [],
@@ -76,6 +74,10 @@ XPlorer.Game.prototype = {
         collision.enableBody = true;
         collision.physicsBodyType = Phaser.Physics.ARCADE;
 
+        enemies = this.game.add.group();
+        enemies.enableBody = true;
+        enemies.physicsBodyType = Phaser.Physics.ARCADE;
+
         this.game.physics.startSystem(Phaser.Physics.P2JS);
 
         this.buildWorld();
@@ -92,6 +94,10 @@ XPlorer.Game.prototype = {
         this.addAnimations();
 
         this.addEnemies();
+
+        //this.enemy = this.game.add.sprite(ship.body.x - 200, ship.body.y, 'green50');
+       // enemies.add(this.enemy);
+        //this.enemy.data.direction = -1;
 
         //changes anchor to the middle of the player
         player.anchor.setTo(0.5,0.5);
@@ -141,6 +147,8 @@ XPlorer.Game.prototype = {
         resourceList = this.game.cache.getJSON('text').resourceCount;
         resourcesNeeded = resourceList[resourceIndex];
 
+        this.timer2 = this.game.time.events.loop(1000, this.flipEnemyDir, this);
+
     },
 
 
@@ -152,6 +160,17 @@ XPlorer.Game.prototype = {
 
         this.physics.arcade.overlap(drops, player, this.pickUpDrop, null, this);
         this.physics.arcade.collide(player, collision, this.stopPlayer,null, this);
+
+        var distance = this.physics.arcade.distanceBetween(this.enemy , player);
+
+
+        if(distance <= enemyRange){
+            this.attackState();
+        }
+        else{
+            this.paceState();
+        }
+
     },
 
 
@@ -222,9 +241,26 @@ XPlorer.Game.prototype = {
 
     //adds enemies to the level
     addEnemies: function(){
-        this.enemy = this.game.add.sprite(ship.body.x - 500, ship.body.y, 'green50');
+        this.enemy = this.game.add.sprite(ship.body.x - 200, ship.body.y, 'green50');
         enemies.add(this.enemy);
-        this.game.physics.enable(enemies);
+        this.enemy.data.direction = -1;
+        
+    },
+
+    //Base state for enemies
+    paceState: function(){
+        this.enemy.body.velocity.x = 0
+        this.enemy.body.velocity.y = enemySpeed * this.enemy.data.direction;
+
+
+    },
+
+    flipEnemyDir: function(){
+        this.enemy.data.direction *= -1;
+    },
+
+    attackState: function(){
+        this.physics.arcade.moveToObject(this.enemy , player, enemySpeed);
     },
 
 
