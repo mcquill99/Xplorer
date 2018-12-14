@@ -18,8 +18,8 @@ var tileWidth = 96,
     down,
     spacebar,
     playerSpeed = 200,
-    enemySpeed = 175,
-    enemyRange = 200,
+    enemySpeed = 150,
+    enemyRange = 170,
     resources = [0, 0], // [Green, Red]
     resourceEmitters = [null, null],
     emitters,
@@ -95,16 +95,23 @@ XPlorer.Game.prototype = {
         this.game.physics.enable(ship, Phaser.Physics.ARCADE);
 
         enemies = this.game.add.group();
+        enemies.enableBody = true;
 
+        //adds collision for spaceShip
         this.createCollision();
 
+        //adds player animations
         this.addAnimations();
 
-        //this.addEnemies();
+        //adds enemies and animations for each one
+        this.addEnemies(); 
 
-        this.enemy = this.game.add.sprite(ship.body.x - 200, ship.body.y, 'green50');
-        enemies.add(this.enemy);
-        this.enemy.data.direction = -1;
+        enemies.forEach(function(item){
+            item.animations.add('hover',[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29], 24, true);
+            item.animations.play('hover');
+        },this);
+
+
 
         //changes anchor to the middle of the player
         player.anchor.setTo(0.5,0.5);
@@ -154,7 +161,7 @@ XPlorer.Game.prototype = {
         resourceList = this.game.cache.getJSON('text').resourceCount;
         resourcesNeeded = resourceList[resourceIndex];
 
-        this.timer2 = this.game.time.events.loop(1000, this.flipEnemyDir, this);
+        this.timer2 = this.game.time.events.loop(1250, this.flipEnemyDir, this); //adds timer for enemies to flip around
 
     },
 
@@ -162,21 +169,28 @@ XPlorer.Game.prototype = {
     update: function() {
         this.handleInput();
 
-        //console.log('x: ' + player.body.x);
-        //console.log('y: ' + player.body.y);
+        console.log('game world length:  ' + this.game.world.width);
+        console.log('game world height: ' +this.game.world.height);
 
         this.physics.arcade.overlap(drops, player, this.pickUpDrop, null, this);
         this.physics.arcade.collide(player, collision, this.stopPlayer,null, this);
 
-        var distance = this.physics.arcade.distanceBetween(this.enemy , player);
+        enemies.forEach(function(enemy){
+            var distance = this.physics.arcade.distanceBetween(enemy, player);
+            if(enemy.data.hasCollided == 0){
+                if(distance <= enemyRange){
+                    this.attackState(enemy);
+                }
+                else{
+                    this.paceState(enemy);
+                }
+            }
+            else{
+                //this.takeResourcesState(enemy);
+            }
+            
+        },this);
 
-
-        if(distance <= enemyRange){
-            this.attackState();
-        }
-        else{
-            this.paceState();
-        }
 
     },
 
@@ -188,7 +202,7 @@ XPlorer.Game.prototype = {
     },
 
 
-    //handles player input and decides which way the player will go
+    //handles player input and decides which way the player will go/face
     handleInput: function() {
         if(canMove == 1){
             var horizontalDir = right.isDown - left.isDown;
@@ -248,27 +262,76 @@ XPlorer.Game.prototype = {
 
     //adds enemies to the level
     addEnemies: function(){
-        this.enemy = this.game.add.sprite(ship.body.x - 200, ship.body.y, 'green50');
-        enemies.add(this.enemy);
-        this.enemy.data.direction = -1;
+        this.enemy1 = this.game.add.sprite(ship.body.x - 350, ship.body.y, 'enemy');
+        enemies.add(this.enemy1);
+        this.enemy1.data.direction = -1;
+        this.enemy1.data.whichWay = this.game.rnd.integerInRange(0, 1);
+        this.enemy1.data.hasCollided = false;
+
+        this.enemy2 = this.game.add.sprite(ship.body.x + 200, ship.body.y + 600, 'enemy');
+        enemies.add(this.enemy2);
+        this.enemy2.data.direction = -1;
+        this.enemy2.data.whichWay = this.game.rnd.integerInRange(0, 1);
+        this.enemy2.data.hasCollided = false;
+
+        this.enemy3 = this.game.add.sprite(ship.body.x, ship.body.y-300, 'enemy');
+        enemies.add(this.enemy3);
+        this.enemy3.data.direction = -1;
+        this.enemy3.data.whichWay = this.game.rnd.integerInRange(0, 1);
+        this.enemy3.data.hasCollided = false;
+
+        this.enemy4 = this.game.add.sprite(ship.body.x + 700, ship.body.y + 250, 'enemy');
+        enemies.add(this.enemy4);
+        this.enemy4.data.direction = -1;
+        this.enemy4.data.whichWay = this.game.rnd.integerInRange(0, 1);
+        this.enemy4.data.hasCollided = false;
+
+        this.enemy5 = this.game.add.sprite(ship.body.x - 300 , ship.body.y + 800 , 'enemy');
+        enemies.add(this.enemy5);
+        this.enemy5.data.direction = -1;
+        this.enemy5.data.whichWay = 0;
+        this.enemy5.data.hasCollided = false;
+
+        this.enemy6 = this.game.add.sprite(ship.body.x + 720 , ship.body.y - 525 , 'enemy');
+        enemies.add(this.enemy6);
+        this.enemy6.data.direction = -1;
+        this.enemy6.data.whichWay = 0;
+        this.enemy6.data.hasCollided = false;
         
     },
 
     //Base state for enemies
-    paceState: function(){
-        this.enemy.body.velocity.x = 0
-        this.enemy.body.velocity.y = enemySpeed * this.enemy.data.direction;
+    paceState: function(enemy){
+        if(enemy.data.whichWay == 1){
+            enemy.body.velocity.x = 0
+            enemy.body.velocity.y = enemySpeed * enemy.data.direction;
+        }
+        else if(enemy.data.whichWay == 0){
+            enemy.body.velocity.x = enemySpeed * enemy.data.direction;
+            enemy.body.velocity.y = 0;
+        }
 
 
     },
-
+    //flips the way the enemies move
     flipEnemyDir: function(){
-        this.enemy.data.direction *= -1;
+        enemies.forEach(function(item){
+            item.data.direction *= -1;
+        },this);
     },
 
-    attackState: function(){
-        this.physics.arcade.moveToObject(this.enemy , player, enemySpeed);
+    //Hostile State for Enemies
+    attackState: function(enemy){
+        this.physics.arcade.moveToObject(enemy , player, enemySpeed);
+        if(this.checkForOverLap(enemy,player)){
+            enemy.data.hasCollided = true;
+        }
     },
+
+    //takeResourcesState: function(enemy){
+    //    if(physics.arcade.distanceBetween(enemy, this.game.world.height))
+    //},
+
 
 
     buildWorld: function() {
@@ -373,6 +436,8 @@ XPlorer.Game.prototype = {
             var x = level.actors[i].position[0],
                 y = level.actors[i].position[1];
             var curActor = this.game.add.sprite(x, y, actorName);
+            curActor.animations.add('sparkle',[0,1,2,3,4,5,6], 10, true);
+            curActor.animations.play('sparkle');
             actors.add(curActor);
             curActor.data.onInteract = integerToActorResponse[level.actors[i].name];
             integerToData[level.actors[i].name](curActor);
