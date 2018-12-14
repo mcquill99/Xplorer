@@ -93,11 +93,11 @@ XPlorer.Game.prototype = {
 
         this.addAnimations();
 
-        this.addEnemies();
+        //this.addEnemies();
 
-        //this.enemy = this.game.add.sprite(ship.body.x - 200, ship.body.y, 'green50');
-       // enemies.add(this.enemy);
-        //this.enemy.data.direction = -1;
+        this.enemy = this.game.add.sprite(ship.body.x - 200, ship.body.y, 'green50');
+        enemies.add(this.enemy);
+        this.enemy.data.direction = -1;
 
         //changes anchor to the middle of the player
         player.anchor.setTo(0.5,0.5);
