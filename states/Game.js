@@ -47,7 +47,7 @@ var tileWidth = 96,
     resourceIndex = 0,
     inc = true,
     line = [],
-    numberOfRocks = 10;
+    numberOfRocks = 30;
 
 
 
@@ -416,6 +416,7 @@ XPlorer.Game.prototype = {
         //this.buildTiles(level);
         this.buildIsometricTiles(level);
         this.buildActors(level);
+        this.buildRocks();
 
     },
 
