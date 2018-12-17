@@ -3,8 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="083fc334-b41d-4d24-846d-7f2263863467" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/RandomMapCreation/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/RandomMapCreation/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/states/Game.js" beforeDir="false" afterPath="$PROJECT_DIR$/states/Game.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/states/Preload.js" beforeDir="false" afterPath="$PROJECT_DIR$/states/Preload.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -19,41 +19,41 @@
     <session id="-1530547159">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="8" />
-          <entry key="project.open.time.1" value="1" />
+          <entry key="project.closed" value="9" />
+          <entry key="project.open.time.1" value="2" />
           <entry key="project.open.time.10" value="1" />
           <entry key="project.open.time.5" value="1" />
           <entry key="project.open.time.7" value="1" />
           <entry key="project.open.time.8" value="3" />
           <entry key="project.open.time.9" value="2" />
-          <entry key="project.opened" value="9" />
+          <entry key="project.opened" value="10" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="gif" value="1" />
-          <entry key="html" value="2" />
+          <entry key="html" value="3" />
           <entry key="js" value="8" />
           <entry key="json" value="2" />
-          <entry key="png" value="19" />
+          <entry key="png" value="32" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="HTML" value="2" />
-          <entry key="Image" value="20" />
+          <entry key="HTML" value="3" />
+          <entry key="Image" value="33" />
           <entry key="JSON" value="2" />
           <entry key="JavaScript" value="8" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="js" value="4496" />
+          <entry key="js" value="5415" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JavaScript" value="4496" />
+          <entry key="JavaScript" value="5415" />
         </counts>
       </usages-collector>
     </session>
@@ -72,19 +72,29 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/states/Game.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="218">
-              <caret line="823" column="31" lean-forward="true" selection-start-line="823" selection-start-column="31" selection-end-line="823" selection-end-column="31" />
+            <state relative-caret-position="296">
+              <caret line="170" column="42" selection-start-line="170" selection-start-column="42" selection-end-line="170" selection-end-column="42" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/assets/new/oxygen_tank.png">
+          <provider selected="true" editor-type-id="images" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/states/Preload.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="570">
-              <caret line="38" column="79" selection-start-line="38" selection-start-column="79" selection-end-line="38" selection-end-column="79" />
+            <state relative-caret-position="367">
+              <caret line="40" column="58" selection-start-line="40" selection-start-column="58" selection-end-line="40" selection-end-column="58" />
             </state>
           </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/assets/new/bar.png">
+          <provider selected="true" editor-type-id="images" />
         </entry>
       </file>
     </leaf>
@@ -97,8 +107,12 @@
       <find>collision</find>
       <find>addEnemies</find>
       <find>enemies</find>
-      <find>rocks</find>
       <find>reset</find>
+      <find>rocks</find>
+      <find>scal</find>
+      <find>max</find>
+      <find>checkDia</find>
+      <find>anchor</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -129,6 +143,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -150,11 +165,6 @@
             <path>
               <item name="X-Plorer" type="b2602c69:ProjectViewProjectNode" />
               <item name="X-Plorer" type="462c0819:PsiDirectoryNode" />
-              <item name="data" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="X-Plorer" type="b2602c69:ProjectViewProjectNode" />
-              <item name="X-Plorer" type="462c0819:PsiDirectoryNode" />
               <item name="RandomMapCreation" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -166,7 +176,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -211,12 +220,13 @@
       <workItem from="1544637550675" duration="180000" />
       <workItem from="1544716119269" duration="4387000" />
       <workItem from="1544730998811" duration="4171000" />
-      <workItem from="1544801224296" duration="712000" />
+      <workItem from="1544801224296" duration="1166000" />
+      <workItem from="1545083571375" duration="4108000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="17519000" />
+    <option name="totallyTimeSpent" value="22081000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1280" height="800" extended-state="6" />
@@ -287,15 +297,6 @@
     <entry file="file://$PROJECT_DIR$/assets/new/transparent400x1.png">
       <provider selected="true" editor-type-id="images" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/assets/new/transparent1x250.png">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/assets/new/grass_tile_1.png">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/assets/new/grass_tile_1_1.png">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/assets/new/grass_tile_1_scaled.png">
       <provider selected="true" editor-type-id="images" />
     </entry>
@@ -323,9 +324,6 @@
     <entry file="file://$PROJECT_DIR$/assets/new/rock_big_3.png">
       <provider selected="true" editor-type-id="images" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/assets/new/rock_big_4.png">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/assets/new/rock_big_5.png">
       <provider selected="true" editor-type-id="images" />
     </entry>
@@ -335,12 +333,26 @@
     <entry file="file://$PROJECT_DIR$/assets/new/grass_tile_3_scaled.png">
       <provider selected="true" editor-type-id="images" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/states/Preload.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="570">
-          <caret line="38" column="79" selection-start-line="38" selection-start-column="79" selection-end-line="38" selection-end-column="79" />
-        </state>
-      </provider>
+    <entry file="file://$PROJECT_DIR$/assets/new/bush_1.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/assets/new/critter.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/assets/new/grass_tile_1.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/assets/new/grass_tile_1_1.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/assets/new/transparent1x250.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/assets/new/rock_big_4.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/assets/new/shipInside.png">
+      <provider selected="true" editor-type-id="images" />
     </entry>
     <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
@@ -349,10 +361,29 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/assets/new/sidebar.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/assets/new/shipOriginal.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/assets/new/bar.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/assets/new/oxygen_tank.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/states/Preload.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="367">
+          <caret line="40" column="58" selection-start-line="40" selection-start-column="58" selection-end-line="40" selection-end-column="58" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/states/Game.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="218">
-          <caret line="823" column="31" lean-forward="true" selection-start-line="823" selection-start-column="31" selection-end-line="823" selection-end-column="31" />
+        <state relative-caret-position="296">
+          <caret line="170" column="42" selection-start-line="170" selection-start-column="42" selection-end-line="170" selection-end-column="42" />
         </state>
       </provider>
     </entry>

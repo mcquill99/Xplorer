@@ -26,7 +26,7 @@ XPlorer.Preload.prototype = {
         this.load.image('yellow20', 'assets/test/yellow20.png');
         this.load.image('yellow50', 'assets/test/yellow50.png');
         this.load.image('checkerboard50', 'assets/test/checkerboard50.png');
-        this.load.spritesheet('ship', 'assets/new/shipInside.png', 400, 250);
+        this.load.spritesheet('ship', 'assets/new/shipOriginal.png', 400, 250);
         this.load.image('transparent', 'assets/new/transparent.png');
         this.load.image('redParticle1', 'assets/test/redParticle1.png');
         this.load.image('redParticle2', 'assets/test/redParticle2.png');
@@ -37,6 +37,9 @@ XPlorer.Preload.prototype = {
         this.load.image('transparent', 'assets/new/transparent.png');
         this.load.image('transparent1x250', 'assets/new/transparent1x250.png');
         this.load.image('transparent400x1', 'assets/new/transparent400x1.png');
+        this.load.image('timerCover', 'assets/new/oxygen_tank.png');
+        this.load.image('timerBar', 'assets/new/bar.png');
+        this.load.image('sidebar', 'assets/new/sidebar.png');
         this.load.spritesheet('mo','assets/new/moSteele.png',64,64);
         this.load.spritesheet('shipInside', 'assets/new/shipInside.png',90,90);
         this.load.spritesheet('enemy', 'assets/new/critter.png', 42,60);

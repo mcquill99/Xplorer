@@ -47,7 +47,12 @@ var tileWidth = 96,
     resourceIndex = 0,
     inc = true,
     line = [],
-    numberOfRocks = 30;
+    numberOfRocks = 30,
+    timerBar,
+    timerCover,
+    sidebar,
+    maxTime,
+    rocks;
 
 
 
@@ -112,7 +117,6 @@ XPlorer.Game.prototype = {
         },this);
 
 
-
         //changes anchor to the middle of the player
         player.anchor.setTo(0.5,0.5);
 
@@ -153,6 +157,8 @@ XPlorer.Game.prototype = {
         this.timeText = this.game.add.text(this.game.camera.x - 100, this.game.camera.y, "0:00", { fontSize: '30px', fill: '#ffffff' });
         this.timer = this.game.time.events.loop(Phaser.Timer.SECOND, this.tick, this); // timer event calls tick function for seconds 
 
+        maxTime = 35;
+
         //this.game.world.bringToTop(actors);
         this.game.world.bringToTop(this.bubble);
         this.game.world.bringToTop(this.text1);
@@ -162,6 +168,14 @@ XPlorer.Game.prototype = {
         resourcesNeeded = resourceList[resourceIndex];
 
         this.timer2 = this.game.time.events.loop(1250, this.flipEnemyDir, this); //adds timer for enemies to flip around
+        timerBar = this.game.add.sprite(32, 80+184, "timerBar");
+        timerBar.anchor.set(0, 1);
+        timerCover = this.game.add.sprite(0, 30, "timerCover");
+        sidebar = this.game.add.sprite(width-85, 50, "sidebar");
+        timerBar.fixedToCamera = true;
+        timerCover.fixedToCamera = true;
+        sidebar.fixedToCamera = true;
+
 
     },
 
@@ -542,7 +556,7 @@ XPlorer.Game.prototype = {
                 this.game.world.height/numberOfRocks * i,
                 rockNames[rand]);
             var newRockRight = this.game.add.sprite(
-                this.game.world.width-70,
+                this.game.world.width,
                 this.game.world.height/numberOfRocks * i,
                 rockNames[rand]);
             collision.add(newRockleft);
@@ -560,7 +574,7 @@ XPlorer.Game.prototype = {
                 rockNames[rand]);
             newRockRight = this.game.add.sprite(
                 this.game.world.width/numberOfRocks * i,
-                this.game.world.height - 70,
+                this.game.world.height,
                 rockNames[rand]);
             collision.add(newRockleft);
             collision.add(newRockRight);
@@ -711,6 +725,7 @@ XPlorer.Game.prototype = {
                     resourceIndex++;
                     resourcesNeeded = resourceList[resourceIndex];
                     this.timeInSeconds = timeArray[resourceIndex];
+                    maxTime = timeArray[resourceIndex];
                 }
             }
 
@@ -810,6 +825,7 @@ XPlorer.Game.prototype = {
             this.timeText.text="Game Over";
             this.game.state.start('Game');
         }
+        this.updateOxygenBar();
     },
     
     // Function to add 0s to tome
@@ -848,6 +864,11 @@ XPlorer.Game.prototype = {
 
     stopPlayer: function(){
         //This function just exists as a call for collision between collidable walls and the player
+    },
+
+
+    updateOxygenBar: function() {
+        timerBar.scale.setTo(1, this.timeInSeconds/maxTime)
     }
     
 };
