@@ -99,6 +99,7 @@ XPlorer.Game.prototype = {
         ship = this.game.add.sprite(player.body.x - 230, player.body.y - 230, 'ship');
         ship.enableBody = true;
         this.game.physics.enable(ship, Phaser.Physics.ARCADE);
+        ship.body.setSize(380, 200, 0, 120);
 
         enemies = this.game.add.group();
         enemies.enableBody = true;
@@ -219,7 +220,8 @@ XPlorer.Game.prototype = {
         this.game.debug.text('Blue Resources:\t' + resources[1], 50, 50);
         this.game.debug.text('Red Resources: \t' + resources[0], 50, 75);
         this.game.debug.text(this.timeText.text, 50, 100);
-        this.game.debug.body(player);
+        // this.game.debug.body(player);
+        // this.game.debug.body(ship);
     },
 
 
@@ -452,7 +454,7 @@ XPlorer.Game.prototype = {
 
     buildWorld: function() {
         // Load the json file
-        var level = this.game.cache.getJSON('testMap3');
+        var level = this.game.cache.getJSON('finalMap');
         console.log(level);
 
         this.game.world.setBounds(0, 0, level.tiles[0].length * tileWidth + tileWidth / 2, level.tiles.length * tileHeight / 2);
@@ -790,11 +792,14 @@ XPlorer.Game.prototype = {
 
     },
 
+    // Hit the enemy. If the enemies health is 1, kill it.
     interactWithEnemy:function(player, enemy){
+        this.playSound('hit');
         if(enemy.data.hp > 1){
             enemy.data.hp--;
         }
         else{
+            this.playSound('enemyDestroyed');
             this.spawnX = enemy.data.defaultX;
             this.spawnY = enemy.data.defaultY;
 
@@ -879,6 +884,17 @@ XPlorer.Game.prototype = {
         }
         this.updateOxygenBar();
     },
+
+
+    /*
+    Caled when the player runs out of oxygen.
+        tween a black sprite over the screen,
+        then reset the player to the center of the map,
+        take away half of their resources
+     */
+    // playerRunsOutOfOxygen: function() {
+    //
+    // },
     
     // Function to add 0s to tome
     addZeros: function(num) {

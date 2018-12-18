@@ -16,9 +16,11 @@ public class RandomMapCreator {
     static int worldWidthPx = mapWidth * tileWidth;
     static int worldHeightPx = mapHeight * tileHeight / 2;
     static int numOfActors = 30;
+    static double[] tilePercentages = new double[] {0.5, 0.3, 0.1, 0.08, 0.02};
+    static double[] actorPercentages = new double[] {0.5, 0.5};
     static int actorsLength = 2; // The number of different actors
     static int tilesLength = 5; // The number of different tiles
-    static private String path = "testWorld30+15*60.json";
+    static private String path = "finalWorld.json";
 
 
     public static void main(String[] args) {
@@ -45,20 +47,16 @@ public class RandomMapCreator {
 
     public static int[][] buildTiles() {
         int[][] level = new int[mapHeight][mapWidth];
-        int maxThing = getThing(tilesLength);
+        if(!setPercentages(tilePercentages))
+            System.out.println("Problem with the tilePercentages array (doesn't add to 1)");
 
         for(int i=0; i<mapHeight; i++) {
             for(int j=0; j<mapWidth; j++) {
-                double rand = Math.random() * maxThing;
-
-                boolean finished = false;
-                for(int k=0; k<tilesLength && !finished; k++) {
-                    rand -= k;
-                    if(rand <= 0) {
-                        finished = true;
-                        level[i][j] = k;
-                    }
-                }
+                double rand = Math.random();
+                int tile = 0;
+                while(tilePercentages[tile] < rand)
+                    tile++;
+                level[i][j] = tile;
             }
         }
 
@@ -68,11 +66,19 @@ public class RandomMapCreator {
     public static Actor[] buildActors() {
         Actor[] actors = new Actor[numOfActors];
         Random rand = new Random();
+        if(!setPercentages(actorPercentages))
+            System.out.println("Problem with the actorPercentages array (doesn't add to 1)");
+
+        // Set up nodes for the actors to spawn around
+
 
         for(int i=0; i<numOfActors; i++) {
-            int x = rand.nextInt(worldWidthPx);
-            int y = rand.nextInt(worldHeightPx);
-            int name = rand.nextInt(actorsLength);
+            int x = rand.nextInt(worldWidthPx-50) + 25;
+            int y = rand.nextInt(worldHeightPx-50) + 25;
+            double randDouble = Math.random();
+            int name = 0;
+            while(actorPercentages[name] < randDouble)
+                name++;
             int[] pos = new int[2];
             pos[0] = x;
             pos[1] = y;
@@ -121,19 +127,16 @@ public class RandomMapCreator {
         return out;
     }
 
-
-    public static int getThing(int e) {
-        return getThing(e, 0);
-    }
-
-    public static int getThing(int e, int sum) {
-        if(e <= 0) {
-            return sum;
+    public static boolean setPercentages(double[] percentages) {
+        double sum = 0.0;
+        for(int i=0; i<percentages.length; i++) {
+            sum += percentages[i];
+            percentages[i] = sum;
         }
-        else {
-            sum += e;
-            return getThing(e-1, sum);
+        if(sum == 1.0) {
+            return true;
         }
+        return false;
     }
 
     public static void testRandomness(int[][] level) {
@@ -156,8 +159,5 @@ public class RandomMapCreator {
             System.out.println("\tresult " + Integer.toString(i) + ": " + Integer.toString(results[i]));
         }
     }
-
-
-
 
 }
