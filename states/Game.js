@@ -410,6 +410,10 @@ XPlorer.Game.prototype = {
     },
     //decrements resources by 2 and has alien run away
     takeResourcesState: function(enemy){
+        if(enemy.data.decrement == true){
+            canMove = 0;
+            this.game.time.events.add(500, this.switchCanMove, this);
+        }
         if(resources[0] > 1 && resources[1] > 1 &&  enemy.data.decrement == true){
             resources[0] = resources[0] - 2;
             resources[1] = resources[1] - 2;
@@ -447,6 +451,15 @@ XPlorer.Game.prototype = {
                 this.paceState(enemy);
             }
 
+        }
+    },
+
+    switchCanMove: function(){
+        if(canMove == 0){
+            canMove = 1;
+        }
+        else{
+            canMove = 0;
         }
     },
 
