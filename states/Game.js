@@ -47,7 +47,13 @@ var tileWidth = 96,
     resourceIndex = 0,
     inc = true,
     line = [],
-    numberOfRocks = 30;
+    numberOfRocks = 30,
+    timerBar,
+    timerCover,
+    sidebar,
+    maxTime,
+    rocks,
+    ambiance;
 
 
 
@@ -112,7 +118,6 @@ XPlorer.Game.prototype = {
         },this);
 
 
-
         //changes anchor to the middle of the player
         player.anchor.setTo(0.5,0.5);
 
@@ -153,6 +158,8 @@ XPlorer.Game.prototype = {
         this.timeText = this.game.add.text(this.game.camera.x - 100, this.game.camera.y, "0:00", { fontSize: '30px', fill: '#ffffff' });
         this.timer = this.game.time.events.loop(Phaser.Timer.SECOND, this.tick, this); // timer event calls tick function for seconds 
 
+        maxTime = 35;
+
         //this.game.world.bringToTop(actors);
         this.game.world.bringToTop(this.bubble);
         this.game.world.bringToTop(this.text1);
@@ -162,6 +169,19 @@ XPlorer.Game.prototype = {
         resourcesNeeded = resourceList[resourceIndex];
 
         this.timer2 = this.game.time.events.loop(1250, this.flipEnemyDir, this); //adds timer for enemies to flip around
+        timerBar = this.game.add.sprite(32, 80+184, "timerBar");
+        timerBar.anchor.set(0, 1);
+        timerCover = this.game.add.sprite(0, 30, "timerCover");
+        sidebar = this.game.add.sprite(width-85, 50, "sidebar");
+        timerBar.fixedToCamera = true;
+        timerCover.fixedToCamera = true;
+        sidebar.fixedToCamera = true;
+        ambiance = this.add.audio('ambiance');
+        ambiance.loop = true;
+        ambiance.play();
+
+        this.phaserTimer = this.game.time.create(false); //adds timer for re adding enemies
+        this.phaserTimer.start();
 
     },
 
@@ -190,8 +210,7 @@ XPlorer.Game.prototype = {
             }
             
         },this);
-
-
+        
     },
 
 
@@ -272,6 +291,7 @@ XPlorer.Game.prototype = {
         this.enemy1.data.hasCollided = false;   //tells if it has collided with player
         this.enemy1.data.decrement = true;  //tells if it should decrement resources from player
         this.enemy1.data.return = false; //tells if it should return to its original position
+        this.enemy1.data.hp = 4; // hit points of the enemy
 
         this.enemy1.data.defaultX = ship.body.x - 350;
         this.enemy1.data.defaultY = ship.body.y;
@@ -283,6 +303,7 @@ XPlorer.Game.prototype = {
         this.enemy2.data.hasCollided = false;
         this.enemy2.data.decrement = true;
         this.enemy2.data.return = false;
+        this.enemy2.data.hp = 2;
 
         this.enemy2.data.defaultX = ship.body.x + 200;
         this.enemy2.data.defaultY = ship.body.y + 600;
@@ -294,6 +315,7 @@ XPlorer.Game.prototype = {
         this.enemy3.data.hasCollided = false;
         this.enemy3.data.decrement = true;
         this.enemy3.data.return = false;
+        this.enemy3.data.hp = 2;
 
         this.enemy3.data.defaultX = ship.body.x;
         this.enemy3.data.defaultY = ship.body.y - 300;
@@ -305,6 +327,7 @@ XPlorer.Game.prototype = {
         this.enemy4.data.hasCollided = false;
         this.enemy4.data.decrement = true;
         this.enemy4.data.return = false;
+        this.enemy4.data.hp = 2;
 
         this.enemy4.data.defaultX = ship.body.x + 700;
         this.enemy4.data.defaultY = ship.body.y + 250;
@@ -316,6 +339,7 @@ XPlorer.Game.prototype = {
         this.enemy5.data.hasCollided = false;
         this.enemy5.data.decrement = true;
         this.enemy5.data.return = false;
+        this.enemy1.data.hp = 2;
 
         this.enemy5.data.defaultX = ship.body.x - 300;
         this.enemy5.data.defaultY = ship.body.y + 800;
@@ -327,10 +351,28 @@ XPlorer.Game.prototype = {
         this.enemy6.data.hasCollided = false;
         this.enemy6.data.decrement = true;
         this.enemy6.data.return = false;
+        this.enemy1.data.hp = 2;
 
         this.enemy6.data.defaultX = ship.body.x + 720;
         this.enemy6.data.defaultY = ship.body.y -525;
         
+    },
+    spawnGenericEnemy: function(x,y){
+        console.log("Adding generic enemy");
+        this.enemy = this.game.add.sprite(x,y, 'enemy');
+        enemies.add(this.enemy);
+        this.enemy.data.direction = -1;
+        this.enemy.data.whichWay = this.game.rnd.integerInRange(0, 1);
+        this.enemy.data.hasCollided = false;
+        this.enemy.data.decrement = true;
+        this.enemy.data.return = false;
+        this.enemy.data.hp = 2;
+
+        this.enemy.data.defaultX = x;
+        this.enemy.data.defaultY = y;
+
+        this.enemy.animations.add('hover',[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29], 24, true);
+        this.enemy.animations.play('hover');
     },
 
     //Base state for enemies
@@ -389,7 +431,7 @@ XPlorer.Game.prototype = {
             enemy.data.return = true;
         }
 
-        enemy.body.velocity.x = 200;
+        enemy.body.velocity.x = 175;
         if(enemy.data.return == true){
 
             this.originalPos = this.game.add.sprite(enemy.data.defaultX,enemy.data.defaultY, 'transparent');
@@ -542,7 +584,7 @@ XPlorer.Game.prototype = {
                 this.game.world.height/numberOfRocks * i,
                 rockNames[rand]);
             var newRockRight = this.game.add.sprite(
-                this.game.world.width-70,
+                this.game.world.width,
                 this.game.world.height/numberOfRocks * i,
                 rockNames[rand]);
             collision.add(newRockleft);
@@ -560,7 +602,7 @@ XPlorer.Game.prototype = {
                 rockNames[rand]);
             newRockRight = this.game.add.sprite(
                 this.game.world.width/numberOfRocks * i,
-                this.game.world.height - 70,
+                this.game.world.height,
                 rockNames[rand]);
             collision.add(newRockleft);
             collision.add(newRockRight);
@@ -711,6 +753,7 @@ XPlorer.Game.prototype = {
                     resourceIndex++;
                     resourcesNeeded = resourceList[resourceIndex];
                     this.timeInSeconds = timeArray[resourceIndex];
+                    maxTime = timeArray[resourceIndex];
                 }
             }
 
@@ -733,6 +776,9 @@ XPlorer.Game.prototype = {
         // Tells the physics system how to act if this collides with an actor.
         // NOTE: if it collides with multiple actors, it will run with hitActor for each actor hit
         this.physics.arcade.overlap(hitbox, actors, this.interactWithActor, null, this);
+        enemies.forEach(function(item){
+            this.physics.arcade.overlap(hitbox, item, this.interactWithEnemy, null, this)
+        },this);
         //hitbox.destroy();
     },
 
@@ -740,6 +786,25 @@ XPlorer.Game.prototype = {
     interactWithActor: function(player, actor) {
         actor.data.onInteract.call(this, actor);
 
+    },
+
+    interactWithEnemy:function(player, enemy){
+        if(enemy.data.hp > 1){
+            enemy.data.hp--;
+        }
+        else{
+            this.spawnX = enemy.data.defaultX;
+            this.spawnY = enemy.data.defaultY;
+
+            this.numOfDrops = this.game.rnd.integerInRange(1, 4);
+            this.dropType =  this.game.rnd.integerInRange(0, 1);
+            this.addDrops(enemy.body.x, enemy.body.y,this.dropType,this.numOfDrops);
+
+            enemy.destroy();
+
+            console.log(this.phaserTimer.running);
+            this.phaserTimer.add(this.phaserTimer.ms + 7000, this.spawnGenericEnemy, this, this.spawnX, this.spawnY);
+        }
     },
 
 
@@ -810,6 +875,7 @@ XPlorer.Game.prototype = {
             this.timeText.text="Game Over";
             this.game.state.start('Game');
         }
+        this.updateOxygenBar();
     },
     
     // Function to add 0s to tome
@@ -848,6 +914,11 @@ XPlorer.Game.prototype = {
 
     stopPlayer: function(){
         //This function just exists as a call for collision between collidable walls and the player
+    },
+
+
+    updateOxygenBar: function() {
+        timerBar.scale.setTo(1, this.timeInSeconds/maxTime)
     }
     
 };
