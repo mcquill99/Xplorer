@@ -27,6 +27,7 @@ XPlorer.Preload.prototype = {
         this.load.image('yellow50', 'assets/test/yellow50.png');
         this.load.image('checkerboard50', 'assets/test/checkerboard50.png');
         this.load.spritesheet('ship', 'assets/new/shipInside.png', 384, 384);
+        this.load.image('shipOutside', 'assets/new/shipOutside.png');
         this.load.image('transparent', 'assets/new/transparent.png');
         this.load.image('redParticle1', 'assets/test/redParticle1.png');
         this.load.image('redParticle2', 'assets/test/redParticle2.png');
@@ -43,6 +44,7 @@ XPlorer.Preload.prototype = {
         this.load.spritesheet('mo','assets/new/moSteele.png',64,64);
         this.load.spritesheet('shipInside', 'assets/new/shipInside.png',90,90);
         this.load.spritesheet('enemy', 'assets/new/critter.png', 42,60);
+        this.load.image('blackScreen', 'assets/test/blackScreen.png');
 
         //this.load.image('grass1', 'assets/new/grass_tile_1.png');
         this.load.image('grass1', 'assets/new/grass_tile_1_scaled.png');
@@ -64,7 +66,7 @@ XPlorer.Preload.prototype = {
         this.load.image("menuBack", 'assets/menu/menuBack.png');
         this.load.image('logo', 'assets/menu/logo.png');
         this.load.image('startBtn', 'assets/menu/start.png');
-        this.load.image('textBox', 'assets/HUD/textBubble.png');
+        this.load.image('textBox', 'assets/new/text_bubble.png');
         
         this.load.json('testMap', 'data/testMap.json');
         this.load.json('testMap3', 'data/testWorld30+15x60.json');

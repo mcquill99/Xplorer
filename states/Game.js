@@ -39,6 +39,7 @@ var tileWidth = 96,
     redNeeded = 5,
     inc = true,
     collision,
+    lines,
     tilesRendered,
     tilesArray,
     timeArray = [],
@@ -58,6 +59,7 @@ var tileWidth = 96,
     thisdotgame,
     timeInSeconds,
     curtain,
+    shipOutside,
     ambiance;
 
 
@@ -91,6 +93,10 @@ XPlorer.Game.prototype = {
         collision.enableBody = true;
         collision.physicsBodyType = Phaser.Physics.ARCADE;
 
+        lines = this.game.add.group();
+        //lines.enableBody = true;
+        //lines.physicsBodyType = Phaser.Physics.ARCADE;
+
         enemies = this.game.add.group();
         enemies.enableBody = true;
         enemies.physicsBodyType = Phaser.Physics.ARCADE;
@@ -111,13 +117,14 @@ XPlorer.Game.prototype = {
         ship.body.immovable = true;
         actors.add(ship);
 
+        shipOutside = this.game.add.sprite(ship.body.x-205, ship.body.y-107, 'shipOutside');
+        shipOutside.alpha = 0.35;
+
         ship.data.onInteract = this.textInteract;
 
         enemies = this.game.add.group();
         enemies.enableBody = true;
 
-        //adds collision for spaceShip
-        //this.createCollision();
 
         //adds player animations
         this.addAnimations();
@@ -160,10 +167,10 @@ XPlorer.Game.prototype = {
         this.bubble.enableBody = true;
 
         //adds text lines but blank
-        this.text1 = this.game.add.text(this.game.camera.x+30, this.game.camera.y+450, '', { fontSize: '30px', fill: '#000000', wordWrap: true, wordWrapWidth: 910});
+        this.text1 = this.game.add.text(this.game.camera.x+150, this.game.camera.y+450, '', { fontSize: '30px', fill: '#000000', wordWrap: true, wordWrapWidth: 790});
         this.text1.lineSpacing = -10;
 
-        this.textCompare = this.game.add.text(this.game.width + 1000, this.game.height + 1000, '', { fontSize: '30px', fill: '#000000', wordWrap: true, wordWrapWidth: 910});
+        this.textCompare = this.game.add.text(this.game.width + 1000, this.game.height + 1000, '', { fontSize: '30px', fill: '#000000', wordWrap: true, wordWrapWidth: 790});
         this.textCompare.lineSpacing = -10;
         
         // Setting up timer for oxygen
@@ -175,8 +182,6 @@ XPlorer.Game.prototype = {
         maxTime = 35;
 
         //this.game.world.bringToTop(actors);
-        this.game.world.bringToTop(this.bubble);
-        this.game.world.bringToTop(this.text1);
 
         this.buildEmitters();
         resourceList = this.game.cache.getJSON('text').resourceCount;
@@ -203,17 +208,37 @@ XPlorer.Game.prototype = {
         this.blueCounter = this.game.add.sprite(width-80, 110, 'resourceBlue');
         this.blueCounter.fixedToCamera = true;
 
+        this.game.world.bringToTop(this.bubble);
+        this.game.world.bringToTop(this.text1);
+
+        //adds collision for spaceShip
+        this.createCollision();
+
+        this.blueText = this.game.add.text(width-50, 120,'x ' + resources[1], { fontSize: '12px', fill: '#ffffff' });
+        this.blueText.fixedToCamera = true;
+
+        this.redText = this.game.add.text(width-50, 85,'x ' + resources[0], { fontSize: '12px', fill: '#ffffff' });
+        this.redText.fixedToCamera = true;
+
+
         curtain = this.game.add.sprite(0, 0, 'curtain');
         curtain.alpha = 0;
         curtain.fixedToCamera = true;
+
+
+
+
     },
 
 
     update: function() {
         this.handleInput();
 
-        //console.log("x: " + player.body.x);
-        //console.log("y: " + player.body.y);
+        console.log("x: " + player.body.x);
+        console.log("y: " + player.body.y);
+
+        this.blueText.text = "x " + resources[1];
+        this.redText.text = "x " + resources[0];
 
         this.physics.arcade.overlap(drops, player, this.pickUpDrop, null, this);
         this.physics.arcade.collide(player, collision, this.stopPlayer,null, this);
@@ -236,12 +261,27 @@ XPlorer.Game.prototype = {
 
         this.physics.arcade.collide(enemies, ship,this.stopPlayer,null, this);
 
+        if(this.checkForOverLap(player,ship)){
+            shipOutside.alpha = 0.35;
+        }
+        else{
+            shipOutside.alpha = 1;
+        }
+
+        if(this.bubble.x == -10000){
+            this.text1.text = "";
+            wordIndex = 0;
+        }
+
+        if(Phaser.Line.intersectsRectangle(this.line1,player)){
+            
+        }
+
     },
 
 
     render: function() {
-        this.game.debug.text('Blue Resources:\t' + resources[1], 50, 50);
-        this.game.debug.text('Red Resources: \t' + resources[0], 50, 75);
+        this.game.debug.geom(this.line1);
         this.game.debug.text(this.timeText.text, 50, 100);
         // this.game.debug.body(player);
         // this.game.debug.body(ship);
@@ -659,21 +699,9 @@ XPlorer.Game.prototype = {
 
     //create collision around ship and adds it to collision group
     createCollision: function(){
-        var leftShipCollision = this.game.add.sprite(ship.body.x,ship.body.y, 'transparent1x250');
-        collision.add(leftShipCollision);
-        this.game.physics.enable(leftShipCollision, Phaser.Physics.ARCADE);
-        leftShipCollision.body.immovable = true;
-
-        var topShipCollision = this.game.add.sprite(ship.body.x,ship.body.y, 'transparent400x1');
-        collision.add(topShipCollision);
-        this.game.physics.enable(topShipCollision, Phaser.Physics.ARCADE);
-        topShipCollision.body.immovable = true;
-
-        var bottomShipCollision = this.game.add.sprite(ship.body.x, ship.body.y+250, 'transparent400x1');
-        collision.add(bottomShipCollision);
-        this.game.physics.enable(bottomShipCollision, Phaser.Physics.ARCADE);
-        bottomShipCollision.body.immovable = true;
-
+        this.line1 = new Phaser.Line(690,688,895,790);
+        this.line2 = new Phaser.Line();
+        
     },
 
 
@@ -701,7 +729,7 @@ XPlorer.Game.prototype = {
         let dialogue = this.game.cache.getJSON('text')
         this.textCompare.text = this.textCompare.text.concat(line[wordIndex] + " ");
 
-        if(wordIndex < line.length &&  this.textCompare.height < this.bubble.height){
+        if(wordIndex < line.length &&  this.textCompare.height < this.bubble.height-20){
 
             this.text1.text = this.text1.text.concat(line[wordIndex] + " ");
 
@@ -726,7 +754,7 @@ XPlorer.Game.prototype = {
         if(Phaser.Math.isEven(this.press)){ //continues text interaction if odd
             this.bubble.x = this.game.camera.x +10;
             this.bubble.y = this.game.camera.y + 440;
-            this.text1.x = this.game.camera.x+30;
+            this.text1.x = this.game.camera.x+150;
             this.text1.y = this.game.camera.y+450;
 
             this.text1.text = "";
