@@ -53,6 +53,11 @@ var tileWidth = 96,
     sidebar,
     maxTime,
     rocks,
+    playerStartX,
+    playerStartY,
+    thisdotgame,
+    timeInSeconds,
+    curtain,
     ambiance;
 
 
@@ -61,6 +66,7 @@ XPlorer.Game.prototype = {
 
     create: function() {
         this.physics.startSystem(Phaser.Physics.ARCADE);
+        thisdotgame = this.game;
 
         // Create a tile group. This will hold all tiles and help with chunking later
         tiles = this.game.add.group();
@@ -95,6 +101,8 @@ XPlorer.Game.prototype = {
 
         player = this.game.add.sprite(this.game.world.width/2, this.game.world.height/2, 'mo');
         this.game.physics.enable(player, Phaser.Physics.ARCADE);
+        playerStartX = player.x;
+        playerStartY = player.y;
 
         ship = this.game.add.sprite(player.body.x - 230, player.body.y - 230, 'ship');
         ship.enableBody = true;
@@ -156,10 +164,10 @@ XPlorer.Game.prototype = {
         
         // Setting up timer for oxygen
         timeArray = this.game.cache.getJSON('text').oxygenTime[0];
-        this.timeInSeconds = timeArray[resourceIndex];
+        timeInSeconds = timeArray[resourceIndex];
         this.timeText = this.game.add.text(this.game.camera.x - 100, this.game.camera.y, "0:00", { fontSize: '30px', fill: '#ffffff' });
         this.timer = this.game.time.events.loop(Phaser.Timer.SECOND, this.tick, this); // timer event calls tick function for seconds 
-
+        timeInSeconds = 5; //DEBUG CODE ONLY
         maxTime = 35;
 
         //this.game.world.bringToTop(actors);
@@ -185,6 +193,9 @@ XPlorer.Game.prototype = {
         this.phaserTimer = this.game.time.create(false); //adds timer for re adding enemies
         this.phaserTimer.start();
 
+        curtain = this.game.add.sprite(0, 0, 'curtain');
+        curtain.alpha = 0;
+        curtain.fixedToCamera = true;
     },
 
 
@@ -769,7 +780,7 @@ XPlorer.Game.prototype = {
                 if(resourceIndex != resourceList.length){
                     resourceIndex++;
                     resourcesNeeded = resourceList[resourceIndex];
-                    this.timeInSeconds = timeArray[resourceIndex];
+                    timeInSeconds = timeArray[resourceIndex];
                     maxTime = timeArray[resourceIndex];
                 }
             }
@@ -882,18 +893,16 @@ XPlorer.Game.prototype = {
     // Function to tick down time for the counter + formatting
     tick: function(){
         if(!this.checkForOverLap(player, ship)){ // does not decrement if the player is located inside the ship
-            this.timeInSeconds--;
+            timeInSeconds--;
         }
 
-        var minutes = Math.floor(this.timeInSeconds / 60);
-        var seconds = this.timeInSeconds - (minutes * 60);
+        var minutes = Math.floor(timeInSeconds / 60);
+        var seconds = timeInSeconds - (minutes * 60);
         var timeString = this.addZeros(minutes) + ":" + this.addZeros(seconds);
         this.timeText.text = timeString;
 
-        if (this.timeInSeconds == 0) { // This condition calls functions when timer hits 0
-            this.game.time.events.remove(this.timer);
-            this.timeText.text="Game Over";
-            this.game.state.start('Game');
+        if (timeInSeconds == 0) { // This condition calls functions when timer hits 0
+            this.playerRunsOutOfOxygen()
         }
         this.updateOxygenBar();
     },
@@ -905,9 +914,21 @@ XPlorer.Game.prototype = {
         then reset the player to the center of the map,
         take away half of their resources
      */
-    // playerRunsOutOfOxygen: function() {
-    //
-    // },
+    playerRunsOutOfOxygen: function() {
+        canMove = 0;
+        tween = thisdotgame.add.tween(curtain).to({alpha: 1}, 1000, "Linear", true);
+        tween.onComplete.add(function() {
+            player.x = playerStartX;
+            player.y = playerStartY;
+            newTween = thisdotgame.add.tween(curtain).to({alpha: 0}, 1000, "Linear", true);
+            newTween.onComplete.add(function() {
+                canMove = 1;
+                timeInSeconds = maxTime;
+
+            })
+        })
+
+    },
     
     // Function to add 0s to tome
     addZeros: function(num) {
@@ -919,9 +940,9 @@ XPlorer.Game.prototype = {
     
     // Function to reset resources and timer
     resetResources: function(){
-        if(this.timeInSeconds < timeArray[resourceIndex]){
-            this.toAdd = timeArray[resourceIndex]-this.timeInSeconds;
-            this.timeInSeconds = this.timeInSeconds + this.toAdd;
+        if(timeInSeconds < timeArray[resourceIndex]){
+            this.toAdd = timeArray[resourceIndex]-timeInSeconds;
+            timeInSeconds = timeInSeconds + this.toAdd;
         }
         for(var i=0; i < resources.length; i++)
             resources[i] = resources[i] - resourcesNeeded[i];
@@ -949,7 +970,7 @@ XPlorer.Game.prototype = {
 
 
     updateOxygenBar: function() {
-        timerBar.scale.setTo(1, this.timeInSeconds/maxTime)
+        timerBar.scale.setTo(1, timeInSeconds/maxTime)
     }
     
 };
