@@ -45,7 +45,7 @@ XPlorer.Preload.prototype = {
         this.load.spritesheet('mo','assets/new/moSteele.png',64,64);
         this.load.spritesheet('shipInside', 'assets/new/shipInside.png',90,90);
         this.load.spritesheet('enemy', 'assets/new/critter.png', 42,60);
-        this.load.image('blackScreen', 'assets/test/blackScreen.png');
+        this.load.image('blackInsideShip', 'assets/new/blackInsideShip.png');
 
         //this.load.image('grass1', 'assets/new/grass_tile_1.png');
         this.load.image('grass1', 'assets/new/grass_tile_1_scaled.png');
@@ -56,7 +56,7 @@ XPlorer.Preload.prototype = {
         this.load.spritesheet('resourceBlue', 'assets/new/resource_blue.png', 26,27);
         this.load.spritesheet('resourceOrange', 'assets/new/resource_orange.png',19,17);
         this.load.spritesheet('resourceRed', 'assets/new/resource_red.png',27,27);
-        this.load.spritesheet('resourceYellow', 'assets/new/resource_yellow.png',16,16);
+        this.load.spritesheet('resourceYellow', 'assets/new/resource_pink.png',63,63);
         this.load.image('rock1', 'assets/new/rock_big_1.png');
         this.load.image('rock2', 'assets/new/rock_big_2.png');
         this.load.image('rock3', 'assets/new/rock_big_3.png');

@@ -60,6 +60,7 @@ var tileWidth = 96,
     timeInSeconds,
     curtain,
     shipOutside,
+    blackInsideShip,
     ambiance;
 
 
@@ -116,6 +117,8 @@ XPlorer.Game.prototype = {
         ship.body.setSize(380, 200, 0, 120);
         ship.body.immovable = true;
         actors.add(ship);
+
+        backInsideShip = this.game.add.sprite(ship.body.x-205, ship.body.y-107, 'blackInsideShip')
 
         shipOutside = this.game.add.sprite(ship.body.x-205, ship.body.y-107, 'shipOutside');
         shipOutside.alpha = 0.35;
