@@ -19,7 +19,7 @@ var tileWidth = 96,
     spacebar,
     playerSpeed = 200,
     enemySpeed = 130,
-    enemyRange = 135,
+    enemyRange = 142,
     resources = [0, 0], // [Green, Red]
     resourceEmitters = [null, null],
     emitters,
@@ -108,6 +108,10 @@ XPlorer.Game.prototype = {
         ship.enableBody = true;
         this.game.physics.enable(ship, Phaser.Physics.ARCADE);
         ship.body.setSize(380, 200, 0, 120);
+        ship.body.immovable = true;
+        actors.add(ship);
+
+        ship.data.onInteract = this.textInteract;
 
         enemies = this.game.add.group();
         enemies.enableBody = true;
@@ -193,6 +197,12 @@ XPlorer.Game.prototype = {
         this.phaserTimer = this.game.time.create(false); //adds timer for re adding enemies
         this.phaserTimer.start();
 
+        this.redCounter = this.game.add.sprite(width-80, 70, 'resourceRed');
+        this.redCounter.fixedToCamera = true;
+
+        this.blueCounter = this.game.add.sprite(width-80, 110, 'resourceBlue');
+        this.blueCounter.fixedToCamera = true;
+
         curtain = this.game.add.sprite(0, 0, 'curtain');
         curtain.alpha = 0;
         curtain.fixedToCamera = true;
@@ -223,6 +233,8 @@ XPlorer.Game.prototype = {
             }
             
         },this);
+
+        this.physics.arcade.collide(enemies, ship,this.stopPlayer,null, this);
 
     },
 
@@ -868,6 +880,8 @@ XPlorer.Game.prototype = {
 
 
             var drop = this.game.add.sprite(x + xOffset, y + yOffset, 'circle20');
+            drop.animations.add('glow', [0,1,2,3,4,5,6,7,8,9,10], 10, true)
+            drop.animations.play('glow');
             drop.data.resource = resource;
             drops.add(drop);
             this.game.physics.enable(drop, Phaser.Physics.ARCADE);
@@ -878,6 +892,7 @@ XPlorer.Game.prototype = {
     pickUpDrop: function(player, drop) {
         console.log('pickup drop...');
         resources[drop.data.resource]++;
+
         drop.destroy();
     },
 
