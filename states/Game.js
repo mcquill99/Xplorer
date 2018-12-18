@@ -20,7 +20,7 @@ var tileWidth = 96,
     playerSpeed = 200,
     enemySpeed = 130,
     enemyRange = 142,
-    resources = [0, 0], // [Green, Red]
+    resources = [0,0,0,0], // [Green, Red]
     resourceEmitters = [null, null],
     emitters,
     enemies,
@@ -33,7 +33,7 @@ var tileWidth = 96,
     lineIndex = 0,
     wordDelay = 120,
     lineDelay = 400,
-    textIndex = 1,
+    textIndex = 2,
     taskNum = 0,
     greenNeeded = 10,
     redNeeded = 5,
@@ -208,8 +208,16 @@ XPlorer.Game.prototype = {
         this.redCounter = this.game.add.sprite(width-80, 70, 'resourceRed');
         this.redCounter.fixedToCamera = true;
 
-        this.blueCounter = this.game.add.sprite(width-80, 110, 'resourceBlue');
+        this.blueCounter = this.game.add.sprite(width-80, 116, 'resourceBlue');
         this.blueCounter.fixedToCamera = true;
+
+        this.orangeCounter = this.game.add.sprite(width-80, 162, 'resourceOrange');
+        this.orangeCounter.scale.setTo(.75,.75);
+        this.orangeCounter.fixedToCamera = true;
+
+        this.pinkCounter = this.game.add.sprite(width-80, 210, 'resourcePink');
+        this.pinkCounter.scale.setTo(.428,.428);
+        this.pinkCounter.fixedToCamera = true;
 
         this.game.world.bringToTop(this.bubble);
         this.game.world.bringToTop(this.text1);
@@ -217,11 +225,17 @@ XPlorer.Game.prototype = {
         //adds collision for spaceShip
         this.createCollision();
 
-        this.blueText = this.game.add.text(width-50, 120,'x ' + resources[1], { fontSize: '12px', fill: '#ffffff' });
-        this.blueText.fixedToCamera = true;
-
         this.redText = this.game.add.text(width-50, 85,'x ' + resources[0], { fontSize: '12px', fill: '#ffffff' });
         this.redText.fixedToCamera = true;
+
+        this.blueText = this.game.add.text(width-50, 130,'x ' + resources[1], { fontSize: '12px', fill: '#ffffff' });
+        this.blueText.fixedToCamera = true;
+
+        this.orangeText = this.game.add.text(width-50, 175,'x ' + resources[2], { fontSize: '12px', fill: '#ffffff' });
+        this.orangeText.fixedToCamera = true;
+
+        this.pinkText = this.game.add.text(width-50, 220,'x ' + resources[3], { fontSize: '12px', fill: '#ffffff' });
+        this.pinkText.fixedToCamera = true;
 
 
         curtain = this.game.add.sprite(0, 0, 'curtain');
@@ -242,6 +256,8 @@ XPlorer.Game.prototype = {
 
         this.blueText.text = "x " + resources[1];
         this.redText.text = "x " + resources[0];
+        this.orangeText.text = "x " + resources[2];
+        this.pinkText.text = "x " +resources[3];
 
         this.physics.arcade.overlap(drops, player, this.pickUpDrop, null, this);
         this.physics.arcade.collide(player, collision, this.stopPlayer,null, this);
@@ -610,8 +626,8 @@ XPlorer.Game.prototype = {
         sprite. In this case, we can store a function which will run when the actor is interacted with.
          */
 
-        var integerToActorName = ['resourceRed', 'resourceBlue', 'yellow20'];
-        var integerToActorResponse =[this.interactWithResource, this.interactWithResource, this.textInteract];
+        var integerToActorName = ['resourceRed', 'resourceBlue', 'resourceOrange', 'resourcePink'];
+        var integerToActorResponse =[this.interactWithResource, this.interactWithResource, this.interactWithResource, this.interactWithResource];
 
         var integerToData = [
                 function(curActor) {
@@ -626,7 +642,10 @@ XPlorer.Game.prototype = {
                     curActor.data.resource = 2;
                     curActor.data.health = 3;
                 },
-                function(curActor) { curActor.data.text = "test text" }
+                function(curActor) { 
+                    curActor.data.resource = 3;
+                    curActor.data.health = 7;
+                }
             ];
 
         for(var i=0; i<level.actors.length; i++) {
@@ -710,7 +729,7 @@ XPlorer.Game.prototype = {
 
     //returns if the player has the resources needed
     hasResources: function(resoursesNeeded){
-        if(resources[0] >= resourcesNeeded[0] && resources[1] >= resourcesNeeded[1]){
+        if(resources[0] >= resourcesNeeded[0] && resources[1] >= resourcesNeeded[1] && resources[2] >= resourcesNeeded[2] && resources[3] >= resourcesNeeded[3]){
             return true;
         }
         else{
@@ -832,6 +851,9 @@ XPlorer.Game.prototype = {
         else{
             if(this.press != 0 && wordIndex == 0 && lineIndex == 0){
                 textIndex = 0;
+            }
+            if(player.body.x == playerStartX && player.body.y == playerStartY){
+                textIndex = 1;
             }
         }
     },
@@ -973,6 +995,7 @@ XPlorer.Game.prototype = {
 
             })
         })
+
 
     },
     

@@ -54,9 +54,9 @@ XPlorer.Preload.prototype = {
         this.load.image('grass4', 'assets/new/grass_tile_4_scaled.png');
         this.load.image('grass5', 'assets/new/grass_tile_5_scaled.png');
         this.load.spritesheet('resourceBlue', 'assets/new/resource_blue.png', 26,27);
-        this.load.spritesheet('resourceOrange', 'assets/new/resource_orange.png',19,17);
+        this.load.spritesheet('resourceOrange', 'assets/new/resource_orange.png',38,34);
         this.load.spritesheet('resourceRed', 'assets/new/resource_red.png',27,27);
-        this.load.spritesheet('resourceYellow', 'assets/new/resource_pink.png',63,63);
+        this.load.spritesheet('resourcePink', 'assets/new/resource_pink.png',63,63);
         this.load.image('rock1', 'assets/new/rock_big_1.png');
         this.load.image('rock2', 'assets/new/rock_big_2.png');
         this.load.image('rock3', 'assets/new/rock_big_3.png');
