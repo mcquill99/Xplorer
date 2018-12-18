@@ -96,7 +96,7 @@ XPlorer.Game.prototype = {
         player = this.game.add.sprite(this.game.world.width/2, this.game.world.height/2, 'mo');
         this.game.physics.enable(player, Phaser.Physics.ARCADE);
 
-        ship = this.game.add.sprite(player.body.x - 210, player.body.y - 125, 'ship');
+        ship = this.game.add.sprite(player.body.x - 230, player.body.y - 230, 'ship');
         ship.enableBody = true;
         this.game.physics.enable(ship, Phaser.Physics.ARCADE);
 
