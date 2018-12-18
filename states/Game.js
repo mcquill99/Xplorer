@@ -120,6 +120,7 @@ XPlorer.Game.prototype = {
 
         //changes anchor to the middle of the player
         player.anchor.setTo(0.5,0.5);
+        player.body.setSize(30, 30, 15, 34);
 
         // Makes the camera follow the player
         this.game.camera.follow(player);
@@ -210,7 +211,7 @@ XPlorer.Game.prototype = {
             }
             
         },this);
-        
+
     },
 
 
@@ -218,6 +219,7 @@ XPlorer.Game.prototype = {
         this.game.debug.text('Blue Resources:\t' + resources[1], 50, 50);
         this.game.debug.text('Red Resources: \t' + resources[0], 50, 75);
         this.game.debug.text(this.timeText.text, 50, 100);
+        this.game.debug.body(player);
     },
 
 
