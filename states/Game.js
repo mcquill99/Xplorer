@@ -181,8 +181,8 @@ XPlorer.Game.prototype = {
         timeInSeconds = timeArray[resourceIndex];
         this.timeText = this.game.add.text(this.game.camera.x - 100, this.game.camera.y, "0:00", { fontSize: '30px', fill: '#ffffff' });
         this.timer = this.game.time.events.loop(Phaser.Timer.SECOND, this.tick, this); // timer event calls tick function for seconds 
-        timeInSeconds = 5; //DEBUG CODE ONLY
-        maxTime = 35;
+        //timeInSeconds = 5; //DEBUG CODE ONLY
+        //maxTime = 35;
 
         //this.game.world.bringToTop(actors);
 
@@ -225,16 +225,16 @@ XPlorer.Game.prototype = {
         //adds collision for spaceShip
         this.createCollision();
 
-        this.redText = this.game.add.text(width-50, 85,'x ' + resources[0], { fontSize: '12px', fill: '#ffffff' });
+        this.redText = this.game.add.text(width-50, 80,'x ' + resources[0], { fontSize: '12px', fill: '#ffffff' });
         this.redText.fixedToCamera = true;
 
-        this.blueText = this.game.add.text(width-50, 130,'x ' + resources[1], { fontSize: '12px', fill: '#ffffff' });
+        this.blueText = this.game.add.text(width-50, 125,'x ' + resources[1], { fontSize: '12px', fill: '#ffffff' });
         this.blueText.fixedToCamera = true;
 
-        this.orangeText = this.game.add.text(width-50, 175,'x ' + resources[2], { fontSize: '12px', fill: '#ffffff' });
+        this.orangeText = this.game.add.text(width-50, 170,'x ' + resources[2], { fontSize: '12px', fill: '#ffffff' });
         this.orangeText.fixedToCamera = true;
 
-        this.pinkText = this.game.add.text(width-50, 220,'x ' + resources[3], { fontSize: '12px', fill: '#ffffff' });
+        this.pinkText = this.game.add.text(width-50, 215,'x ' + resources[3], { fontSize: '12px', fill: '#ffffff' });
         this.pinkText.fixedToCamera = true;
 
 
@@ -496,26 +496,17 @@ XPlorer.Game.prototype = {
             canMove = 0;
             this.game.time.events.add(500, this.switchCanMove, this);
         }
-        if(resources[0] > 1 && resources[1] > 1 &&  enemy.data.decrement == true){
-            resources[0] = resources[0] - 2;
-            resources[1] = resources[1] - 2;
-            enemy.data.decrement = false;
+
+        for(let i = 0; i < resources.length; i++){
+            if(resources[i] > 1 && enemy.data.decrement == true){
+                resources[i] = resources[i] - 2;
+            }
+            else if(resources[i] <= 1 && enemy.data.decrement == true){
+                resources[i] = 0;
+            }
         }
-        else if (resources[0] <= 1 && resources[1] <= 1 && enemy.data.decrement == true){
-            resources[0] = 0;
-            resources[1] = 0;
-            enemy.data.decrement = false;
-        }
-        else if(resources[0] <= 1 && resources[1] > 1 && enemy.data.decrement == true){
-            resources[0] = 0;
-            resources[1] = resources[1] - 2;
-            enemy.data.decrement = false;
-        }
-        else if(resources[0] > 1 && resources[1] <= 1 && enemy.data.decrement == true){
-            resources[0] = resources[0] - 2;
-            resources[1] = 0;
-            enemy.data.decrement = false;
-        }
+
+        enemy.data.decrement = false;
 
         if(enemy.body.x > 1550){
             enemy.data.return = true;
@@ -893,7 +884,7 @@ XPlorer.Game.prototype = {
             this.spawnY = enemy.data.defaultY;
 
             this.numOfDrops = this.game.rnd.integerInRange(1, 4);
-            this.dropType =  this.game.rnd.integerInRange(0, 1);
+            this.dropType =  this.game.rnd.integerInRange(0, 3);
             this.addDrops(enemy.body.x, enemy.body.y,this.dropType,this.numOfDrops);
 
             enemy.destroy();
