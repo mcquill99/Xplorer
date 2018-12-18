@@ -52,7 +52,8 @@ var tileWidth = 96,
     timerCover,
     sidebar,
     maxTime,
-    rocks;
+    rocks,
+    ambiance;
 
 
 
@@ -176,7 +177,9 @@ XPlorer.Game.prototype = {
         timerCover.fixedToCamera = true;
         sidebar.fixedToCamera = true;
 
-
+        ambiance = this.add.audio('ambiance');
+        ambiance.loop = true;
+        ambiance.play();
     },
 
 

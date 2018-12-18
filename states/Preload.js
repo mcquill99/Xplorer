@@ -72,6 +72,7 @@ XPlorer.Preload.prototype = {
         this.load.audio('chipResource', ['assets/sounds/Ice_impact_lite_02 (online-audio-converter.com).mp3',
             'assets/sounds/Ice_impact_lite_02 (online-audio-converter.com).ogg']);
         this.load.audio('breakResource', ['assets/sounds/RockCrumble.mp3', 'assets/sounds/RockCrumble.ogg']);
+        this.load.audio('ambiance', ['assets/sounds/ambientForestNoises.mp3', 'assets/sounds/ambientForestNoises.ogg']);
 
     },
 
