@@ -1,7 +1,9 @@
 {
 	"testText": [
 		["Mo that's not as many materials as we need! Go out and grab some more, take this more seriously!"],
+
 		["Oh Mo I'm so glad you're ok! You ran out of oxygen out there, I have no idea how you got back alive! Please be more careful out there, losing oxygen loses resources"],
+		
 		["Oh Mo thank goodness youre up! Our ship lost power travelling with the other ships across space, and it seems like you and I are the only ones left.",
 		 "Oh god thats terrible! What are we going to do?", 
 		 "Well thankfully for us, my Artificial Intelligence allows me to know whats wrong with the ship and how to fix it. If you bring me 10 red resources from this planet, I'll try and use them to fix the cryotubes and try to get us back online.", 
@@ -27,7 +29,24 @@
 		["You managed to bring back even the orange resources? Wow you really want to patch this up don't you?", 
 			"Well of course I do! I want to rejoin everyone else back up travelling through space! How is the communications system looking?",
 			"Well, it's not great, I'd need a lot of resources to get it up and running to see if we could communicate with any ships. Try bringing me 3 red, 5 blue, 2 orange, and 5 pink resources. I'll even upgrade your oxygen tank again so you can reach out farther for those pink crystals.",
-			"You know, if you could move I'd love some help out here! But I can't repair a ship the way you do so I'll do my best."]
+			"You know, if you could move I'd love some help out here! But I can't repair a ship the way you do so I'll do my best."],
+
+		["Wow Mo, you outdid yourself this time. I can't believe even when I ask more and more of you, you do what I say.", 
+			"I mean, of course, I trust you after all. You are the one who has helped my engineering career on the Mayflower! Speaking of, lets see if we can use the comunications system to contact anyone!", 
+			"Yeah.. the Mayflower..... I'll boot it up now.", 
+			"....................",
+			"Hello? Is anyone there?",
+			"............................",
+			"It seems like no one is answering",
+			"Oh no... I hope everyone is ok. If we crash landed I can't imagine what has happened to everyone else.",
+			"Don't worry too much, all we need to focus on right now is repairing myself.",
+			"You mean the ship, right?",
+			"Oh yeah, I mean the Mayflower of course. Can I trust you to get 8 pink resources, 3 orange ones, and 10 blue ones Mo?",
+			"If it'll help us meet up with everyone, of course."],
+
+		["Thank you for helping collect these resources Mo, you're making this easier than I could if I were to do this by myself. Soon enough my plan will come to fruition",
+			"Your 'plan'? What does that mean?",
+			"TO BE CONTINUED"]
 	],
 	"resourceCount": [
 		[10,0,0,0],
@@ -35,7 +54,8 @@
 		[10,10,0,0],
 		[0,8,7,0],
 		[3,5,2,5],
-		[0,0,0,0]
+		[0,8,3,10],
+		[10,10,10,10]
 	],
 	"oxygenTime":[
 		[35,35,45,45,60,60]
