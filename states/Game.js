@@ -166,7 +166,7 @@ XPlorer.Game.prototype = {
         
         this.press = 0; //variable to represent if the character is interacting with something
 
-        this.bubble = this.game.add.sprite(this.game.world.x+1000,this.game.world.y+10000,"textBox"); //adds text bubble off screen
+        this.bubble = this.game.add.sprite(this.game.world.x+1000,this.game.world.y+10000,"textBoxMo"); //adds text bubble off screen
         this.bubble.enableBody = true;
 
         //adds text lines but blank
@@ -179,7 +179,8 @@ XPlorer.Game.prototype = {
         // Setting up timer for oxygen
         timeArray = this.game.cache.getJSON('text').oxygenTime[0];
         timeInSeconds = timeArray[resourceIndex];
-        this.timeText = this.game.add.text(this.game.camera.x - 100, this.game.camera.y, "0:00", { fontSize: '30px', fill: '#ffffff' });
+        this.timeText = this.game.add.text(this.game.camera.x + 28, this.game.camera.y + 300, "0:00", { fontSize: '15px', fill: '#ffffff' });
+        this.timeText.fixedToCamera = true;
         this.timer = this.game.time.events.loop(Phaser.Timer.SECOND, this.tick, this); // timer event calls tick function for seconds 
         //timeInSeconds = 5; //DEBUG CODE ONLY
         //maxTime = 35;
@@ -191,7 +192,7 @@ XPlorer.Game.prototype = {
         resourcesNeeded = resourceList[resourceIndex];
 
         this.timer2 = this.game.time.events.loop(1250, this.flipEnemyDir, this); //adds timer for enemies to flip around
-        timerBar = this.game.add.sprite(32, 80+184, "timerBar");
+        timerBar = this.game.add.sprite(32, 80+186, "timerBar");
         timerBar.anchor.set(0, 1);
         timerCover = this.game.add.sprite(0, 30, "timerCover");
         sidebar = this.game.add.sprite(width-85, 50, "sidebar");
@@ -259,6 +260,7 @@ XPlorer.Game.prototype = {
         this.orangeText.text = "x " + resources[2];
         this.pinkText.text = "x " +resources[3];
 
+
         this.physics.arcade.overlap(drops, player, this.pickUpDrop, null, this);
         this.physics.arcade.collide(player, collision, this.stopPlayer,null, this);
 
@@ -301,7 +303,6 @@ XPlorer.Game.prototype = {
 
     render: function() {
         this.game.debug.geom(this.line1);
-        this.game.debug.text(this.timeText.text, 50, 100);
         // this.game.debug.body(player);
         // this.game.debug.body(ship);
     },
@@ -770,6 +771,7 @@ XPlorer.Game.prototype = {
             this.text1.x = this.game.camera.x+150;
             this.text1.y = this.game.camera.y+450;
 
+
             this.text1.text = "";
             this.textCompare.text = ""; 
 
@@ -792,6 +794,14 @@ XPlorer.Game.prototype = {
                 this.game.time.events.add(100,this.increment,this);
                 console.log("wordIndex == line.length");
             } //increments if we need more text
+
+            if(Phaser.Math.isEven(lineIndex)){
+                this.bubble.loadTexture('textBoxEve');
+            }
+            
+            if(Phaser.Math.isOdd(lineIndex)){
+                this.bubble.loadTexture('textBoxMo');
+            }
 
 
                 line = dialogue.testText[textIndex][lineIndex].split(' ');
@@ -982,7 +992,7 @@ XPlorer.Game.prototype = {
             newTween = thisdotgame.add.tween(curtain).to({alpha: 0}, 1000, "Linear", true);
             newTween.onComplete.add(function() {
                 canMove = 1;
-                timeInSeconds = maxTime;
+                timeInSeconds = timeArray[resourceIndex];
 
             })
         })
@@ -1030,7 +1040,7 @@ XPlorer.Game.prototype = {
 
 
     updateOxygenBar: function() {
-        timerBar.scale.setTo(1, timeInSeconds/maxTime)
+        timerBar.scale.setTo(1, timeInSeconds/timeArray[resourceIndex])
     }
     
 };
