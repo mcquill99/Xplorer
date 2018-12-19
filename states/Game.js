@@ -686,7 +686,7 @@ XPlorer.Game.prototype = {
 
     //Prints out text word by word. Creates two strings and compares to see if the text can fit in the bubble
     nextWord: function(){
-        let dialogue = this.game.cache.getJSON('text')
+        let dialogue = this.game.cache.getJSON('text');
         this.textCompare.text = this.textCompare.text.concat(line[wordIndex] + " ");
 
         if(wordIndex < line.length &&  this.textCompare.height < this.bubble.height){
@@ -917,14 +917,15 @@ XPlorer.Game.prototype = {
     playerRunsOutOfOxygen: function() {
         canMove = 0;
         tween = thisdotgame.add.tween(curtain).to({alpha: 1}, 1000, "Linear", true);
-        tween.onComplete.add(function() {
+        tween.onComplete.add( function() {
             player.x = playerStartX;
             player.y = playerStartY;
             newTween = thisdotgame.add.tween(curtain).to({alpha: 0}, 1000, "Linear", true);
-            newTween.onComplete.add(function() {
+            newTween.onComplete.add( function() {
                 canMove = 1;
                 timeInSeconds = maxTime;
-
+                for(i=0; i<resources.length; i++)
+                    resources[i] = resources[i]/2;
             })
         })
 
@@ -958,8 +959,9 @@ XPlorer.Game.prototype = {
     /*
     Plays a sound with a given name
      */
-    playSound: function(soundName) {
+    playSound: function(soundName, volume) {
         var sound = this.add.audio(soundName);
+        sound.volume = volume;
         sound.play();
     },
 
