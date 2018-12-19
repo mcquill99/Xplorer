@@ -69,6 +69,7 @@ XPlorer.Preload.prototype = {
         this.load.image('startBtn', 'assets/menu/start.png');
         this.load.image('textBoxMo', 'assets/new/mo_textBubble.png');
         this.load.image('textBoxEve', 'assets/new/eve_textBubble.png');
+        this.load.spritesheet('stun', 'assets/new/stun_animation.png', 51,51);
         
         this.load.json('testMap', 'data/testMap.json');
         this.load.json('testMap3', 'data/testWorld30+15x60.json');
