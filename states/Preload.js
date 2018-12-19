@@ -74,7 +74,7 @@ XPlorer.Preload.prototype = {
         this.load.json('testMap', 'data/testMap.json');
         this.load.json('testMap3', 'data/testWorld30+15x60.json');
         this.load.json('text', 'data/text.json');
-        this.load.json('finalMap', 'data/finalWorld.json')
+        this.load.json('finalMap', 'data/finalWorld3.json');
 
         this.load.audio('chipResource', ['assets/sounds/Ice_impact_lite_02 (online-audio-converter.com).mp3',
             'assets/sounds/Ice_impact_lite_02 (online-audio-converter.com).ogg']);
@@ -82,6 +82,7 @@ XPlorer.Preload.prototype = {
         this.load.audio('ambiance', ['assets/sounds/ambientForestNoises.mp3', 'assets/sounds/ambientForestNoises.ogg']);
         this.load.audio('hit', ['assets/sounds/hit.mp3', 'assets/sounds/hit.ogg']);
         this.load.audio('enemyDestroyed', ['assets/sounds/enemyDestroyed.mp3', 'assets/sounds/enemyDestroyed.ogg']);
+        this.load.audio('pickup', ['assets/sounds/pickup.mp3', 'assets/sounds/pickup.ogg']); // Flight by Nctrnm
 
     },
 

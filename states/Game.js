@@ -21,10 +21,13 @@ var tileWidth = 96,
     enemySpeed = 130,
     enemyRange = 145,
     resources = [0,0,0,0], // [Green, Red]
-    resourceEmitters = [null, null],
+    resourceEmitters = [null, null, null, null],
     emitters,
     enemies,
-    resourceParticles = [['greenParticle1', 'greenParticle2', 'greenParticle3'], ['redParticle1', 'redParticle2', 'redParticle3']],
+    resourceParticles = [['greenParticle1', 'greenParticle2', 'greenParticle3'],
+        ['redParticle1', 'redParticle2', 'redParticle3'],
+        ['greenParticle1', 'greenParticle2', 'greenParticle3'],
+        ['redParticle1', 'redParticle2', 'redParticle3']],
     minDrops = 2,
     maxDrops = 5,
     dropMinOffset = -50,
@@ -892,12 +895,12 @@ XPlorer.Game.prototype = {
 
     // Hit the enemy. If the enemies health is 1, kill it.
     interactWithEnemy:function(player, enemy){
-        this.playSound('hit');
+        this.playSound('hit', 1);
         if(enemy.data.hp > 1){
             enemy.data.hp--;
         }
         else{
-            this.playSound('enemyDestroyed');
+            this.playSound('enemyDestroyed', 1);
             this.spawnX = enemy.data.defaultX;
             this.spawnY = enemy.data.defaultY;
 
@@ -925,12 +928,12 @@ XPlorer.Game.prototype = {
 
         if(actor.data.health > 0) {
             actor.data.health--;
-            this.playSound('chipResource');
+            this.playSound('chipResource', 0.5);
         }
         else {
             this.addDrops(actor.position.x, actor.position.y, actor.data.resource, this.randIntBetween(minDrops, maxDrops));
             actor.destroy();
-            this.playSound('breakResource');
+            this.playSound('breakResource', 0.5);
         }
     },
 
@@ -954,7 +957,7 @@ XPlorer.Game.prototype = {
     pickUpDrop: function(player, drop) {
         console.log('pickup drop...');
         resources[drop.data.resource]++;
-
+        this.playSound('pickup', .4);
         drop.destroy();
     },
 
@@ -1001,7 +1004,7 @@ XPlorer.Game.prototype = {
             newTween.onComplete.add( function() {
                 canMove = 1;
                 for(i=0; i<resources.length; i++)
-                    resources[i] = resources[i]/2;
+                    resources[i] = Math.floor(resources[i]/2);
                 timeInSeconds = timeArray[resourceIndex];
             })
         })
