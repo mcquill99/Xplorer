@@ -65,6 +65,7 @@ var tileWidth = 96,
     curtain,
     shipOutside,
     blackInsideShip,
+    tickIncrement,
     stun,
     ambiance;
 
@@ -250,6 +251,8 @@ XPlorer.Game.prototype = {
 
         this.pinkText = this.game.add.text(width-50, 215,'x ' + resources[3], { fontSize: '12px', fill: '#ffffff' });
         this.pinkText.fixedToCamera = true;
+
+        tickIncrement = 0;
 
 
         curtain = this.game.add.sprite(0, 0, 'curtain');
@@ -518,7 +521,7 @@ XPlorer.Game.prototype = {
                     resources[i] = resources[i] - 2;
                     enemy.data.resourcesTaken[i] = 2;
                 }
-                else if (resources[i] <= 1 && enemy.data.decrement == true) {
+                else if (resources[i] == 1 && enemy.data.decrement == true) {
                     resources[i] = 0;
                     enemy.data.resourcesTaken[i] = 1;
                 }
@@ -933,7 +936,7 @@ XPlorer.Game.prototype = {
     checkDialogue: function(){
 
         if(this.hasResources(resources)){ //resets resources and increments story in text.json if they have resources
-            if(this.press != 0){
+            if(this.press != 0 || textIndex == 1){
                 textIndex = textIndex + 1;
                 this.resetResources();
 
@@ -950,9 +953,6 @@ XPlorer.Game.prototype = {
             if(this.press != 0 && wordIndex == 0 && lineIndex == 0){
                 textIndex = 0;
             }
-            //if(player.body.x == playerStartX && player.body.y == playerStartY){
-            //    textIndex = 1;
-            //}
         }
     },
 
@@ -987,8 +987,10 @@ XPlorer.Game.prototype = {
         }
         else{
             this.playSound('enemyDestroyed', 1);
+
             this.spawnX = enemy.data.defaultX;
             this.spawnY = enemy.data.defaultY;
+
             if(textIndex < 5){
                 this.dropType = this.game.rnd.integerInRange(0,1)
             }
@@ -999,10 +1001,10 @@ XPlorer.Game.prototype = {
                 this.dropType = this.game.rnd.integerInRange(0,3);
             }
 
-
             this.numOfDrops = this.game.rnd.integerInRange(1, 5);
 
             this.addDrops(enemy.body.x, enemy.body.y,this.dropType,this.numOfDrops);
+
             console.log(enemy.data.resourcesTaken);
             for(i=0; i<enemy.data.resourcesTaken.length; i++) {
                 this.addDrops(enemy.body.x, enemy.body.y, i, enemy.data.resourcesTaken[i]);
@@ -1011,7 +1013,8 @@ XPlorer.Game.prototype = {
             enemy.destroy();
 
             console.log(this.phaserTimer.running);
-            this.phaserTimer.add(this.phaserTimer.ms + 7000, this.spawnGenericEnemy, this, this.spawnX, this.spawnY);
+            this.phaserTimer.add(4000, this.spawnGenericEnemy, this, this.spawnX, this.spawnY);
+            this.phaserTimer.start();
         }
     },
 
@@ -1079,13 +1082,21 @@ XPlorer.Game.prototype = {
         if(!this.checkForOverLap(player, ship)){ // does not decrement if the player is located inside the ship
             timeInSeconds--;
         }
+        if(this.checkForOverLap(player,ship) && tickIncrement >= 2){
+            if(timeInSeconds < timeArray[resourceIndex]){
+                timeInSeconds++;
+                tickIncrement=0;
+            }
+        }
+
+        tickIncrement++;
 
         var minutes = Math.floor(timeInSeconds / 60);
         var seconds = timeInSeconds - (minutes * 60);
         var timeString = this.addZeros(minutes) + ":" + this.addZeros(seconds);
         this.timeText.text = timeString;
 
-        if (timeInSeconds == 0) { // This condition calls functions when timer hits 0
+        if (timeInSeconds == 0 && !this.checkForOverLap(player, ship)) { // This condition calls functions when timer hits 0
             this.playerRunsOutOfOxygen()
         }
         this.updateOxygenBar();
@@ -1110,7 +1121,7 @@ XPlorer.Game.prototype = {
                 for(i=0; i<resources.length; i++)
                     resources[i] = Math.floor(resources[i]/2);
                 timeInSeconds = timeArray[resourceIndex];
-                this.textInteract();
+                //this.textInteract();
                 console.log(this.textInteract(true));
             }, this)
         }, this)
