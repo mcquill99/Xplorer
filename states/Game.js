@@ -187,7 +187,7 @@ XPlorer.Game.prototype = {
         this.timeText = this.game.add.text(this.game.camera.x + 28, this.game.camera.y + 300, "0:00", { fontSize: '15px', fill: '#ffffff' });
         this.timeText.fixedToCamera = true;
         this.timer = this.game.time.events.loop(Phaser.Timer.SECOND, this.tick, this); // timer event calls tick function for seconds 
-        timeInSeconds = 5; //DEBUG CODE ONLY
+        //timeInSeconds = 5; //DEBUG CODE ONLY
         //maxTime = 35;
 
         //this.game.world.bringToTop(actors);
@@ -748,7 +748,7 @@ XPlorer.Game.prototype = {
         collision.add(this.shipTop);
 
 
-        this.shipBottom = this.game.add.sprite(ship.body.x+10,ship.body.y+369, 'shipBottom');
+        this.shipBottom = this.game.add.sprite(ship.body.x+5,ship.body.y+369, 'shipBottom');
         this.game.physics.enable(this.shipBottom, Phaser.Physics.ARCADE);
         this.shipBottom.body.immovable = true;
         collision.add(this.shipBottom);
@@ -945,9 +945,19 @@ XPlorer.Game.prototype = {
             this.playSound('enemyDestroyed', 1);
             this.spawnX = enemy.data.defaultX;
             this.spawnY = enemy.data.defaultY;
+            if(textIndex < 5){
+                this.dropType = this.game.rnd.integerInRange(0,1)
+            }
+            else if(textIndex == 5){
+                this.dropType - this.game.rnd.integerInRange(1,2);
+            }
+            else if(textIndex > 5){
+                this.dropType = this.game.rnd.integerInRange(0,3);
+            }
 
-            this.numOfDrops = this.game.rnd.integerInRange(1, 4);
-            this.dropType =  this.game.rnd.integerInRange(0, 3);
+
+            this.numOfDrops = this.game.rnd.integerInRange(1, 5);
+
             this.addDrops(enemy.body.x, enemy.body.y,this.dropType,this.numOfDrops);
             for(i=0; i<enemy.data.resourcesTaken.length; i++) {
                 this.addDrops(enemy.body.x, enemy.body.y, i, enemy.data.resourcesTaken[i]);
