@@ -310,7 +310,7 @@ XPlorer.Game.prototype = {
 
 
     render: function() {
-        this.game.debug.geom(this.line1);
+        //this.game.debug.geom(this.line1);
         // this.game.debug.body(player);
         // this.game.debug.body(ship);
     },
