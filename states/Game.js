@@ -537,7 +537,7 @@ XPlorer.Game.prototype = {
             enemy.data.return = true;
         }
 
-        enemy.body.velocity.x = 175;
+        enemy.body.velocity.x = 170;
         if(enemy.data.return == true){
 
             this.originalPos = this.game.add.sprite(enemy.data.defaultX,enemy.data.defaultY, 'transparent');
