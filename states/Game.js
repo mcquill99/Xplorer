@@ -187,7 +187,7 @@ XPlorer.Game.prototype = {
         this.timeText = this.game.add.text(this.game.camera.x + 28, this.game.camera.y + 300, "0:00", { fontSize: '15px', fill: '#ffffff' });
         this.timeText.fixedToCamera = true;
         this.timer = this.game.time.events.loop(Phaser.Timer.SECOND, this.tick, this); // timer event calls tick function for seconds 
-        //timeInSeconds = 5; //DEBUG CODE ONLY
+        timeInSeconds = 5; //DEBUG CODE ONLY
         //maxTime = 35;
 
         //this.game.world.bringToTop(actors);
@@ -507,14 +507,17 @@ XPlorer.Game.prototype = {
             stun.animations.play('stun');
             this.game.time.events.add(500, this.switchCanMove, this);
         }
-
+        enemy.data.resourcesTaken = [];
         for(let i = 0; i < resources.length; i++){
             if(resources[i] > 1 && enemy.data.decrement == true){
                 resources[i] = resources[i] - 2;
+                enemy.data.resourcesTaken[i] = 2;
             }
             else if(resources[i] <= 1 && enemy.data.decrement == true){
                 resources[i] = 0;
+                enemy.data.resourcesTaken[i] = 1;
             }
+            else enemy.data.resourcesTaken[i] = 0;
         }
 
         enemy.data.decrement = false;
@@ -935,6 +938,9 @@ XPlorer.Game.prototype = {
             this.numOfDrops = this.game.rnd.integerInRange(1, 4);
             this.dropType =  this.game.rnd.integerInRange(0, 3);
             this.addDrops(enemy.body.x, enemy.body.y,this.dropType,this.numOfDrops);
+            for(i=0; i<enemy.data.resourcesTaken.length; i++) {
+                this.addDrops(enemy.body.x, enemy.body.y, i, enemy.data.resourcesTaken[i]);
+            }
 
             enemy.destroy();
 
@@ -980,6 +986,8 @@ XPlorer.Game.prototype = {
             this.game.physics.enable(drop, Phaser.Physics.ARCADE);
         }
     },
+
+
 
     //has the player pick up a drop
     pickUpDrop: function(player, drop) {
@@ -1034,8 +1042,10 @@ XPlorer.Game.prototype = {
                 for(i=0; i<resources.length; i++)
                     resources[i] = Math.floor(resources[i]/2);
                 timeInSeconds = timeArray[resourceIndex];
-            })
-        })
+                this.textInteract();
+                console.log(this.textInteract(true));
+            }, this)
+        }, this)
 
 
     },
