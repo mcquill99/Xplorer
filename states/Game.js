@@ -232,6 +232,12 @@ XPlorer.Game.prototype = {
 
         //adds collision for spaceShip
         this.createCollision();
+        
+        this.makeBush1(200, 200);
+        this.makeBush2(350, 400);
+        this.makeBush3(907, 175);
+        this.makeBush3(373, 963);
+        this.makeBush3(783, 1268);
 
         this.redText = this.game.add.text(width-50, 80,'x ' + resources[0], { fontSize: '12px', fill: '#ffffff' });
         this.redText.fixedToCamera = true;
@@ -256,8 +262,8 @@ XPlorer.Game.prototype = {
     update: function() {
         this.handleInput();
 
-        //console.log("x: " + player.body.x);
-        //console.log("y: " + player.body.y);
+        console.log("x: " + player.body.x);
+        console.log("y: " + player.body.y);
 
         this.blueText.text = "x " + resources[1];
         this.redText.text = "x " + resources[0];
@@ -556,13 +562,47 @@ XPlorer.Game.prototype = {
 
     makeTree: function(x, y, treeName) {
         newTree = this.game.add.sprite(x, y, treeName);
-        this.game.physics.enable(newTree, Phaser.Physics.ARCADE);
         //console.log(newTree);
-        newTree.body.setSize(30, 30, 0, 20);
-        newTree.immovable = true;
+        newTree.enableBody = true;
+        this.game.physics.enable(newTree, Phaser.Physics.ARCADE);
+        newTree.body.setSize(90, 32, 0, 134);
+        newTree.body.immovable = true;
+        this.game.world.bringToTop(newTree);
         collision.add(newTree);
     },
-
+    
+    makeBush1: function(x, y) {
+        newBush = this.game.add.sprite(x, y, "bush1");
+        //console.log(newTree);
+        newBush.enableBody = true;
+        this.game.physics.enable(newBush, Phaser.Physics.ARCADE);
+        newBush.body.setSize(58, 35);
+        newBush.body.immovable = true;
+        this.game.world.bringToTop(newBush);
+        collision.add(newBush);
+    },
+    
+    makeBush2: function(x, y) {
+        newBush = this.game.add.sprite(x, y, "bush2");
+        //console.log(newTree);
+        newBush.enableBody = true;
+        this.game.physics.enable(newBush, Phaser.Physics.ARCADE);
+        newBush.body.setSize(58, 35);
+        newBush.body.immovable = true;
+        this.game.world.bringToTop(newBush);
+        collision.add(newBush);
+    },
+    
+    makeBush3: function(x, y) {
+        newBush = this.game.add.sprite(x, y, "bush3");
+        //console.log(newTree);
+        newBush.enableBody = true;
+        this.game.physics.enable(newBush, Phaser.Physics.ARCADE);
+        newBush.body.setSize(22, 28);
+        newBush.body.immovable = true;
+        this.game.world.bringToTop(newBush);
+        collision.add(newBush);
+    },
 
     buildWorld: function() {
         // Load the json file
