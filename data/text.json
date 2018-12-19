@@ -1,16 +1,17 @@
 {
 	"testText": [
 		["Mo that's not as many materials as we need! Go out and grab some more, take this more seriously!"],
+		["Oh Mo I'm so glad you're ok! You ran out of oxygen out there, I have no idea how you got back alive! Please be more careful out there, losing oxygen loses resources"],
 		["Mo, if we want to repair the ship you need to bring me 10 red resources and 5 blue ones! But beware of the aliens on this planet, they look like they're guarding the resources.", "All right, I'm on it!"],
 		["Oh thank goodness! I didn't actually think you'd make it back in one piece, this is uncharted territory", "Anyway, go find me 10 blue resources and 5 red resources this time. We need it to fix the mainframe. I upgraded your oxygen tank so you can stay out longer too!"],
 		["Thanks Mo! You're really turning into a valuable part... I mean friend in my plan, now please go out and grab me 10 blue resources and 10 red resources. As a reward I'll even upgrade your tank capacity again. ", "Of course, anything to help out!"],
 		["Excellent Mo! We're Almost there now!"]
 	],
 	"resourceCount": [
-		[10,5],
-		[5,10],
-		[10,10],
-		[50,50]
+		[10,5,0,0],
+		[5,10,0,0],
+		[10,10,0,0],
+		[50,50,0,0]
 	],
 	"oxygenTime":[
 		[35,45,60,65]

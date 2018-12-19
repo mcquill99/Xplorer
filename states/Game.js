@@ -19,8 +19,8 @@ var tileWidth = 96,
     spacebar,
     playerSpeed = 200,
     enemySpeed = 130,
-    enemyRange = 135,
-    resources = [0, 0], // [Green, Red]
+    enemyRange = 142,
+    resources = [0,0,0,0], // [Green, Red]
     resourceEmitters = [null, null],
     emitters,
     enemies,
@@ -33,12 +33,13 @@ var tileWidth = 96,
     lineIndex = 0,
     wordDelay = 120,
     lineDelay = 400,
-    textIndex = 1,
+    textIndex = 2,
     taskNum = 0,
     greenNeeded = 10,
     redNeeded = 5,
     inc = true,
     collision,
+    lines,
     tilesRendered,
     tilesArray,
     timeArray = [],
@@ -58,6 +59,8 @@ var tileWidth = 96,
     thisdotgame,
     timeInSeconds,
     curtain,
+    shipOutside,
+    blackInsideShip,
     ambiance;
 
 
@@ -91,6 +94,10 @@ XPlorer.Game.prototype = {
         collision.enableBody = true;
         collision.physicsBodyType = Phaser.Physics.ARCADE;
 
+        lines = this.game.add.group();
+        //lines.enableBody = true;
+        //lines.physicsBodyType = Phaser.Physics.ARCADE;
+
         enemies = this.game.add.group();
         enemies.enableBody = true;
         enemies.physicsBodyType = Phaser.Physics.ARCADE;
@@ -108,12 +115,19 @@ XPlorer.Game.prototype = {
         ship.enableBody = true;
         this.game.physics.enable(ship, Phaser.Physics.ARCADE);
         ship.body.setSize(380, 200, 0, 120);
+        ship.body.immovable = true;
+        actors.add(ship);
+
+        backInsideShip = this.game.add.sprite(ship.body.x-205, ship.body.y-107, 'blackInsideShip')
+
+        shipOutside = this.game.add.sprite(ship.body.x-205, ship.body.y-107, 'shipOutside');
+        shipOutside.alpha = 0.35;
+
+        ship.data.onInteract = this.textInteract;
 
         enemies = this.game.add.group();
         enemies.enableBody = true;
 
-        //adds collision for spaceShip
-        //this.createCollision();
 
         //adds player animations
         this.addAnimations();
@@ -152,34 +166,33 @@ XPlorer.Game.prototype = {
         
         this.press = 0; //variable to represent if the character is interacting with something
 
-        this.bubble = this.game.add.sprite(this.game.world.x+1000,this.game.world.y+10000,"textBox"); //adds text bubble off screen
+        this.bubble = this.game.add.sprite(this.game.world.x+1000,this.game.world.y+10000,"textBoxMo"); //adds text bubble off screen
         this.bubble.enableBody = true;
 
         //adds text lines but blank
-        this.text1 = this.game.add.text(this.game.camera.x+30, this.game.camera.y+450, '', { fontSize: '30px', fill: '#000000', wordWrap: true, wordWrapWidth: 910});
+        this.text1 = this.game.add.text(this.game.camera.x+150, this.game.camera.y+450, '', { fontSize: '30px', fill: '#000000', wordWrap: true, wordWrapWidth: 790});
         this.text1.lineSpacing = -10;
 
-        this.textCompare = this.game.add.text(this.game.width + 1000, this.game.height + 1000, '', { fontSize: '30px', fill: '#000000', wordWrap: true, wordWrapWidth: 910});
+        this.textCompare = this.game.add.text(this.game.width + 1000, this.game.height + 1000, '', { fontSize: '30px', fill: '#000000', wordWrap: true, wordWrapWidth: 790});
         this.textCompare.lineSpacing = -10;
         
         // Setting up timer for oxygen
         timeArray = this.game.cache.getJSON('text').oxygenTime[0];
         timeInSeconds = timeArray[resourceIndex];
-        this.timeText = this.game.add.text(this.game.camera.x - 100, this.game.camera.y, "0:00", { fontSize: '30px', fill: '#ffffff' });
+        this.timeText = this.game.add.text(this.game.camera.x + 28, this.game.camera.y + 300, "0:00", { fontSize: '15px', fill: '#ffffff' });
+        this.timeText.fixedToCamera = true;
         this.timer = this.game.time.events.loop(Phaser.Timer.SECOND, this.tick, this); // timer event calls tick function for seconds 
-        timeInSeconds = 5; //DEBUG CODE ONLY
-        maxTime = 35;
+        //timeInSeconds = 5; //DEBUG CODE ONLY
+        //maxTime = 35;
 
         //this.game.world.bringToTop(actors);
-        this.game.world.bringToTop(this.bubble);
-        this.game.world.bringToTop(this.text1);
 
         this.buildEmitters();
         resourceList = this.game.cache.getJSON('text').resourceCount;
         resourcesNeeded = resourceList[resourceIndex];
 
         this.timer2 = this.game.time.events.loop(1250, this.flipEnemyDir, this); //adds timer for enemies to flip around
-        timerBar = this.game.add.sprite(32, 80+184, "timerBar");
+        timerBar = this.game.add.sprite(32, 80+186, "timerBar");
         timerBar.anchor.set(0, 1);
         timerCover = this.game.add.sprite(0, 30, "timerCover");
         sidebar = this.game.add.sprite(width-85, 50, "sidebar");
@@ -193,17 +206,60 @@ XPlorer.Game.prototype = {
         this.phaserTimer = this.game.time.create(false); //adds timer for re adding enemies
         this.phaserTimer.start();
 
+        this.redCounter = this.game.add.sprite(width-80, 70, 'resourceRed');
+        this.redCounter.fixedToCamera = true;
+
+        this.blueCounter = this.game.add.sprite(width-80, 116, 'resourceBlue');
+        this.blueCounter.fixedToCamera = true;
+
+        this.orangeCounter = this.game.add.sprite(width-80, 162, 'resourceOrange');
+        this.orangeCounter.scale.setTo(.75,.75);
+        this.orangeCounter.fixedToCamera = true;
+
+        this.pinkCounter = this.game.add.sprite(width-80, 210, 'resourcePink');
+        this.pinkCounter.scale.setTo(.428,.428);
+        this.pinkCounter.fixedToCamera = true;
+
+        this.game.world.bringToTop(this.bubble);
+        this.game.world.bringToTop(this.text1);
+
+        //adds collision for spaceShip
+        this.createCollision();
+
+        this.redText = this.game.add.text(width-50, 80,'x ' + resources[0], { fontSize: '12px', fill: '#ffffff' });
+        this.redText.fixedToCamera = true;
+
+        this.blueText = this.game.add.text(width-50, 125,'x ' + resources[1], { fontSize: '12px', fill: '#ffffff' });
+        this.blueText.fixedToCamera = true;
+
+        this.orangeText = this.game.add.text(width-50, 170,'x ' + resources[2], { fontSize: '12px', fill: '#ffffff' });
+        this.orangeText.fixedToCamera = true;
+
+        this.pinkText = this.game.add.text(width-50, 215,'x ' + resources[3], { fontSize: '12px', fill: '#ffffff' });
+        this.pinkText.fixedToCamera = true;
+
+
         curtain = this.game.add.sprite(0, 0, 'curtain');
         curtain.alpha = 0;
         curtain.fixedToCamera = true;
+
+
+
+
     },
 
 
     update: function() {
         this.handleInput();
 
-        //console.log("x: " + player.body.x);
-        //console.log("y: " + player.body.y);
+        console.log("x: " + player.body.x);
+        console.log("y: " + player.body.y);
+
+        this.blueText.text = "x " + resources[1];
+        this.redText.text = "x " + resources[0];
+        this.orangeText.text = "x " + resources[2];
+        this.pinkText.text = "x " +resources[3];
+
 
         this.physics.arcade.overlap(drops, player, this.pickUpDrop, null, this);
         this.physics.arcade.collide(player, collision, this.stopPlayer,null, this);
@@ -224,13 +280,29 @@ XPlorer.Game.prototype = {
             
         },this);
 
+        this.physics.arcade.collide(enemies, ship,this.stopPlayer,null, this);
+
+        if(this.checkForOverLap(player,ship)){
+            shipOutside.alpha = 0.35;
+        }
+        else{
+            shipOutside.alpha = 1;
+        }
+
+        if(this.bubble.x == -10000){
+            this.text1.text = "";
+            wordIndex = 0;
+        }
+
+        if(Phaser.Line.intersectsRectangle(this.line1,player)){
+            
+        }
+
     },
 
 
     render: function() {
-        this.game.debug.text('Blue Resources:\t' + resources[1], 50, 50);
-        this.game.debug.text('Red Resources: \t' + resources[0], 50, 75);
-        this.game.debug.text(this.timeText.text, 50, 100);
+        this.game.debug.geom(this.line1);
         // this.game.debug.body(player);
         // this.game.debug.body(ship);
     },
@@ -425,26 +497,17 @@ XPlorer.Game.prototype = {
             canMove = 0;
             this.game.time.events.add(500, this.switchCanMove, this);
         }
-        if(resources[0] > 1 && resources[1] > 1 &&  enemy.data.decrement == true){
-            resources[0] = resources[0] - 2;
-            resources[1] = resources[1] - 2;
-            enemy.data.decrement = false;
+
+        for(let i = 0; i < resources.length; i++){
+            if(resources[i] > 1 && enemy.data.decrement == true){
+                resources[i] = resources[i] - 2;
+            }
+            else if(resources[i] <= 1 && enemy.data.decrement == true){
+                resources[i] = 0;
+            }
         }
-        else if (resources[0] <= 1 && resources[1] <= 1 && enemy.data.decrement == true){
-            resources[0] = 0;
-            resources[1] = 0;
-            enemy.data.decrement = false;
-        }
-        else if(resources[0] <= 1 && resources[1] > 1 && enemy.data.decrement == true){
-            resources[0] = 0;
-            resources[1] = resources[1] - 2;
-            enemy.data.decrement = false;
-        }
-        else if(resources[0] > 1 && resources[1] <= 1 && enemy.data.decrement == true){
-            resources[0] = resources[0] - 2;
-            resources[1] = 0;
-            enemy.data.decrement = false;
-        }
+
+        enemy.data.decrement = false;
 
         if(enemy.body.x > 1550){
             enemy.data.return = true;
@@ -555,8 +618,8 @@ XPlorer.Game.prototype = {
         sprite. In this case, we can store a function which will run when the actor is interacted with.
          */
 
-        var integerToActorName = ['resourceRed', 'resourceBlue', 'yellow20'];
-        var integerToActorResponse =[this.interactWithResource, this.interactWithResource, this.textInteract];
+        var integerToActorName = ['resourceRed', 'resourceBlue', 'resourceOrange', 'resourcePink'];
+        var integerToActorResponse =[this.interactWithResource, this.interactWithResource, this.interactWithResource, this.interactWithResource];
 
         var integerToData = [
                 function(curActor) {
@@ -571,7 +634,10 @@ XPlorer.Game.prototype = {
                     curActor.data.resource = 2;
                     curActor.data.health = 3;
                 },
-                function(curActor) { curActor.data.text = "test text" }
+                function(curActor) { 
+                    curActor.data.resource = 3;
+                    curActor.data.health = 7;
+                }
             ];
 
         for(var i=0; i<level.actors.length; i++) {
@@ -647,27 +713,15 @@ XPlorer.Game.prototype = {
 
     //create collision around ship and adds it to collision group
     createCollision: function(){
-        var leftShipCollision = this.game.add.sprite(ship.body.x,ship.body.y, 'transparent1x250');
-        collision.add(leftShipCollision);
-        this.game.physics.enable(leftShipCollision, Phaser.Physics.ARCADE);
-        leftShipCollision.body.immovable = true;
-
-        var topShipCollision = this.game.add.sprite(ship.body.x,ship.body.y, 'transparent400x1');
-        collision.add(topShipCollision);
-        this.game.physics.enable(topShipCollision, Phaser.Physics.ARCADE);
-        topShipCollision.body.immovable = true;
-
-        var bottomShipCollision = this.game.add.sprite(ship.body.x, ship.body.y+250, 'transparent400x1');
-        collision.add(bottomShipCollision);
-        this.game.physics.enable(bottomShipCollision, Phaser.Physics.ARCADE);
-        bottomShipCollision.body.immovable = true;
-
+        this.line1 = new Phaser.Line(690,688,895,790);
+        this.line2 = new Phaser.Line();
+        
     },
 
 
     //returns if the player has the resources needed
     hasResources: function(resoursesNeeded){
-        if(resources[0] >= resourcesNeeded[0] && resources[1] >= resourcesNeeded[1]){
+        if(resources[0] >= resourcesNeeded[0] && resources[1] >= resourcesNeeded[1] && resources[2] >= resourcesNeeded[2] && resources[3] >= resourcesNeeded[3]){
             return true;
         }
         else{
@@ -689,7 +743,7 @@ XPlorer.Game.prototype = {
         let dialogue = this.game.cache.getJSON('text');
         this.textCompare.text = this.textCompare.text.concat(line[wordIndex] + " ");
 
-        if(wordIndex < line.length &&  this.textCompare.height < this.bubble.height){
+        if(wordIndex < line.length &&  this.textCompare.height < this.bubble.height-20){
 
             this.text1.text = this.text1.text.concat(line[wordIndex] + " ");
 
@@ -714,8 +768,9 @@ XPlorer.Game.prototype = {
         if(Phaser.Math.isEven(this.press)){ //continues text interaction if odd
             this.bubble.x = this.game.camera.x +10;
             this.bubble.y = this.game.camera.y + 440;
-            this.text1.x = this.game.camera.x+30;
+            this.text1.x = this.game.camera.x+150;
             this.text1.y = this.game.camera.y+450;
+
 
             this.text1.text = "";
             this.textCompare.text = ""; 
@@ -739,6 +794,14 @@ XPlorer.Game.prototype = {
                 this.game.time.events.add(100,this.increment,this);
                 console.log("wordIndex == line.length");
             } //increments if we need more text
+
+            if(Phaser.Math.isEven(lineIndex)){
+                this.bubble.loadTexture('textBoxEve');
+            }
+            
+            if(Phaser.Math.isOdd(lineIndex)){
+                this.bubble.loadTexture('textBoxMo');
+            }
 
 
                 line = dialogue.testText[textIndex][lineIndex].split(' ');
@@ -790,6 +853,9 @@ XPlorer.Game.prototype = {
             if(this.press != 0 && wordIndex == 0 && lineIndex == 0){
                 textIndex = 0;
             }
+            if(player.body.x == playerStartX && player.body.y == playerStartY){
+                textIndex = 1;
+            }
         }
     },
 
@@ -828,7 +894,7 @@ XPlorer.Game.prototype = {
             this.spawnY = enemy.data.defaultY;
 
             this.numOfDrops = this.game.rnd.integerInRange(1, 4);
-            this.dropType =  this.game.rnd.integerInRange(0, 1);
+            this.dropType =  this.game.rnd.integerInRange(0, 3);
             this.addDrops(enemy.body.x, enemy.body.y,this.dropType,this.numOfDrops);
 
             enemy.destroy();
@@ -868,6 +934,8 @@ XPlorer.Game.prototype = {
 
 
             var drop = this.game.add.sprite(x + xOffset, y + yOffset, 'circle20');
+            drop.animations.add('glow', [0,1,2,3,4,5,6,7,8,9,10], 10, true)
+            drop.animations.play('glow');
             drop.data.resource = resource;
             drops.add(drop);
             this.game.physics.enable(drop, Phaser.Physics.ARCADE);
@@ -878,6 +946,7 @@ XPlorer.Game.prototype = {
     pickUpDrop: function(player, drop) {
         console.log('pickup drop...');
         resources[drop.data.resource]++;
+
         drop.destroy();
     },
 
@@ -923,11 +992,12 @@ XPlorer.Game.prototype = {
             newTween = thisdotgame.add.tween(curtain).to({alpha: 0}, 1000, "Linear", true);
             newTween.onComplete.add( function() {
                 canMove = 1;
-                timeInSeconds = maxTime;
                 for(i=0; i<resources.length; i++)
                     resources[i] = resources[i]/2;
+                timeInSeconds = timeArray[resourceIndex];
             })
         })
+
 
     },
     
@@ -972,7 +1042,7 @@ XPlorer.Game.prototype = {
 
 
     updateOxygenBar: function() {
-        timerBar.scale.setTo(1, timeInSeconds/maxTime)
+        timerBar.scale.setTo(1, timeInSeconds/timeArray[resourceIndex])
     }
     
 };
