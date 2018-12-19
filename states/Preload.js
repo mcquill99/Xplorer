@@ -93,7 +93,8 @@ XPlorer.Preload.prototype = {
         this.load.audio('ambiance', ['assets/sounds/ambientForestNoises.mp3', 'assets/sounds/ambientForestNoises.ogg']);
         this.load.audio('hit', ['assets/sounds/hit.mp3', 'assets/sounds/hit.ogg']);
         this.load.audio('enemyDestroyed', ['assets/sounds/enemyDestroyed.mp3', 'assets/sounds/enemyDestroyed.ogg']);
-        this.load.audio('pickup', ['assets/sounds/pickup.mp3', 'assets/sounds/pickup.ogg']); // Flight by Nctrnm
+        this.load.audio('pickup', ['assets/sounds/pickup.mp3', 'assets/sounds/pickup.ogg']); 
+        this.load.audio('menuMusic', ['assets/sounds/menuMusic.mp3', 'assets/sounds/menuMusic.ogg']); // Flight by Nctrnm
 
     },
 
