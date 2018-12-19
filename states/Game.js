@@ -249,9 +249,6 @@ XPlorer.Game.prototype = {
         curtain.alpha = 0;
         curtain.fixedToCamera = true;
 
-
-
-
     },
 
 
@@ -552,6 +549,15 @@ XPlorer.Game.prototype = {
         }
     },
 
+
+    makeTree: function(x, y, treeName) {
+        newTree = this.game.add.sprite(x, y, treeName);
+        this.game.physics.enable(newTree, Phaser.Physics.ARCADE);
+        //console.log(newTree);
+        newTree.body.setSize(30, 30, 0, 20);
+        newTree.immovable = true;
+        collision.add(newTree);
+    },
 
 
     buildWorld: function() {
@@ -994,6 +1000,8 @@ XPlorer.Game.prototype = {
 
 
 
+
+
     //has the player pick up a drop
     pickUpDrop: function(player, drop) {
         console.log('pickup drop...');
@@ -1030,7 +1038,7 @@ XPlorer.Game.prototype = {
 
 
     /*
-    Caled when the player runs out of oxygen.
+    Called when the player runs out of oxygen.
         tween a black sprite over the screen,
         then reset the player to the center of the map,
         take away half of their resources

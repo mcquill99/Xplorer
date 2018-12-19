@@ -63,6 +63,11 @@ XPlorer.Preload.prototype = {
         this.load.image('rock4', 'assets/new/rock_big_4.png');
         this.load.image('rock5', 'assets/new/rock_big_5.png');
         this.load.image('curtain', 'assets/new/curtain.png');
+        this.load.image('tree1', 'assets/new/tree_1.png');
+        this.load.image('tree2', 'assets/new/tree_2.png');
+        this.load.image('bush1', 'assets/new/bush_1.png');
+        this.load.image('bush2', 'assets/new/bush_2.png');
+        this.load.image('bush3', 'assets/new/bush_3.png');
 
         this.load.image("menuBack", 'assets/menu/menuBack.png');
         this.load.image('logo', 'assets/menu/logo.png');
