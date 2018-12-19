@@ -2,13 +2,13 @@
 	"testText": [
 		["Mo that's not as many materials as we need! Go out and grab some more, take this more seriously!"],
 
-		["Oh Mo I'm so glad you're ok! You ran out of oxygen out there, I have no idea how you got back alive! Please be more careful out there, losing oxygen loses resources."],
+		["Oh Mo I'm so glad you're ok! You ran out of oxygen out there, I have no idea how you got back alive! Please be more careful out there, losing oxygen loses resources. Also remember if your resources get taken by enemies you can hit them to take it back before they get to their nest. They may even be carrying some extra ones you didn't have before!"],
 		
 		["Oh Mo thank goodness youre up! Our ship lost power travelling with the other ships across space, and it seems like you and I are the only ones left.",
 		 "Oh god thats terrible! What are we going to do?", 
 		 "Well thankfully for us, my Artificial Intelligence allows me to know whats wrong with the ship and how to fix it. If you bring me 10 red resources from this planet, I'll try and use them to fix the cryotubes and try to get us back online.", 
 		 "All right I'm on it!",
-		 "But beware, Mo, I sense alien life on this planet protecting the resources. If you get hit by them they might steal them back, so try punching them with spacebar if that happens.",
+		 "But beware, Mo, I sense alien life on this planet protecting the resources. If you get hit by them they might steal them back, so try punching them with spacebar if that happens to get your resources back, and maybe even some extra ones.",
 		 "What is a spacebar?", "Oh, you'll figure it out."],
 
 		["Oh thank goodness! I didn't actually think you'd make it back in one piece, this is uncharted territory after all.",
