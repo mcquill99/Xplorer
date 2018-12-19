@@ -255,8 +255,8 @@ XPlorer.Game.prototype = {
     update: function() {
         this.handleInput();
 
-        //console.log("x: " + player.body.x);
-        //console.log("y: " + player.body.y);
+        console.log("x: " + player.body.x);
+        console.log("y: " + player.body.y);
 
         this.blueText.text = "x " + resources[1];
         this.redText.text = "x " + resources[0];
@@ -436,7 +436,7 @@ XPlorer.Game.prototype = {
         this.enemy5.data.defaultX = ship.body.x - 300;
         this.enemy5.data.defaultY = ship.body.y + 800;
 
-        this.enemy6 = this.game.add.sprite(ship.body.x + 720 , ship.body.y - 525 , 'enemy');
+        this.enemy6 = this.game.add.sprite(ship.body.x + 720 , ship.body.y - 400 , 'enemy');
         enemies.add(this.enemy6);
         this.enemy6.data.direction = -1;
         this.enemy6.data.whichWay = 0;
