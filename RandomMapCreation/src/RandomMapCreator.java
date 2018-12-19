@@ -15,15 +15,22 @@ public class RandomMapCreator {
     static int tileHeight = 52;
     static int worldWidthPx = mapWidth * tileWidth;
     static int worldHeightPx = mapHeight * tileHeight / 2;
-    static int numOfActors = 30;
+    static int numOfActors = 50;
     static double[] tilePercentages = new double[] {0.5, 0.3, 0.1, 0.08, 0.02};
-    static double[] actorPercentages = new double[] {0.5, 0.5};
-    static int actorsLength = 2; // The number of different actors
+    static double[] actorPercentages = new double[] {0.25, 0.25, 0.25, 0.25};
+    static int[][] actorCenterPositions = new int[][] {
+            {worldWidthPx/3, worldHeightPx/3},
+            {2*worldWidthPx/3, worldHeightPx/3},
+            {worldWidthPx/3, 2*worldHeightPx/3},
+            {2*worldWidthPx/3, 2*worldHeightPx/3}
+    };
+    static int actorsLength = 4; // The number of different actors
     static int tilesLength = 5; // The number of different tiles
     static private String path = "finalWorld.json";
 
 
     public static void main(String[] args) {
+
         Writer writer = null;
         try {
             writer = new BufferedWriter(new OutputStreamWriter(
@@ -69,19 +76,20 @@ public class RandomMapCreator {
         if(!setPercentages(actorPercentages))
             System.out.println("Problem with the actorPercentages array (doesn't add to 1)");
 
+
         // Set up nodes for the actors to spawn around
 
 
         for(int i=0; i<numOfActors; i++) {
-            int x = rand.nextInt(worldWidthPx-50) + 25;
-            int y = rand.nextInt(worldHeightPx-50) + 25;
+            int x = rand.nextInt(2*worldWidthPx/3-10) + 5 - worldWidthPx/3;
+            int y = rand.nextInt(2*worldHeightPx/3-10) + 5 - worldHeightPx/3;
             double randDouble = Math.random();
             int name = 0;
             while(actorPercentages[name] < randDouble)
                 name++;
             int[] pos = new int[2];
-            pos[0] = x;
-            pos[1] = y;
+            pos[0] = x + actorCenterPositions[name][0];
+            pos[1] = y + actorCenterPositions[name][1];
             actors[i] = new Actor(pos, name);
         }
 
@@ -154,7 +162,7 @@ public class RandomMapCreator {
             }
         }
 
-        System.out.println("RESULTS OF RANDOMNESS:\n\ttotal:" + Integer.toString(total));
+        System.out.println("RESULTS OF RANDOMNESS:\n\ttotal: " + Integer.toString(total));
         for(int i=0; i<results.length; i++) {
             System.out.println("\tresult " + Integer.toString(i) + ": " + Integer.toString(results[i]));
         }

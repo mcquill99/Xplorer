@@ -1,5 +1,8 @@
 XPlorer.Menu = function() {};
 
+var menuMusic,
+    btn;
+
 XPlorer.Menu.prototype = {
 
     preload: function() {
@@ -12,9 +15,11 @@ XPlorer.Menu.prototype = {
 
     	this.logoText = this.game.add.sprite(this.game.world.centerX-225, 100, 'logo');
 
-    	var btn = this.game.add.button(this.game.world.centerX-275, 350, "startBtn", this.startGame, this);
+    	btn = this.game.add.button(this.game.world.centerX-275, 350, "startBtn", this.startGame, this);
 
-    	
+        menuMusic = this.add.audio('menuMusic'); // Flight by Nctrnm
+        menuMusic.loop = true;
+        menuMusic.play();
 
 
 
@@ -22,6 +27,7 @@ XPlorer.Menu.prototype = {
     },
 
     startGame: function(){
+        menuMusic.stop();
     	this.state.start("Game");
     },
 
