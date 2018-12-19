@@ -19,7 +19,7 @@ var tileWidth = 96,
     spacebar,
     playerSpeed = 200,
     enemySpeed = 130,
-    enemyRange = 142,
+    enemyRange = 145,
     resources = [0,0,0,0], // [Green, Red]
     resourceEmitters = [null, null],
     emitters,
@@ -61,6 +61,7 @@ var tileWidth = 96,
     curtain,
     shipOutside,
     blackInsideShip,
+    stun,
     ambiance;
 
 
@@ -127,6 +128,7 @@ XPlorer.Game.prototype = {
 
         enemies = this.game.add.group();
         enemies.enableBody = true;
+
 
 
         //adds player animations
@@ -203,6 +205,7 @@ XPlorer.Game.prototype = {
         ambiance.loop = true;
         ambiance.play();
 
+
         this.phaserTimer = this.game.time.create(false); //adds timer for re adding enemies
         this.phaserTimer.start();
 
@@ -252,8 +255,8 @@ XPlorer.Game.prototype = {
     update: function() {
         this.handleInput();
 
-        console.log("x: " + player.body.x);
-        console.log("y: " + player.body.y);
+        //console.log("x: " + player.body.x);
+        //console.log("y: " + player.body.y);
 
         this.blueText.text = "x " + resources[1];
         this.redText.text = "x " + resources[0];
@@ -364,6 +367,7 @@ XPlorer.Game.prototype = {
         player.animations.add('right', [6,7,8,9], 10, true);
         player.animations.add('down', [0,11,12], 10, true);
         player.animations.add('up', [13,14,15], 10, true);
+
 
         ship.animations.add('play', [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35], 10,true);
         ship.animations.play('play');
@@ -495,6 +499,9 @@ XPlorer.Game.prototype = {
     takeResourcesState: function(enemy){
         if(enemy.data.decrement == true){
             canMove = 0;
+            stun = this.game.add.sprite(player.body.x - 5,player.body.y-80, 'stun');
+            stun.animations.add('stun', [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15], 24, true)
+            stun.animations.play('stun');
             this.game.time.events.add(500, this.switchCanMove, this);
         }
 
@@ -531,6 +538,7 @@ XPlorer.Game.prototype = {
     switchCanMove: function(){
         if(canMove == 0){
             canMove = 1;
+            stun.destroy();
         }
         else{
             canMove = 0;
@@ -853,9 +861,9 @@ XPlorer.Game.prototype = {
             if(this.press != 0 && wordIndex == 0 && lineIndex == 0){
                 textIndex = 0;
             }
-            if(player.body.x == playerStartX && player.body.y == playerStartY){
-                textIndex = 1;
-            }
+            //if(player.body.x == playerStartX && player.body.y == playerStartY){
+            //    textIndex = 1;
+            //}
         }
     },
 
