@@ -24,6 +24,7 @@ var tileWidth = 96,
     resourceEmitters = [null, null, null, null],
     emitters,
     enemies,
+    resourcesGroup,
     resourceParticles = [['greenParticle1', 'greenParticle2', 'greenParticle3'],
         ['redParticle1', 'redParticle2', 'redParticle3'],
         ['greenParticle1', 'greenParticle2', 'greenParticle3'],
@@ -187,7 +188,7 @@ XPlorer.Game.prototype = {
         this.timeText = this.game.add.text(this.game.camera.x + 28, this.game.camera.y + 300, "0:00", { fontSize: '15px', fill: '#ffffff' });
         this.timeText.fixedToCamera = true;
         this.timer = this.game.time.events.loop(Phaser.Timer.SECOND, this.tick, this); // timer event calls tick function for seconds 
-        timeInSeconds = 5; //DEBUG CODE ONLY
+        //timeInSeconds = 5; //DEBUG CODE ONLY
         //maxTime = 35;
 
         //this.game.world.bringToTop(actors);
@@ -255,8 +256,8 @@ XPlorer.Game.prototype = {
     update: function() {
         this.handleInput();
 
-        console.log("x: " + player.body.x);
-        console.log("y: " + player.body.y);
+        //console.log("x: " + player.body.x);
+        //console.log("y: " + player.body.y);
 
         this.blueText.text = "x " + resources[1];
         this.redText.text = "x " + resources[0];
@@ -498,27 +499,30 @@ XPlorer.Game.prototype = {
     },
     //decrements resources by 2 and has alien run away
     takeResourcesState: function(enemy){
-        if(enemy.data.decrement == true){
+        if(enemy.data.decrement == true) {
             canMove = 0;
-            stun = this.game.add.sprite(player.body.x - 5,player.body.y-80, 'stun');
-            stun.animations.add('stun', [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15], 24, true)
+            stun = this.game.add.sprite(player.body.x - 5, player.body.y - 80, 'stun');
+            stun.animations.add('stun', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], 24, true)
             stun.animations.play('stun');
             this.game.time.events.add(500, this.switchCanMove, this);
-        }
-        enemy.data.resourcesTaken = [];
-        for(let i = 0; i < resources.length; i++){
-            if(resources[i] > 1 && enemy.data.decrement == true){
-                resources[i] = resources[i] - 2;
-                enemy.data.resourcesTaken[i] = 2;
-            }
-            else if(resources[i] <= 1 && enemy.data.decrement == true){
-                resources[i] = 0;
-                enemy.data.resourcesTaken[i] = 1;
-            }
-            else enemy.data.resourcesTaken[i] = 0;
-        }
 
-        enemy.data.decrement = false;
+            enemy.data.resourcesTaken = [];
+            for (let i = 0; i < resources.length; i++) {
+                if (resources[i] > 1 && enemy.data.decrement == true) {
+                    resources[i] = resources[i] - 2;
+                    enemy.data.resourcesTaken[i] = 2;
+                }
+                else if (resources[i] <= 1 && enemy.data.decrement == true) {
+                    resources[i] = 0;
+                    enemy.data.resourcesTaken[i] = 1;
+                }
+                else enemy.data.resourcesTaken[i] = 0;
+            }
+            console.log(enemy.data.resourcesTaken);
+
+
+            enemy.data.decrement = false;
+        }
 
         if(enemy.body.x > 1550){
             enemy.data.return = true;
@@ -699,7 +703,7 @@ XPlorer.Game.prototype = {
                 this.game.world.height/numberOfRocks * i,
                 rockNames[rand]);
             var newRockRight = this.game.add.sprite(
-                this.game.world.width,
+                this.game.world.width-30,
                 this.game.world.height/numberOfRocks * i,
                 rockNames[rand]);
             collision.add(newRockleft);
@@ -717,7 +721,7 @@ XPlorer.Game.prototype = {
                 rockNames[rand]);
             newRockRight = this.game.add.sprite(
                 this.game.world.width/numberOfRocks * i,
-                this.game.world.height,
+                this.game.world.height-30,
                 rockNames[rand]);
             collision.add(newRockleft);
             collision.add(newRockRight);
@@ -949,6 +953,7 @@ XPlorer.Game.prototype = {
             this.numOfDrops = this.game.rnd.integerInRange(1, 4);
             this.dropType =  this.game.rnd.integerInRange(0, 3);
             this.addDrops(enemy.body.x, enemy.body.y,this.dropType,this.numOfDrops);
+            console.log(enemy.data.resourcesTaken);
             for(i=0; i<enemy.data.resourcesTaken.length; i++) {
                 this.addDrops(enemy.body.x, enemy.body.y, i, enemy.data.resourcesTaken[i]);
             }
