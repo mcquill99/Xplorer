@@ -287,6 +287,7 @@ XPlorer.Game.prototype = {
         },this);
 
         this.physics.arcade.collide(enemies, shipOutside,this.stopPlayer,null, this);
+        this.physics.arcade.collide(enemies, ship, this.stopPlayer,null,this);
 
         if(this.checkForOverLap(player,ship)){
             shipOutside.alpha = 0.35;
@@ -794,7 +795,7 @@ XPlorer.Game.prototype = {
 
 
     //this function exists to handle text interactions with the player and eve
-    textInteract: function(){
+    textInteract: function(outOfOxygygen = false){
 
         console.log(this.press);
 
@@ -838,11 +839,15 @@ XPlorer.Game.prototype = {
             if(Phaser.Math.isOdd(lineIndex)){
                 this.bubble.loadTexture('textBoxMo');
             }
-            if(textIndex == 7 && lineIndex == 3 || lineIndex == 5){
+            if((textIndex == 7 && lineIndex == 3) || (textIndex == 7 && lineIndex == 5)){
                 this.bubble.loadTexture('textBoxStatic');
             }
             if(textIndex == 8 && lineIndex == 2){
                 this.bubble.loadTexture('textBoxStatic');
+            }
+
+            if(outOfOxygygen == true){
+                textIndex = 1;
             }
 
 
