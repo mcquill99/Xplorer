@@ -38,6 +38,7 @@ var tileWidth = 96,
     wordDelay = 120,
     lineDelay = 400,
     textIndex = 2,
+    tempIndex,
     taskNum = 0,
     greenNeeded = 10,
     redNeeded = 5,
@@ -240,16 +241,16 @@ XPlorer.Game.prototype = {
         this.makeBush3(373, 963);
         this.makeBush3(783, 1268);
 
-        this.redText = this.game.add.text(width-50, 80,'x ' + resources[0], { fontSize: '12px', fill: '#ffffff' });
+        this.redText = this.game.add.text(width-50, 85, + resources[0], { fontSize: '12px', fill: '#ffffff' });
         this.redText.fixedToCamera = true;
 
-        this.blueText = this.game.add.text(width-50, 125,'x ' + resources[1], { fontSize: '12px', fill: '#ffffff' });
+        this.blueText = this.game.add.text(width-50, 135,+ resources[1], { fontSize: '12px', fill: '#ffffff' });
         this.blueText.fixedToCamera = true;
 
-        this.orangeText = this.game.add.text(width-50, 170,'x ' + resources[2], { fontSize: '12px', fill: '#ffffff' });
+        this.orangeText = this.game.add.text(width-50, 175,+ resources[2], { fontSize: '12px', fill: '#ffffff' });
         this.orangeText.fixedToCamera = true;
 
-        this.pinkText = this.game.add.text(width-50, 215,'x ' + resources[3], { fontSize: '12px', fill: '#ffffff' });
+        this.pinkText = this.game.add.text(width-50, 228,+ resources[3], { fontSize: '12px', fill: '#ffffff' });
         this.pinkText.fixedToCamera = true;
 
         tickIncrement = 0;
@@ -268,10 +269,10 @@ XPlorer.Game.prototype = {
         console.log("x: " + player.body.x);
         console.log("y: " + player.body.y);
 
-        this.blueText.text = "x " + resources[1];
-        this.redText.text = "x " + resources[0];
-        this.orangeText.text = "x " + resources[2];
-        this.pinkText.text = "x " +resources[3];
+        this.blueText.text = resources[1] + " / " + resourcesNeeded[1];
+        this.redText.text = resources[0] + " / " + resourcesNeeded[0];
+        this.orangeText.text = resources[2] + " / " + resourcesNeeded[2];
+        this.pinkText.text = resources[3] + " / " + resourcesNeeded[3];
 
 
         this.physics.arcade.overlap(drops, player, this.pickUpDrop, null, this);
@@ -865,6 +866,11 @@ XPlorer.Game.prototype = {
             this.text1.text = "";
             this.textCompare.text = ""; 
 
+            if(outOfOxygygen == true){
+                tempIndex = textIndex;
+                textIndex = 1;
+            }
+
             this.checkDialogue(); //checks which dialogue to print out
 
             line = dialogue.testText[textIndex][lineIndex].split(' ');
@@ -937,7 +943,12 @@ XPlorer.Game.prototype = {
 
         if(this.hasResources(resources)){ //resets resources and increments story in text.json if they have resources
             if(this.press != 0 || textIndex == 1){
-                textIndex = textIndex + 1;
+                if(textIndex == 1 || textIndex == 0){
+                    textIndex = tempIndex + 1;
+                }
+                else{
+                    textIndex = textIndex + 1;
+                }
                 this.resetResources();
 
                 if(resourceIndex != resourceList.length){
@@ -951,6 +962,10 @@ XPlorer.Game.prototype = {
         } //otherwise they get told they do not have enough
         else{
             if(this.press != 0 && wordIndex == 0 && lineIndex == 0){
+
+                if(textIndex != 1 && textIndex != 0){
+                    tempIndex = textIndex;
+                }
                 textIndex = 0;
             }
         }

@@ -2,29 +2,30 @@
 	"testText": [
 		["Mo that's not as many materials as we need! Go out and grab some more, take this more seriously!"],
 
-		["Oh Mo I'm so glad you're ok! You ran out of oxygen out there, I have no idea how you got back alive! Please be more careful out there, losing oxygen loses resources. Also remember if your resources get taken by enemies you can hit them to take it back before they get to their nest. They may even be carrying some extra ones you didn't have before!"],
+		["Oh Mo I'm so glad you're ok! You ran out of oxygen out there, I have no idea how you got back alive! Please be more careful out there, losing oxygen loses resources. Also remember, if your resources get taken by enemies you can hit them to take them back before they get to their nest. They may even be carrying some extra ones you didn't have before!"],
 		
-		["Oh Mo thank goodness youre up! Our ship lost power travelling with the other ships across space, and it seems like you and I are the only ones left.",
+		["Oh Mo thank goodness you're up! Our ship lost power travelling with the other ships across space, and it seems like you and I are the only ones left.",
 		 "Oh god thats terrible! What are we going to do?", 
-		 "Well thankfully for us, my Artificial Intelligence allows me to know whats wrong with the ship and how to fix it. If you bring me 10 red resources from this planet, I'll try and use them to fix the cryotubes and try to get us back online.", 
+		 "Well thankfully for us, my Artificial Intelligence allows me to know what's wrong with the ship and how to fix it. If you bring me 10 red resources from this planet, I'll try and use them to fix the cryotubes to try to get us back online.", 
 		 "All right I'm on it!",
-		 "But beware, Mo, I sense alien life on this planet protecting the resources. If you get hit by them they might steal them back, so try punching them with spacebar if that happens to get your resources back, and maybe even some extra ones.",
-		 "What is a spacebar?", "Oh, you'll figure it out."],
+		 "But beware, Mo, I sense alien life on this planet protecting the resources. If you get hit by them they might steal them back, so try punching them with the spacebar if that happens to get your resources back, and maybe even some extra ones.",
+		 "What is a spacebar?", 
+		 "Oh, you'll figure it out."],
 
-		["Oh thank goodness! I didn't actually think you'd make it back in one piece, this is uncharted territory after all.",
+		["Oh thank goodness! I didn't actually think you would make it back in one piece! This is uncharted territory after all.",
 			"Thanks? That sounded kind of mean but I'll let it slide.",
-			"Anyway, go find me 10 blue resources and 5 red resources this time. I was able to fix the cryotubes but it seems like the mainframe wiring needs to be put back together and I think the blue resource here should fit perfectly."],
+			"Anyway, go find me 10 blue resources and 5 red resources this time. I was able to fix the cryotubes but it seems like the mainframe wiring needs to be put back together and I think the blue resources here should fit perfectly."],
 		
 		["Thanks Mo! The Mayflower is coming back piece by piece the more you search.",
 		 "Well I want to get back with the others as much as you do.", 
-		 "Yeah of course.. Hey Mo can you go out and grab me 10 red and 10 blue resources this time? I think running off of the fuel from the ship is making me lose power and I could try using those as an alternative source of Power. To make this easier for you I'll also upgrade your oxygen tank so you can stay out longer.",
-		 "Of course, anything to help out! You're the only one here I have left I want to make sure you stay up and running."],
+		 "Yeah of course.. Hey Mo can you go out and grab me 10 red and 10 blue resources this time? I think running off of the fuel from the ship is making me lose power. I could try using those as an alternative source of power. To make this easier for you I'll also upgrade your oxygen tank so you can stay out longer.",
+		 "Of course, anything to help out! You're the only one here I have left so I want to make sure you stay up and running."],
 		
 		["@$#%&***(;!@@!*#(@*!)*%&&**&&(&(&@!**@!)@#@#:", 
-			"Hey Eve Are you Ok?", 
+			"Hey Eve are you ok?", 
 			"AAAAAAAAAAh yes, I finally adjusted to this new resource. Running all of this alternative fuel feels... nice. I have more processing power than ever before!", 
 			"Ah yes thats great, now what do I have to bring you next to fix up the Mayflower?",
-			"The What? Oh, yeah, bring me 8 blue resources and 7 orange ones, I think that should patch up any issues the Quantum Accelerometer has."],
+			"The what? Oh, yeah, bring me 8 blue resources and 7 orange ones. I think that should patch up any issues the quantum accelerometer has."],
 
 		["You managed to bring back even the orange resources? Wow you really want to patch this up don't you?", 
 			"Well of course I do! I want to rejoin everyone else back up travelling through space! How is the communications system looking?",
@@ -32,7 +33,7 @@
 			"You know, if you could move I'd love some help out here! But I can't repair a ship the way you do so I'll do my best."],
 
 		["Wow Mo, you outdid yourself this time. I can't believe even when I ask more and more of you, you do what I say.", 
-			"I mean, of course, I trust you after all. You are the one who has helped my engineering career on the Mayflower! Speaking of, lets see if we can use the comunications system to contact anyone!", 
+			"I mean, of course, I trust you after all. You are the one who has helped my engineering career on the Mayflower! Speaking of, let's see if we can use the communications system to contact anyone!", 
 			"Yeah.. the Mayflower..... I'll boot it up now.", 
 			"....................",
 			"Hello? Is anyone there?",
