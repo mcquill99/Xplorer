@@ -5,7 +5,7 @@ You wake up in your spaseship to see that you crashed mid flight onto an unknown
 
 The only way to repair your ship is to collect resources scattered around the planet, but hostile life lives on the planet. Will you be able to survive long enough to get off of the planet? You must race against your oxygen tank's depletion to do so.
 
-![alt text](https://github.com/mcquill99/Xplorer/blob/master/assets/Screenshots/Title.png)
+![Main Menu](https://github.com/mcquill99/Xplorer/blob/master/assets/Screenshots/Title.png)
 
 ### Objective
 
@@ -15,6 +15,7 @@ To create as polished of a game experience in one month as you can, from concept
 - Preload: This is the state that loads all assets into our game, and then brings the player to the main menu
 - Menu: The state that controlls how the main menu looks and sounds
 - Game: The main state the player is in while playing the game. This controlls all main gameplay loops: variables, enemy movement, sounds, timers, etc. This is the state that also loads in all enemies
+![Enemy](https://github.com/mcquill99/Xplorer/blob/master/assets/Screenshots/critter.gif)
 - GameOver: The state when the player loses all of their oxygen, this resets them with less materials in their spaceship.
 
 ### Random Map Creation
