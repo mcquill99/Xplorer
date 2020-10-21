@@ -15,9 +15,10 @@ To create as polished of a game experience in one month as you can, from concept
 - Preload: This is the state that loads all assets into our game, and then brings the player to the main menu
 - Menu: The state that controlls how the main menu looks and sounds
 - Game: The main state the player is in while playing the game. This controlls all main gameplay loops: variables, enemy movement, sounds, timers, etc. This is the state that also loads in all enemies
+- GameOver: The state when the player loses all of their oxygen, this resets them with less materials in their spaceship.
 
 ![Enemy](https://github.com/mcquill99/Xplorer/blob/master/assets/Screenshots/critter.gif)
-- GameOver: The state when the player loses all of their oxygen, this resets them with less materials in their spaceship.
+
 
 ### Random Map Creation
 This section assigns random json values to a preassigned grid size. This becomes our game world. The number generated in our json represents the texture displayed. Possible textures include different grass textures and materials, so no one play through is exactly the same.
